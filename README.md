@@ -1,14 +1,14 @@
 <div align="center">
   
   <!-- Banner -->
-  <img src="https://i.imgur.com/Hc3J0gA.png" width="100%" alt="Rei Calasso Banner"/>
+  <img src="assets\github-header-banner.png" width="100%" alt="Rei Calasso Banner"/>
 
   <br/><br/>
 
   <!-- Avatar -->
-  <img src="https://i.imgur.com/8x0P0V7.png" width="120" style="border-radius:50%;" />
+  <img src="https://avatars.githubusercontent.com/u/131282394?v=4t" width="120" style="border-radius:50%;" />
 
-  <h1>Hi, I'm <strong>REI CALASSO</strong> 👋</h1>
+  <h1>Hi, I'm Arda but you can call me <strong>REI CALASSO</strong></h1>
   <h3>Software Engineering Student • Full-Stack Developer • AI/ML & Systems Enthusiast</h3>
 
   <br/>
@@ -19,34 +19,36 @@
 
 ---
 
-## 🌟 About Me
-- 🎓 Software Engineering Student  
-- 🔥 Interested in **Full-Stack Development**, **AI/ML**, **C++ Systems**, and **AR/Embedded Tech**  
-- 🚀 Currently building modern web apps, distributed systems, and experimental AI projects  
-- 🎯 Open to **internships**, **junior dev roles**, and **collaborations**  
-- 🧠 Passionate about low-level engineering + futuristic tech (AR, neural interfaces, ML compilers)
+## ✮ About Me
+- ᝰ Software Engineering Student  
+- ⚡︎ Interested in **Full-Stack Development**, **Embedded Systems**, **AI/ML**, and **AR/Embedded Tech**  
+- ⌲ Currently building embedded systems, modern web apps, distributed systems, and experimental AI projects  
+- ❣ Open to **internships**, **junior dev roles**, and **collaborations**  
+- 🗯️ Passionate about low-level engineering + futuristic tech (AR, neural interfaces, ML compilers)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### 💻 Languages  
+### Languages  
 <p>
-  <img src="https://skillicons.dev/icons?i=js,ts,cpp,py,go,rust" />
+  <img src="https://skillicons.dev/icons?i=cpp,rust,c,swift,js,ts,py" />
 </p>
 
 ### 🧩 Frameworks & Tools  
-<p>
-  <img src="https://skillicons.dev/icons?i=react,nextjs,nodejs,express,tailwind,redux" />
-  <br/>
-  <img src="https://skillicons.dev/icons?i=firebase,supabase,postgres,mysql,redis" />
-  <br/>
-  <img src="https://skillicons.dev/icons?i=linux,arduino,raspberrypi,git,github,vscode" />
-</p>
+<!-- Backend --> 
+<img src="https://skillicons.dev/icons?i=nodejs,express,fastapi,postgres,mysql,redis" /> <br/>
+<p> <!-- Web & Frontend --> 
+<img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,redux,vite" /> <br/>  
+<!-- AI/ML & Systems --> 
+<img src="https://skillicons.dev/icons?i=pytorch,tensorflow,opencv" /> <br/> <!-- DevOps & Tools --> 
+<img src="https://skillicons.dev/icons?i=linux,git,github,docker,vscode" /> <br/> 
+<!-- Embedded & Hardware --> 
+<img src="https://skillicons.dev/icons?i=arduino,raspberrypi" /> </p>
 
 ---
 
-## 🚀 Featured Projects
+## Featured Projects
 
 ### 🔹 **SentinelFS-Neo — P2P Distributed File Sync**
 A self-optimizing distributed file-sync engine with auto-remesh, delta-sync and optional AI-powered anomaly detection.  
@@ -55,23 +57,10 @@ A self-optimizing distributed file-sync engine with auto-remesh, delta-sync and 
 
 ---
 
-### 🔹 **MindLine — Modern Notes & Knowledge App**
-A full-stack notes app with real-time sync, clean UI, and authentication.  
-**Tech:** React, TypeScript, Firebase  
-🔗 Repo: *github.com/reicalasso/MindLine*
-
----
-
-### 🔹 **ACY Vision — AR Smart Glass System (Prototype)**
-Experimental AR glass architecture using XR1 SBC, micro-OLED displays, and embedded Linux.  
-**Tech:** ESP32, XR1, Embedded Linux, 3D design  
-
----
-
 ### 🔹 **Mini Projects**
 - Todo App (React)  
 - Weather App (API Fetch)  
-- ESP32 Sensor Logger  
+- ESP32 Projects(Mostly about Cybersecurity) 
 - Basic backend: CRUD + JWT  
 
 ---
@@ -79,9 +68,10 @@ Experimental AR glass architecture using XR1 SBC, micro-OLED displays, and embed
 ## 📊 Overall Performance
 
 <p align="center">
-  <img width="48%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=tokyonight" />
-  <img width="48%" src="https://github-readme-stats.vercel.app/api?username=reicalasso&show_icons=true&theme=tokyonight" />
+  <img width="48%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=tokyonight&count_private=true&include_all_commits=true" />
+  <img width="48%" src="https://github-readme-stats.vercel.app/api?username=reicalasso&show_icons=true&theme=tokyonight&count_private=true&include_all_commits=true" />
 </p>
+
 
 ---
 
