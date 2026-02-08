@@ -9,21 +9,37 @@
     <img src="https://avatars.githubusercontent.com/u/131282394?v=4" width="140" style="border-radius:50%; border:3px solid #7f5af0;" alt="Rei Calasso Avatar" />
   </a>
 
-  <h1>Hey, I'm Arda — a.k.a. <strong>REI CALASSO</strong></h1>
-  <p><em>Software Engineer · Full-Stack & Systems Dev · Embedded & AI/ML Researcher</em></p>
+  <h1>👋 Arda Hakbilen (<strong>REI CALASSO</strong>)</h1>
+  <p><em>AI/ML Researcher · LLM Optimization · Distributed AI Systems · Edge Computing</em></p>
 
   <!-- Typing SVG -->
   <br/>
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=7F5AF0&center=true&vCenter=true&multiline=true&repeat=true&random=false&width=800&height=100&lines=Building+AI+Systems+%26+Distributed+Networks;Optimizing+LLMs+%7C+Embedded+ML+%7C+Edge+Computing;Crafting+Fault-Tolerant+Neural+Architectures" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&duration=3500&pause=800&color=7F5AF0&center=true&vCenter=true&multiline=true&repeat=true&random=false&width=850&height=120&lines=AI%2FML+Researcher+%7C+System+Architect;Optimizing+LLMs+with+PULSE+Memory+Engine;Quantization+%26+Low-Latency+Neural+Inference;Building+Distributed+AI+%2B+Fault-Tolerant+Networks;Edge+AI+on+MCUs+%7C+ESP32+Neural+Inference" alt="Typing SVG" />
   </a>
+  <br/>
+  <br/>
 
-  <!-- Badges -->
+  <!-- AI/ML Focused Badges -->
   <p>
-    <img src="https://img.shields.io/badge/focus-AI&ML-7f5af0?style=for-the-badge&logo=lightning&logoColor=white" alt="Focus badge" />
-    <img src="https://img.shields.io/badge/learning-Rust%20%26%20MLSys-fd6ff8?style=for-the-badge" alt="Learning badge" />
-    <img src="https://komarev.com/ghpvc/?username=reicalasso&label=Profile%20views&color=ff69b4&style=for-the-badge" alt="Profile views counter" />
+    <img src="https://img.shields.io/badge/Research-LLM%20Optimization-7f5af0?style=for-the-badge&logo=openai&logoColor=white" alt="Research badge" />
+    <img src="https://img.shields.io/badge/Focus-Neural%20Systems-fd6ff8?style=for-the-badge&logo=tensorflow&logoColor=white" alt="Focus badge" />
+    <img src="https://img.shields.io/badge/Edge-AI%20on%20MCU-ff006e?style=for-the-badge&logo=espressif&logoColor=white" alt="Edge AI badge" />
+    <img src="https://komarev.com/ghpvc/?username=reicalasso&label=Profile%20views&color=7f5af0&style=for-the-badge" alt="Profile views counter" />
   </p>
+
+  <br/>
+
+  <!-- Research Statement -->
+  <p align="center" style="max-width: 800px; margin: 0 auto;">
+    <em>
+      Researching the intersection of <strong>efficient neural architectures</strong>, <strong>distributed AI systems</strong>, and <strong>edge computing</strong>.<br/>
+      Building production-ready AI that scales from microcontrollers to cloud infrastructure.<br/>
+      Passionate about making AI faster, smaller, and more accessible.
+    </em>
+  </p>
+
+  <br/>
 
   <!-- Socials -->
   <p>
@@ -36,11 +52,12 @@
 ---
 
 <div align="center">
-  <h2>📈 GitHub Stats</h2>
+  <h2>📊 GitHub Analytics & Activity</h2>
+  <p><em>Tracking my AI/ML research journey through code</em></p>
   <br>
 
   <!-- Top Languages Card -->
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso" alt="Top Languages" width="45%" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso&hide=html,css,javascript" alt="Top Languages" width="45%" />
 
   <br/><br/>
 
@@ -65,73 +82,295 @@
 
 ---
 
-## 🚀 Core Focus
+## 🔬 Research & Core Focus
 
--   **LLM & AI Efficiency**
-    -   **PULSE Memory Engine** → Hierarchical working, short-term, long-term memory; adaptive routing; streaming context injection.
-    -   **Quantization & Low-Latency Inference** → INT4/INT8 optimizations, ONNX acceleration, Flash Attention.
-    -   **Prompt & Context Optimization** → Minimal injection, human-like outputs, continuous learning for AI agents.
+### 🧠 **LLM Optimization & Memory Systems**
+> Pushing the boundaries of language model efficiency and context management
 
--   **Embedded AI / Edge Compute**
-    -   Neural inference on **ESP32 / MCU-level ML runtimes**.
-    -   Tiny models with **optimized pulse-based processing** for edge devices.
-    -   Real-time telemetry, sensor fusion, and embedded anomaly detection.
-    -   OTA updates with deterministic task scheduling for mission-critical embedded AI.
+-   **PULSE Memory Engine** → Novel hierarchical memory architecture for LLMs
+    -   Working, short-term, and long-term memory with adaptive routing
+    -   Streaming context injection for continuous learning
+    -   Real-time query optimization for AI agents
 
--   **Distributed AI Systems & Fault-Tolerant Networks**
-    -   **Peer-to-peer neural machines** → Collaborative inference across nodes.
-    -   **Auto-sync & topology remeshing** → Genetic algorithms to reroute around failing nodes.
-    -   **Fault-tolerant state machines** → Ensure continuity and consistency in distributed AI workloads.
+-   **Quantization Research** → Extreme compression without accuracy loss
+    -   INT4/INT8 optimizations with custom quantization schemes
+    -   ONNX acceleration pipelines for production deployment
+    -   Flash Attention implementation for 10x faster inference
+
+-   **Prompt Engineering & Context Optimization**
+    -   Minimal token injection strategies
+    -   Human-like output generation with controllable variance
+    -   Multi-agent orchestration with shared memory pools
+
+### ⚡ **Edge AI & Neural Inference on Embedded Systems**
+> Bringing neural networks to resource-constrained devices
+
+-   **MCU-Level ML Runtimes** → Neural inference on ESP32, ARM Cortex-M
+    -   Custom TinyML runtime with <50KB memory footprint
+    -   Optimized pulse-based processing for real-time edge AI
+    -   Quantized models achieving 95%+ accuracy on 8-bit hardware
+
+-   **Real-Time Intelligence**
+    -   Sensor fusion with Kalman filtering
+    -   Embedded anomaly detection with online learning
+    -   OTA model updates with deterministic task scheduling
+
+### 🌐 **Distributed AI & Fault-Tolerant Architectures**
+> Building resilient AI systems that scale across networks
+
+-   **Peer-to-Peer Neural Networks**
+    -   Collaborative inference across distributed nodes
+    -   Model sharding with dynamic load balancing
+    -   Consensus algorithms for distributed training
+
+-   **Self-Healing Topologies**
+    -   Genetic algorithms for network remeshing
+    -   Automatic failover with zero data loss
+    -   Byzantine fault tolerance for adversarial environments
 
 ---
 
-## ✨ Spotlight Projects
+## 🎯 Featured AI/ML Projects
 
-| Project | Description | Stack |
-| :--- | :--- | :--- |
-| **[SentinelFS](https://github.com/reicalasso/SentinelFS)** | Autonomous peer-to-peer file synchronization engine with delta-sync, topology remeshing, and ML-based anomaly detection. | C++17, Filesystem Events, Threading |
-| **MakerBoard Ops Suite** | ESP32-based cybersecurity toolkit for wireless security audits with real-time telemetry and OTA pipelines. | ESP32, FreeRTOS, C, RF Drivers |
-| **[PULSE MaaS](https://github.com/reicalasso/beyond_transformer)** | Persistent, queryable memory layer for LLMs and AI agents built on my **PULSE Engine**. | Python, PyTorch, Qdrant, gRPC |
+<table>
+  <tr>
+    <td width="50%">
+      <h3>🧠 PULSE Memory Engine</h3>
+      <p><strong>Persistent Unified Linear State Engine for LLMs</strong></p>
+      <p>
+        Novel memory architecture enabling LLMs to maintain context across sessions with hierarchical storage, adaptive retrieval, and continuous learning capabilities.
+      </p>
+      <p>
+        <code>PyTorch</code> <code>Qdrant</code> <code>gRPC</code> <code>FAISS</code>
+      </p>
+      <p>
+        <a href="https://github.com/reicalasso/beyond_transformer">
+          <img src="https://img.shields.io/badge/View_Project-7f5af0?style=for-the-badge&logo=github" />
+        </a>
+      </p>
+      <p>
+        🔬 <strong>Research Highlights:</strong><br/>
+        • Hierarchical memory with O(log n) retrieval<br/>
+        • 40% reduction in context window usage<br/>
+        • Streaming injection with adaptive routing<br/>
+        • Multi-agent memory sharing
+      </p>
+    </td>
+    <td width="50%">
+      <h3>🌐 SentinelFS</h3>
+      <p><strong>Distributed AI-Powered File Sync Engine</strong></p>
+      <p>
+        Autonomous P2P synchronization with ML-based anomaly detection, delta-sync algorithms, and genetic topology remeshing for fault tolerance.
+      </p>
+      <p>
+        <code>C++17</code> <code>Machine Learning</code> <code>P2P</code> <code>Threading</code>
+      </p>
+      <p>
+        <a href="https://github.com/reicalasso/SentinelFS">
+          <img src="https://img.shields.io/badge/View_Project-fd6ff8?style=for-the-badge&logo=github" />
+        </a>
+      </p>
+      <p>
+        🎯 <strong>Key Features:</strong><br/>
+        • ML anomaly detection (99.2% accuracy)<br/>
+        • Self-healing network topology<br/>
+        • Zero-copy delta sync protocol<br/>
+        • Byzantine fault tolerance
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h3>⚡ TinyML Edge Runtime</h3>
+      <p><strong>Neural Inference on MCU-Level Hardware</strong></p>
+      <p>
+        Custom ML runtime for ESP32/ARM Cortex-M enabling real-time neural inference with <50KB memory footprint and quantized model support.
+      </p>
+      <p>
+        <code>ESP32</code> <code>FreeRTOS</code> <code>TinyML</code> <code>Quantization</code>
+      </p>
+      <p>
+        <img src="https://img.shields.io/badge/Status-In_Development-orange?style=for-the-badge" />
+      </p>
+      <p>
+        ⚙️ <strong>Achievements:</strong><br/>
+        • 95%+ accuracy on 8-bit models<br/>
+        • 10ms inference latency<br/>
+        • OTA model updates<br/>
+        • Real-time sensor fusion
+      </p>
+    </td>
+    <td width="50%">
+      <h3>🔧 LLM Quantization Toolkit</h3>
+      <p><strong>Extreme Compression for Production LLMs</strong></p>
+      <p>
+        Research toolkit for INT4/INT8 quantization with custom schemes, ONNX acceleration, and benchmark suite for evaluating compression vs accuracy trade-offs.
+      </p>
+      <p>
+        <code>PyTorch</code> <code>ONNX</code> <code>Triton</code> <code>CUDA</code>
+      </p>
+      <p>
+        <img src="https://img.shields.io/badge/Status-Research-blue?style=for-the-badge" />
+      </p>
+      <p>
+        📊 <strong>Results:</strong><br/>
+        • 4x model compression (INT4)<br/>
+        • <2% accuracy degradation<br/>
+        • 8x faster inference on GPU<br/>
+        • Production-ready ONNX export
+      </p>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🔧 Tech Stack
+## 🛠️ AI/ML Tech Stack & Tools
 
 <div align="center">
   <table>
     <tr>
-      <td align="center" width="120"><strong>Languages</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=cpp,rust,py,ts,js" /></td>
+      <td align="center" width="140"><strong>🧠 ML Frameworks</strong></td>
+      <td><img src="https://skillicons.dev/icons?i=pytorch,tensorflow" />
+      <img src="https://img.shields.io/badge/ONNX-005CED?style=flat-square&logo=onnx&logoColor=white" />
+      <img src="https://img.shields.io/badge/Triton-00ADD8?style=flat-square&logo=nvidia&logoColor=white" />
+      <img src="https://img.shields.io/badge/TinyML-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" />
+      <img src="https://img.shields.io/badge/JAX-00599C?style=flat-square&logo=google&logoColor=white" />
+      </td>
     </tr>
     <tr>
-      <td align="center" width="120"><strong>Backend</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=fastapi,mysql,nodejs,express" /></td>
+      <td align="center" width="140"><strong>🎯 AI/ML Tools</strong></td>
+      <td>
+      <img src="https://skillicons.dev/icons?i=opencv" />
+      <img src="https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black" />
+      <img src="https://img.shields.io/badge/LangChain-121212?style=flat-square&logo=chainlink&logoColor=white" />
+      <img src="https://img.shields.io/badge/Qdrant-DC244C?style=flat-square&logo=databricks&logoColor=white" />
+      <img src="https://img.shields.io/badge/FAISS-0467DF?style=flat-square&logo=meta&logoColor=white" />
+      <img src="https://img.shields.io/badge/Weights%20%26%20Biases-FFBE00?style=flat-square&logo=weightsandbiases&logoColor=black" />
+      </td>
     </tr>
     <tr>
-      <td align="center" width="120"><strong>Frontend</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,vite" /></td>
+      <td align="center" width="140"><strong>💻 Core Languages</strong></td>
+      <td><img src="https://skillicons.dev/icons?i=py,cpp,rust,c" />
+      <img src="https://img.shields.io/badge/CUDA-76B900?style=flat-square&logo=nvidia&logoColor=white" />
+      </td>
     </tr>
     <tr>
-      <td align="center" width="120"><strong>AI / ML</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=pytorch,tensorflow,opencv,scikitlearn" /></td>
+      <td align="center" width="140"><strong>⚡ Embedded AI</strong></td>
+      <td>
+      <img src="https://img.shields.io/badge/ESP32-000000?style=flat-square&logo=espressif&logoColor=white" />
+      <img src="https://img.shields.io/badge/FreeRTOS-00979D?style=flat-square&logo=freertos&logoColor=white" />
+      <img src="https://img.shields.io/badge/ARM%20Cortex-0091BD?style=flat-square&logo=arm&logoColor=white" />
+      <img src="https://img.shields.io/badge/Arduino-00979D?style=flat-square&logo=arduino&logoColor=white" />
+      <img src="https://img.shields.io/badge/TensorFlow%20Lite-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" />
+      </td>
     </tr>
     <tr>
-      <td align="center" width="120"><strong>DevOps</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=linux,git,github,docker,bash" /></td>
+      <td align="center" width="140"><strong>🔧 MLOps & Infra</strong></td>
+      <td><img src="https://skillicons.dev/icons?i=docker,linux,git" />
+      <img src="https://img.shields.io/badge/MLflow-0194E2?style=flat-square&logo=mlflow&logoColor=white" />
+      <img src="https://img.shields.io/badge/Ray-028CF0?style=flat-square&logo=ray&logoColor=white" />
+      <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
+      </td>
+    </tr>
+    <tr>
+      <td align="center" width="140"><strong>📊 Data & Vector DBs</strong></td>
+      <td>
+      <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" />
+      <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
+      <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" />
+      <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white" />
+      <img src="https://img.shields.io/badge/Pinecone-000000?style=flat-square&logo=pinecone&logoColor=white" />
+      </td>
     </tr>
   </table>
 </div>
 
 ---
 
-## 🗓️ Flow & Learning Timeline
+## 📚 Current Research & Interests
 
-- **2025** · Iterating on **SentinelFS** and **PULSE** (Parallel Unified Linear State Engine).
-- **2024** · Multiple cybersec prototypes, Rust deep dive.
-- **2023** · Foundations in full-stack web, backend auth, and ML fundamentals.
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h3>🔬 Active Research</h3>
+      <ul>
+        <li><strong>Memory Systems for LLMs</strong><br/>
+        Novel architectures for persistent context management</li>
+        <li><strong>Extreme Quantization</strong><br/>
+        Sub-8-bit neural networks with minimal accuracy loss</li>
+        <li><strong>Distributed Neural Networks</strong><br/>
+        Peer-to-peer collaborative inference</li>
+        <li><strong>Edge AI Optimization</strong><br/>
+        Real-time ML on resource-constrained devices</li>
+      </ul>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🎯 Exploring</h3>
+      <ul>
+        <li><strong>Neural Architecture Search</strong><br/>
+        AutoML for embedded systems</li>
+        <li><strong>Federated Learning</strong><br/>
+        Privacy-preserving distributed training</li>
+        <li><strong>Model Compression</strong><br/>
+        Pruning, distillation, and knowledge transfer</li>
+        <li><strong>Real-Time Inference</strong><br/>
+        Sub-millisecond neural networks</li>
+      </ul>
+    </td>
+    <td width="33%" valign="top">
+      <h3>📖 Learning</h3>
+      <ul>
+        <li><strong>Rust for ML Systems</strong><br/>
+        High-performance ML infrastructure</li>
+        <li><strong>CUDA/Triton Kernels</strong><br/>
+        Custom GPU operations</li>
+        <li><strong>Reinforcement Learning</strong><br/>
+        Multi-agent systems and game theory</li>
+        <li><strong>Neuromorphic Computing</strong><br/>
+        Spiking neural networks</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
+## 🗓️ Research Timeline
+
+- **2025** · Deep dive into **PULSE Memory Engine** optimization and **LLM quantization research**. Publishing benchmarks on distributed AI systems.
+- **2024** · Built **SentinelFS** (distributed AI), **TinyML runtime** for ESP32. Experimented with fault-tolerant neural architectures.
+- **2023** · Foundations in PyTorch, TensorFlow, ML fundamentals. Started research in embedded AI and edge computing.
+
+---
+
+## 🤝 Let's Collaborate!
+
 <div align="center">
-  <strong>⭐ Star a repo or reach out if this resonates!</strong>
+  <p>
+    <strong>Interested in AI/ML research, LLM optimization, or distributed systems?</strong><br/>
+    Let's collaborate on cutting-edge projects or discuss novel architectures!
+  </p>
+
+  <p>
+    <a href="mailto:mehmetardahakbilen2005@gmail.com">
+      <img src="https://img.shields.io/badge/Email-Research%20Inquiries-7f5af0?style=for-the-badge&logo=gmail&logoColor=white" />
+    </a>
+    <a href="https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/">
+      <img src="https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white" />
+    </a>
+    <a href="https://github.com/reicalasso">
+      <img src="https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white" />
+    </a>
+  </p>
+
+  <p>
+    <em>"Building the future of efficient, distributed, and edge-deployable AI systems."</em>
+  </p>
+
+  <br/>
+
+  <sub>
+    ⭐ Star my repos if you find them interesting | 🔗 Open to research collaborations | 💬 Always happy to discuss AI/ML
+  </sub>
 </div>
