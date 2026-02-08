@@ -57,7 +57,7 @@
   <br>
 
   <!-- Top Languages Card -->
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso&hide=html,css,javascript" alt="Top Languages" width="45%" />
+  <img src="https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso&hide=html,css,javascript" alt="Top Languages" width="45%" />
 
   <br/><br/>
 
