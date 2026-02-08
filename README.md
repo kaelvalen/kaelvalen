@@ -81,15 +81,15 @@
   <table>
     <tr>
       <td align="center" width="120"><strong>Languages</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=cpp,rust,py,c,ts,js,html,css" /></td>
+      <td><img src="https://skillicons.dev/icons?i=cpp,rust,py,ts,js" /></td>
     </tr>
     <tr>
       <td align="center" width="120"><strong>Backend</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=fastapi,postgres,mysql,redis,nodejs,express,mongodb" /></td>
+      <td><img src="https://skillicons.dev/icons?i=fastapi,mysql,nodejs,express" /></td>
     </tr>
     <tr>
       <td align="center" width="120"><strong>Frontend</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,vite,bootstrap" /></td>
+      <td><img src="https://skillicons.dev/icons?i=react,nextjs,tailwind,vite" /></td>
     </tr>
     <tr>
       <td align="center" width="120"><strong>AI / ML</strong></td>
@@ -98,10 +98,6 @@
     <tr>
       <td align="center" width="120"><strong>DevOps</strong></td>
       <td><img src="https://skillicons.dev/icons?i=linux,git,github,docker,bash" /></td>
-    </tr>
-    <tr>
-      <td align="center" width="120"><strong>Embedded</strong></td>
-      <td><img src="https://skillicons.dev/icons?i=arduino,raspberrypi,c" /></td>
     </tr>
   </table>
 </div>
