@@ -24,11 +24,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: reicalasso
 
-      - name: Publish to output branch
+      - name: Publish 3D Graph to output/3d
         uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: profile-3d-contrib
+          destination_dir: 3d   # ← KRİTİK SATIR
           keep_history: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
