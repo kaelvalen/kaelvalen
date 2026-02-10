@@ -20,10 +20,9 @@ jobs:
 
       - name: Generate 3D Contribution Graph
         uses: yoshi389111/github-profile-3d-contrib@0.7.1
-        with:
-          username: ${{ github.repository_owner }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: reicalasso
 
       - name: Publish to output branch
         uses: crazy-max/ghaction-github-pages@v4
