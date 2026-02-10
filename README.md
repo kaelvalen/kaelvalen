@@ -76,7 +76,7 @@
 <div align="center">
   <h2>3D Contribution Graph</h2>
   <img
-    src="https://raw.githubusercontent.com/reicalasso/reicalasso/output/3d/profile-night-view.svg"
+    src="https://raw.githubusercontent.com/reicalasso/reicalasso/output/profile-night-view.svg"
     alt="3D Contribution Graph"
     width="100%"
   />
