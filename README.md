@@ -58,7 +58,7 @@
   <br>
 
   <!-- Top Languages Card -->
-  <img src="https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso&hide=html,css,javascript" alt="Top Languages" width="60%" />
+  <img src="https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=reicalasso&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&title_color=7f5af0&text_color=ffffff&icon_color=7f5af0&langs_count=8&exclude_repo=reicalasso&hide=html,css,javascript,typescript" alt="Top Languages" width="60%" />
 
   <br/><br/>
 
@@ -78,8 +78,13 @@
 <!-- 3D Contribution Graph -->
 <div align="center">
   <h2>3D Contribution Graph</h2>
-  <img src="https://raw.githubusercontent.com/reicalasso/reicalasso/output/profile-night-rainbow.svg" alt="3D Contribution Graph" width="100%" />
+  <img
+    src="https://raw.githubusercontent.com/reicalasso/reicalasso/output/3d/profile-night-view.svg"
+    alt="3D Contribution Graph"
+    width="100%"
+  />
 </div>
+
 
 ---
 
