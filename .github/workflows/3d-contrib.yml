@@ -22,7 +22,7 @@ jobs:
         uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: reicalasso
+          USERNAME: kaelvalen
 
       - name: Publish 3D Graph to output branch
         uses: crazy-max/ghaction-github-pages@v4
