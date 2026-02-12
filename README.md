@@ -2,6 +2,13 @@
   <!-- Banner -->
   <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
 
+  <!-- Spotify Now Playing -->
+  <div align="right" style="position: relative; margin-top: -120px; margin-right: 20px;">
+    <a href="https://github.com/kaelvalen/spotify-github-profile">
+      <img src="https://spotify-github-profile.kittinanx.com/api/view?uid=sn1uybyd67gt3ikqu8uosb0tv&cover_image=true&theme=novatorem&show_offline=false&background_color=0d1117&interchange=false&bar_color=7f5af0&bar_color_cover=true" alt="Spotify Now Playing" width="380" />
+    </a>
+  </div>
+
   <br/><br/>
 
   <!-- Avatar -->
