@@ -18,18 +18,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create settings file
+        run: |
+          cat << 'EOF' > settings.json
+          {
+            "type": "normal",
+            "contributionView": "language",
+            "aggregateContributions": "all",
+            "isometric": true
+          }
+          EOF
+
       - name: Generate 3D Contribution Graph
         uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN }}
           USERNAME: kaelvalen
-          SETTING_JSON: |
-            {
-              "type": "normal",
-              "contributionView": "language",
-              "aggregateContributions": "all",
-              "isometric": true
-            }
+          SETTING_JSON: settings.json
 
       - name: Publish 3D Graph to output branch
         uses: crazy-max/ghaction-github-pages@v4
