@@ -23,7 +23,6 @@ jobs:
           cat << 'EOF' > settings.json
           {
             "type": "normal",
-            "contributionView": "language",
             "aggregateContributions": "all",
             "isometric": true
           }
