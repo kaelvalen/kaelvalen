@@ -3,7 +3,7 @@
   <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
 
   <br/>
-  <h1>Arda Hakbilen (<strong>Kael Valen</strong>)</h1>
+  <h1>Mehmet Arda Hakbilen (<strong>Kael Valen</strong>)</h1>
   <p><em>ML Architecture Researcher · Non-Transformer Models · Systematic Learning</em></p>
 
   <!-- Typing SVG -->
