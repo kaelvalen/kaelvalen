@@ -91,7 +91,7 @@
 
 <table>
   <tr>
-    <td width="50%">
+    <td width="33%">
       <h3>Beyond Transformer</h3>
       <p><strong>Open-source alternative architecture research</strong></p>
       <p>
@@ -112,28 +112,7 @@
         • RWKV architecture comparison
       </p>
     </td>
-    <td width="50%">
-      <h3>Learning Tracker</h3>
-      <p><strong>Structured habit & progress management</strong></p>
-      <p>
-        SQLite-based system for breaking vibe coding habits. Daily plans, evening reports, focus zone management, and streak tracking with AI coach integration.
-      </p>
-      <p>
-        <code>Python</code> <code>SQLite</code> <code>CLI</code> <code>Anthropic API</code>
-      </p>
-      <p>
-        <img src="https://img.shields.io/badge/Status-Active_Use-success?style=for-the-badge" />
-      </p>
-      <p>
-        <strong>Features:</strong><br/>
-        • GREEN/RED focus zone tracking<br/>
-        • Morning planning + evening review<br/>
-        • AI coach for accountability
-      </p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
+    <td width="33%">
       <h3>SentinelFS</h3>
       <p><strong>Distributed P2P File Sync (Archived)</strong></p>
       <p>
@@ -155,7 +134,7 @@
         • Byzantine fault tolerance
       </p>
     </td>
-    <td width="50%">
+    <td width="33%">
       <h3>Research Blog (Planned)</h3>
       <p><strong>Implementation Notes & Architecture Analysis</strong></p>
       <p>
@@ -250,7 +229,7 @@
       </ul>
     </td>
     <td width="33%" valign="top">
-      <h3>Next Phase (Q2 2025)</h3>
+      <h3>Next Phase (Q2 2026)</h3>
       <ul>
         <li><strong>CUDA Optimization</strong><br/>
         Custom kernels for inference</li>
