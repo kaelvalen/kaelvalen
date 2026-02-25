@@ -247,9 +247,9 @@
         <li><strong>Implementation First</strong><br/>
         Build it before believing it</li>
         <li><strong>Question Assumptions</strong><br/>
-        Why transformers for everything?</li>
+        Why X for everything?</li>
         <li><strong>Systematic Learning</strong><br/>
-        No vibe coding, structured roadmap</li>
+        Structured</li>
         <li><strong>Trade-off Analysis</strong><br/>
         Speed vs accuracy vs memory</li>
       </ul>
