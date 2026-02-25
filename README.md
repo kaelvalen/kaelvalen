@@ -211,51 +211,6 @@
   </table>
 </div>
 
----
-
-## Current Research & Learning Path
-
-<table>
-  <tr>
-    <td width="33%" valign="top">
-      <h3>Active Implementation</h3>
-      <ul>
-        <li><strong>State-Space Models</strong><br/>
-        Mamba & RWKV from-scratch builds</li>
-        <li><strong>Flash Attention v2</strong><br/>
-        CUDA kernel-level understanding</li>
-        <li><strong>Hybrid RNN-Attention</strong><br/>
-        Exploring architecture combinations</li>
-      </ul>
-    </td>
-    <td width="33%" valign="top">
-      <h3>Next Phase (Q2 2026)</h3>
-      <ul>
-        <li><strong>CUDA Optimization</strong><br/>
-        Custom kernels for inference</li>
-        <li><strong>JAX Deep Dive</strong><br/>
-        Functional programming for ML</li>
-        <li><strong>Quantization Research</strong><br/>
-        INT4/INT8 with minimal loss</li>
-        <li><strong>Production Inference</strong><br/>
-        Deployment-ready pipelines</li>
-      </ul>
-    </td>
-    <td width="33%" valign="top">
-      <h3>Philosophy</h3>
-      <ul>
-        <li><strong>Implementation First</strong><br/>
-        Build it before believing it</li>
-        <li><strong>Question Assumptions</strong><br/>
-        Why X for everything?</li>
-        <li><strong>Systematic Learning</strong><br/>
-        Structured</li>
-        <li><strong>Trade-off Analysis</strong><br/>
-        Speed vs accuracy vs memory</li>
-      </ul>
-    </td>
-  </tr>
-</table>
 
 ---
 
