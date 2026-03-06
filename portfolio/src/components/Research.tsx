@@ -6,8 +6,8 @@ import ParallaxCard from "./ParallaxCard";
 const researchAreas = [
   {
     color: "accent",
-    glowColor: "rgba(127,90,240,0.15)",
-    borderGlow: "rgba(127,90,240,0.4)",
+    glowColor: "rgba(212,145,42,0.15)",
+    borderGlow: "rgba(212,145,42,0.4)",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
         <rect x="4" y="4" width="16" height="16" />
@@ -29,8 +29,8 @@ const researchAreas = [
   },
   {
     color: "accent-pink",
-    glowColor: "rgba(253,111,248,0.12)",
-    borderGlow: "rgba(253,111,248,0.35)",
+    glowColor: "rgba(212,78,56,0.12)",
+    borderGlow: "rgba(212,78,56,0.35)",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
         <path d="M12 2L2 7l10 5 10-5-10-5z" />
@@ -50,8 +50,8 @@ const researchAreas = [
   },
   {
     color: "accent-green",
-    glowColor: "rgba(44,182,125,0.12)",
-    borderGlow: "rgba(44,182,125,0.35)",
+    glowColor: "rgba(82,168,120,0.12)",
+    borderGlow: "rgba(82,168,120,0.35)",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-8 h-8">
         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />

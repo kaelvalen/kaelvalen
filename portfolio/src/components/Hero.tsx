@@ -171,7 +171,7 @@ export default function Hero() {
     >
       <div className="absolute inset-0">
         <ColorBends
-          colors={["#865eff", "#ffffff", "#ff63d8"]}
+          colors={["#d4912a", "#ffffff", "#d44e38"]}
           rotation={-1}
           speed={0}
           scale={0.1}
@@ -210,7 +210,7 @@ export default function Hero() {
         <div ref={ctaRef} className="flex flex-wrap gap-3 justify-center mb-14">
           <a
             href="#research"
-            className="px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-all duration-200 hover:shadow-[0_0_24px_rgba(127,90,240,0.5)]"
+            className="px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-all duration-200 hover:shadow-[0_0_24px_rgba(212,145,42,0.5)]"
           >
             View Research
           </a>

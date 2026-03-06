@@ -16,7 +16,7 @@ const categories: {
   {
     name: "ML Frameworks",
     color: "accent",
-    glowColor: "rgba(127,90,240,0.12)",
+    glowColor: "rgba(212,145,42,0.12)",
     icon: "⬡",
     items: [
       { name: "PyTorch", Icon: SiPytorch },
@@ -28,7 +28,7 @@ const categories: {
   {
     name: "Research Tools",
     color: "accent-pink",
-    glowColor: "rgba(253,111,248,0.10)",
+    glowColor: "rgba(212,78,56,0.10)",
     icon: "◈",
     items: [
       { name: "HuggingFace", Icon: SiHuggingface },
@@ -40,7 +40,7 @@ const categories: {
   {
     name: "Core Languages",
     color: "accent-green",
-    glowColor: "rgba(44,182,125,0.10)",
+    glowColor: "rgba(82,168,120,0.10)",
     icon: "λ",
     items: [
       { name: "Python", Icon: SiPython },
@@ -64,7 +64,7 @@ const categories: {
   {
     name: "Web Stack",
     color: "accent",
-    glowColor: "rgba(127,90,240,0.10)",
+    glowColor: "rgba(212,145,42,0.10)",
     icon: "◇",
     items: [
       { name: "React", Icon: SiReact },

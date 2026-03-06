@@ -33,9 +33,9 @@ const CardNav: React.FC<CardNavProps> = ({
   items,
   className = "",
   ease = "power3.out",
-  baseColor = "#16161e",
-  menuColor = "#e2e2ef",
-  buttonBgColor = "#7f5af0",
+  baseColor = "#1a1815",
+  menuColor = "#f0ebe0",
+  buttonBgColor = "#d4912a",
   buttonTextColor = "#fff",
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
