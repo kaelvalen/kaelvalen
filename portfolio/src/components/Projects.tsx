@@ -78,7 +78,7 @@ export default function Projects() {
           <article className="relative bg-bg-card border border-accent/20 rounded-2xl p-5 sm:p-8 mb-6 group hover:border-accent/40 hover:bg-bg-card-hover transition-all duration-300 overflow-hidden">
             {/* Background glow */}
             <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={{ background: "radial-gradient(ellipse at 0% 0%, rgba(212,145,42,0.08), transparent 60%)" }}
+              style={{ background: "radial-gradient(ellipse at 0% 0%, rgba(229,62,62,0.08), transparent 60%)" }}
             />
 
             <div className="relative">

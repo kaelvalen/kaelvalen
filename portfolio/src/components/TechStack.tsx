@@ -16,7 +16,7 @@ const categories: {
   {
     name: "ML Frameworks",
     color: "accent",
-    glowColor: "rgba(212,145,42,0.12)",
+    glowColor: "rgba(229,62,62,0.12)",
     icon: "⬡",
     items: [
       { name: "PyTorch", Icon: SiPytorch },
@@ -28,7 +28,7 @@ const categories: {
   {
     name: "Research Tools",
     color: "accent-pink",
-    glowColor: "rgba(212,78,56,0.10)",
+    glowColor: "rgba(252,129,129,0.10)",
     icon: "◈",
     items: [
       { name: "HuggingFace", Icon: SiHuggingface },
@@ -40,7 +40,7 @@ const categories: {
   {
     name: "Core Languages",
     color: "accent-green",
-    glowColor: "rgba(82,168,120,0.10)",
+    glowColor: "rgba(104,211,145,0.10)",
     icon: "λ",
     items: [
       { name: "Python", Icon: SiPython },
@@ -52,7 +52,7 @@ const categories: {
   {
     name: "Infrastructure",
     color: "accent-orange",
-    glowColor: "rgba(255,139,57,0.10)",
+    glowColor: "rgba(246,173,85,0.10)",
     icon: "⊞",
     items: [
       { name: "Linux", Icon: SiLinux },
@@ -64,7 +64,7 @@ const categories: {
   {
     name: "Web Stack",
     color: "accent",
-    glowColor: "rgba(212,145,42,0.10)",
+    glowColor: "rgba(229,62,62,0.10)",
     icon: "◇",
     items: [
       { name: "React", Icon: SiReact },
@@ -77,7 +77,7 @@ const categories: {
 
 export default function TechStack() {
   return (
-    <section id="stack" className="py-28 px-4 sm:px-6 bg-bg-secondary/50">
+    <section id="stack" className="py-28 px-4 sm:px-6 bg-bg">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <h2 className="text-3xl font-bold mb-4">

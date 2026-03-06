@@ -91,7 +91,7 @@ export default function Contact() {
           <div className="flex flex-wrap gap-3 justify-center">
             <a
               href="mailto:mehmetardahakbilen2005@gmail.com"
-              className="flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-all duration-200 hover:shadow-[0_0_24px_rgba(212,145,42,0.4)]"
+              className="flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-all duration-200 hover:shadow-[0_0_24px_rgba(229,62,62,0.4)]"
             >
               <EmailIcon />
               Send Email

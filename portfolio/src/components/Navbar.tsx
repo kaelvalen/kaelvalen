@@ -5,8 +5,8 @@ import CardNav, { CardNavItem } from "./CardNav";
 const items: CardNavItem[] = [
   {
     label: "About",
-    bgColor: "#0c0b09",
-    textColor: "#f0ebe0",
+    bgColor: "#0f0f0f",
+    textColor: "#fafafa",
     links: [
       { label: "Who I Am", href: "#about", ariaLabel: "About me" },
       { label: "Philosophy", href: "#about", ariaLabel: "My philosophy" },
@@ -14,8 +14,8 @@ const items: CardNavItem[] = [
   },
   {
     label: "Research",
-    bgColor: "#131210",
-    textColor: "#f0ebe0",
+    bgColor: "#141414",
+    textColor: "#fafafa",
     links: [
       { label: "State-Space Models", href: "#research", ariaLabel: "State-space models research" },
       { label: "Hybrid Archs", href: "#research", ariaLabel: "Hybrid architectures" },
@@ -24,8 +24,8 @@ const items: CardNavItem[] = [
   },
   {
     label: "Projects",
-    bgColor: "#1a1815",
-    textColor: "#f0ebe0",
+    bgColor: "#1a1a1a",
+    textColor: "#fafafa",
     links: [
       { label: "Beyond Transformer", href: "#projects", ariaLabel: "Beyond Transformer project" },
       { label: "SentinelFS", href: "#projects", ariaLabel: "SentinelFS project" },
@@ -33,8 +33,8 @@ const items: CardNavItem[] = [
   },
   {
     label: "Stack",
-    bgColor: "#1e1c18",
-    textColor: "#f0ebe0",
+    bgColor: "#1e1e1e",
+    textColor: "#fafafa",
     links: [
       { label: "ML Frameworks", href: "#stack", ariaLabel: "ML frameworks" },
       { label: "Languages", href: "#stack", ariaLabel: "Core languages" },
