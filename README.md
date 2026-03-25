@@ -1,254 +1,114 @@
 <div align="center">
-  <!-- Banner -->
   <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
 
-<br/>
-  <h1>Mehmet Arda Hakbilen (<strong>Kael Valen</strong>)</h1>
-  <p><em>ML Architecture Researcher · Non-Transformer Models · Systematic Learning</em></p>
-
-<br/>
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&duration=3500&pause=800&color=E53E3E&center=true&vCenter=true&multiline=true&repeat=true&random=false&width=850&height=180&lines=Building+Beyond+Transformer;Exploring+State-Space+Models+%26+Hybrid+RNNs;Questioning+the+Transformer+Monopoly" alt="Typing SVG" />
-  </a>
-  <br/>
   <br/>
 
-<p>
-    <img src="https://img.shields.io/badge/Research-Alternative%20Architectures-e53e3e?style=for-the-badge&logo=openai&logoColor=white" alt="Research badge" />
-    <img src="https://img.shields.io/badge/Focus-Beyond%20Transformer-c53030?style=for-the-badge&logo=pytorch&logoColor=white" alt="Focus badge" />
-    <img src="https://komarev.com/ghpvc/?username=kaelvalen&label=Profile%20views&color=e53e3e&style=for-the-badge" alt="Profile views counter" />
+  <h1>Mehmet Arda Hakbilen <strong>(Kael Valen)</strong></h1>
+  <p><em>Software Engineer · ML Systems & Efficient Architectures · Student</em></p>
+
+  <br/>
+
+  <p>
+    <img src="https://img.shields.io/badge/Focus-Efficient%20ML%20Systems-e53e3e?style=for-the-badge&logo=pytorch&logoColor=white" />
+    <img src="https://img.shields.io/badge/Research-Alternative%20Architectures-c53030?style=for-the-badge&logo=openai&logoColor=white" />
+    <img src="https://komarev.com/ghpvc/?username=kaelvalen&label=Profile%20views&color=e53e3e&style=for-the-badge" />
   </p>
 
-<br/>
+  <br/>
 
-<p align="center">
-    <em>
-      Researching <strong>non-transformer architectures</strong> through systematic implementation.<br/>
-      Not just reading papers — building Mamba, RWKV, Flash Attention from scratch.
-    </em>
-  </p>
-
-<br/>
-
-<p>
-    <a href="mailto:mehmetardahakbilen2005@gmail.com"><img src="https://img.shields.io/badge/Email-Contact%20Me-e53e3e?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
-    <a href="https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/"><img src="https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-    <a href="https://github.com/kaelvalen"><img src="https://img.shields.io/badge/GitHub-@kaelvalen-222?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
+  <p>
+    <a href="mailto:mehmetardahakbilen2005@gmail.com">
+      <img src="https://img.shields.io/badge/Email-Contact-e53e3e?style=for-the-badge&logo=gmail&logoColor=white" />
+    </a>
+    <a href="https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/">
+      <img src="https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white" />
+    </a>
   </p>
 </div>
 
 ---
 
-<div align="center">
-  <h2>GitHub Analytics & Activity</h2>
-  <p><em>Tracking systematic learning through daily commits</em></p>
-  <br>
-  <img src="https://github.com/kaelvalen/kaelvalen/blob/metrics/github-metrics.svg" alt="Kael Valen's Metrics" width="85%" />
-</div>
+## What I'm Working On
 
-<br />
+I'm interested in the intersection of **model architecture** and **inference efficiency** — specifically, why modern sequence models are designed the way they are, where they fail, and whether simpler alternatives can close the gap.
 
-<div align="center">
-  <img src="https://github.com/kaelvalen/kaelvalen/blob/output/github-contribution-grid-snake.svg" alt="Snake Animation" width="100%" />
-</div>
+Right now I'm building [**PULSE**](https://github.com/kaelvalen/beyond_transformer) — an experimental O(n) architecture that replaces the standard SSM + Attention + State stack with a single uniform block. It's not finished. It's a research project where I'm learning by building from scratch.
 
-<br/>
+**Current focus areas:**
+- Linear attention and its approximation trade-offs
+- Kernel-based sequence models vs. softmax attention
+- Hardware-aware algorithm design (memory hierarchy, tiling, compute efficiency)
+- Why Flash Attention works at the kernel level — working through the math
 
 ---
 
-## Research & Core Focus
+## Projects
 
-### **Beyond Transformer: Alternative Sequence Architectures**
+### [PULSE — Parallel Unified Linear State Engine](https://github.com/kaelvalen/beyond_transformer)
+`PyTorch` `Python` `Research`
 
-> Questioning the assumption that transformers are the only viable solution
-
-- **State-Space Models** → Mamba & RWKV implementations
-
-  - Linear-time inference vs quadratic attention complexity
-  - Selective state mechanisms for efficient memory
-  - Comparing trade-offs: speed vs expressiveness
-- **Hybrid Architectures** → RNN + Attention combinations
-
-  - Exploring best of both worlds: recurrence + selectivity
-  - Custom memory systems for long-context tasks
-  - Implementation-first approach to understanding
-- **Flash Attention v2** → From-scratch CUDA optimization
-
-  - Understanding memory-efficient attention at kernel level
-  - Production inference optimization
-  - 10x speedup through proper memory access patterns
+An experimental sequence architecture exploring whether a single O(n) primitive (local convolution + linear attention + gated fusion) can replace the complexity of transformer-style stacks. Active development — see the repo for current status and known issues.
 
 ---
 
-## Featured Projects
+### [SentinelFS](https://github.com/kaelvalen/SentinelFS)
+`C++17` `P2P` `Distributed Systems` · **Archived**
+
+Distributed peer-to-peer file sync with ML-based anomaly detection, delta-sync algorithms, and self-healing network topology. No longer maintained — kept for reference.
+
+---
+
+## Tech Stack
 
 <table>
   <tr>
-    <td width="33%">
-      <h3>Beyond Transformer</h3>
-      <p><strong>Open-source alternative architecture research</strong></p>
-      <p>
-        Implementation-first approach to understanding non-transformer models. Building Mamba, RWKV, and hybrid systems from scratch to compare trade-offs.
-      </p>
-      <p>
-        <code>PyTorch</code> <code>JAX</code> <code>CUDA</code> <code>ONNX</code>
-      </p>
-      <p>
-        <a href="https://github.com/kaelvalen/beyond_transformer">
-          <img src="https://img.shields.io/badge/View_Project-e53e3e?style=for-the-badge&logo=github" />
-        </a>
-      </p>
-      <p>
-        <strong>Current Phase:</strong><br/>
-        • Flash Attention v2 from scratch<br/>
-        • Mamba state-space model analysis<br/>
-        • RWKV architecture comparison
-      </p>
+    <td><strong>ML / Research</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" />
+      <img src="https://img.shields.io/badge/CUDA-76B900?style=flat-square&logo=nvidia&logoColor=white" />
+      <img src="https://img.shields.io/badge/JAX-00599C?style=flat-square&logo=google&logoColor=white" />
+      <img src="https://img.shields.io/badge/HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black" />
     </td>
-    <td width="33%">
-      <h3>SentinelFS</h3>
-      <p><strong>Distributed P2P File Sync (Archived)</strong></p>
-      <p>
-        Autonomous peer-to-peer synchronization with ML-based anomaly detection, delta-sync algorithms, and genetic topology remeshing for fault tolerance.
-      </p>
-      <p>
-        <code>C++17</code> <code>Threading</code> <code>P2P</code> <code>ML</code>
-      </p>
-      <p>
-        <a href="https://github.com/kaelvalen/SentinelFS">
-          <img src="https://img.shields.io/badge/View_Project-c53030?style=for-the-badge&logo=github" />
-        </a>
-      </p>
-      <p>
-        <strong>Key Features:</strong><br/>
-        • ML anomaly detection pipeline<br/>
-        • Self-healing network topology<br/>
-        • Zero-copy delta sync protocol<br/>
-        • Byzantine fault tolerance
-      </p>
+  </tr>
+  <tr>
+    <td><strong>Languages</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+      <img src="https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white" />
+      <img src="https://img.shields.io/badge/Rust-000000?style=flat-square&logo=rust&logoColor=white" />
+      <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white" />
     </td>
-    <td width="33%">
-      <h3>Research Blog <em>(Planned)</em></h3>
-      <p><strong>Implementation Notes & Architecture Analysis</strong></p>
-      <p>
-        Documenting the learning journey: from-scratch implementations, architecture comparisons, and trade-off analysis. Practical insights over theory.
-      </p>
-      <p>
-        <code>Markdown</code> <code>GitHub Pages</code> <code>Technical Writing</code>
-      </p>
-      <p>
-        <img src="https://img.shields.io/badge/Status-Planned-555555?style=for-the-badge" />
-      </p>
-      <p>
-        <strong>Planned Topics:</strong><br/>
-        • Mamba vs Transformer trade-offs<br/>
-        • Flash Attention internals<br/>
-        • CUDA kernel optimization<br/>
-        • JAX vs PyTorch for research
-      </p>
+  </tr>
+  <tr>
+    <td><strong>Web</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" />
+      <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" />
+      <img src="https://img.shields.io/badge/Tailwind-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" />
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Infra</strong></td>
+    <td>
+      <img src="https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black" />
+      <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
+      <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" />
     </td>
   </tr>
 </table>
 
 ---
 
-## Tech Stack & Tools
+## GitHub Activity
 
 <div align="center">
-  <table>
-    <tr>
-      <td align="center" width="140"><strong>ML Frameworks</strong></td>
-      <td>
-        <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" />
-        <img src="https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white" />
-        <img src="https://img.shields.io/badge/JAX-00599C?style=for-the-badge&logo=google&logoColor=white" />
-        <img src="https://img.shields.io/badge/ONNX-005CED?style=for-the-badge&logo=onnx&logoColor=white" />
-      </td>
-    </tr>
-    <tr>
-      <td align="center" width="140"><strong>Research Tools</strong></td>
-      <td>
-        <img src="https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" />
-        <img src="https://img.shields.io/badge/W&B-FFBE00?style=for-the-badge&logo=weightsandbiases&logoColor=black" />
-        <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" />
-        <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" />
-      </td>
-    </tr>
-    <tr>
-      <td align="center" width="140"><strong>Core Languages</strong></td>
-      <td>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-        <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" />
-        <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" />
-        <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-      </td>
-    </tr>
-    <tr>
-      <td align="center" width="140"><strong>Infrastructure</strong></td>
-      <td>
-        <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" />
-        <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-        <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
-        <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" />
-      </td>
-    </tr>
-    <tr>
-      <td align="center" width="140"><strong>Web Stack</strong></td>
-      <td>
-        <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
-        <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
-        <img src="https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-        <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
-      </td>
-    </tr>
-  </table>
+  <img src="https://github.com/kaelvalen/kaelvalen/blob/metrics/github-metrics.svg" width="85%" alt="GitHub Metrics" />
+  <br/><br/>
+  <img src="https://github.com/kaelvalen/kaelvalen/blob/output/github-contribution-grid-snake.svg" width="100%" alt="Contribution Snake" />
 </div>
 
 ---
 
-## Collaboration & Contact
-
 <div align="center">
-  <p>
-    <strong>Open to research collaboration & technical discussions</strong><br/>
-    Interested in alternative architectures, efficient inference, or systematic ML learning?
-  </p>
-
-<p>
-    <strong>What I'm looking for:</strong><br/>
-    • Co-researchers on non-transformer architectures<br/>
-    • Code review & implementation feedback<br/>
-    • Trade-off discussions: speed vs accuracy vs memory
-  </p>
-
-<p>
-    <strong>What I'm not interested in:</strong><br/>
-    ✗ Wrapper apps without novel architecture<br/>
-    ✗ "Just use ChatGPT API" projects<br/>
-    ✗ Hype-driven development
-  </p>
-
-<br/>
-
-<p>
-    <a href="mailto:mehmetardahakbilen2005@gmail.com">
-      <img src="https://img.shields.io/badge/Email-Research%20Inquiries-e53e3e?style=for-the-badge&logo=gmail&logoColor=white" />
-    </a>
-    <a href="https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/">
-      <img src="https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white" />
-    </a>
-    <a href="https://github.com/kaelvalen">
-      <img src="https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white" />
-    </a>
-  </p>
-
-<p>
-    <em>"Implementation over theory. Trade-offs over hype. Systematic learning over vibe coding."</em>
-  </p>
-
-<br/>
-
-<sub>
-    Star the repos if you find them useful. Building in private — launching soon.
-  </sub>
+  <sub>Open to research collaboration, architecture discussions, and code review. Not interested in wrapper apps or hype-driven projects.</sub>
 </div>
