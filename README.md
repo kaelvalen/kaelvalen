@@ -1,13 +1,9 @@
 <div align="center">
   <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
-
   <br/>
-
   <h1>Mehmet Arda Hakbilen <strong>(Kael Valen)</strong></h1>
-  <p><em>Engineer building efficient ML systems and the infrastructure they run on</em></p>
-
+  <p><em>Research engineer — efficient sequence architectures and the infrastructure they run on</em></p>
   <br/>
-
   <p>
     <a href="mailto:mehmetardahakbilen2005@gmail.com">
       <img src="https://img.shields.io/badge/Email-Contact-e53e3e?style=for-the-badge&logo=gmail&logoColor=white" />
@@ -22,37 +18,44 @@
 
 ## What I'm Working On
 
-I'm interested in the intersection of **model architecture** and **inference efficiency** — why modern sequence models are designed the way they are, where they fail, and whether simpler alternatives can close the gap.
+I'm interested in **why modern sequence architectures are designed the way they are** — the inductive biases baked in by training on language, where they don't transfer, and whether cleaner designs can close the gap on other signal types.
 
-My main project is [**PRISM**](https://github.com/kaelvalen/prism) — a modality-agnostic sequence model with a 12-layer hybrid backbone interleaving S4D-Complex blocks (continuous-time signal dynamics) with Gated Delta Rule blocks (matrix-valued associative memory) at a 3:1 ratio. The same backbone handles 12-lead ECG, image patches, and arbitrary continuous signals — only the input projection and output head are per-modality. Hybrid configuration reaches 88.4% on CIFAR-10 with ~8M parameters. Block-pattern ablations and PTB-XL ECG benchmarks are in progress; results land in the README as runs complete.
+My main project is [**PRISM**](https://github.com/kaelvalen/prism): a hybrid linear-recurrent backbone interleaving Mamba-2-style SSD blocks (per-channel selective state, no mean-over-D_h collapse) with Gated Delta Rule blocks (matrix-valued associative memory) at a 3:1 ratio. The same backbone — identical hyperparameters, no modality-specific tuning — is applied to 12-lead ECG (PTB-XL, primary), spoken commands, and sequential images. Primary metric is macro one-vs-rest AUROC; the target is matching `xresnet1d101` (~0.928) within bootstrap CI. A paper draft targeting ICML 2026 ES-FoMo IV / NeurIPS 2026 ENLSP-VI is in progress.
 
-Alongside the architecture work, I build the systems that production ML lives in — Go/Rust microservices, observability pipelines, and infrastructure tooling. I think the gap between "model that works in a notebook" and "model that ships" is a real engineering problem worth being good at.
+The reference implementation includes from-scratch SSD scan and chunked gated delta rule (UT transform / triangular solve), both with numerical-equivalence tests against `torch.associative_scan` and the FLA Triton kernels. 111 tests total: equivalence, float64 gradcheck, streaming state-passing, property-based.
 
-**Current focus areas:**
-- State-space models (S4D, complex diagonal SSMs) and associative memory (delta rule, fast weights)
-- Hybrid sequence architectures — when interleaving beats either component alone
-- Hardware-aware algorithm design (parallel scan, chunked recurrence, memory hierarchy)
-- Modality-agnostic backbones — testing how far a single design generalizes across signal types
-- Production ML infrastructure — agents, observability, distributed services
+Alongside the architecture work: Go/Rust microservices, observability tooling, and published PyPI packages — because the gap between "model that works in a notebook" and "model that ships" is a real engineering problem worth being good at.
+
+**Current focus:**
+- State-space models (Mamba-2 SSD, diagonal SSMs) and associative memory (delta rule, fast weights)
+- Cross-modal portability — testing how far a single hybrid backbone generalizes without per-modality tuning
+- Hardware-aware algorithm design: parallel scan, chunked recurrence, memory hierarchy
+- Clinical time-series modeling: multi-label ECG classification, macro AUROC as primary metric
+- Production ML infrastructure: training observability, checkpoint management, reproducible pipelines
 
 ---
 
 ## Projects
 
-### [PRISM — Parallel Recurrent Integrated Signal Model](https://github.com/kaelvalen/prism)
-`PyTorch` `SSM` `Delta Rule` `Research` · **Active**
+### [PRISM — modality-portable hybrid linear-recurrent backbone](https://github.com/kaelvalen/prism)
+`PyTorch` `SSM` `Mamba-2 SSD` `Gated Delta Rule` `Research` · **Active — paper in progress**
 
-A modality-agnostic sequence model: 12-layer hybrid backbone interleaving S4D-Complex blocks with Gated Delta Rule blocks at a 3:1 ratio. Custom parallel scan implementation (work-efficient Blelloch upsweep/downsweep) for the SSM path; chunked recurrence for the delta rule. Same backbone handles ECG, image patches, and continuous signals — only the input projection and output head change per modality. Hybrid run: 88.4% on CIFAR-10 (~8M params). Ablations and ECG benchmarks pending.
+12-layer hybrid backbone: SSD blocks (Mamba-2-style, per-channel selective state) interleaved with Gated Delta Rule blocks at 3:1. From-scratch reference implementations of both — Hillis-Steele scan + UT-transform chunked delta rule — with numerical equivalence tests against `torch.associative_scan` and FLA Triton kernels. Same backbone applied to PTB-XL ECG (primary, multi-label macro AUROC), Speech Commands, and sequential CIFAR-10 with no per-modality hyperparameter changes. S4D-Complex is preserved as an ablation row; the default is SSD. Paper target: ICML 2026 ES-FoMo IV or NeurIPS 2026 ENLSP-VI.
+
+### [trainscope](https://pypi.org/project/trainscope/)
+`Python` `FastAPI` `React` `Plotly` `PyPI` · **Published**
+
+LLM training loss spike flight recorder. FastAPI backend, React+Plotly frontend, Welford online z-score spike detection, Apache Arrow IPC transport. Published at `pypi.org/project/trainscope/` — a small tool I wished existed while running PRISM training runs.
 
 ### [PULSE — Parallel Unified Linear State Engine](https://github.com/kaelvalen/beyond_transformer)
 `PyTorch` `Research` · **Study repo**
 
-Earlier exploration of a single O(n) primitive (local convolution + linear attention + gated fusion + key-value memory) as a transformer alternative. Predates PRISM and reflects an earlier mental model — kept public as a reference for the design choices that led to PRISM.
+Predecessor to PRISM. Single O(n) primitive combining local convolution, linear attention, gated fusion, and key-value memory. Kept public as a reference for the design choices that led to PRISM — including an honest README rewrite that removed fabricated metrics.
 
 ### [NanoNet — Microservice Monitoring & Control Platform](https://github.com/kaelvalen/nanonet)
 `Go` `Rust` `TypeScript` `Docker` · **Production-grade**
 
-A full-stack monitoring and control platform for distributed services: Go backend (auth, metrics, alerting, SLO tracking, incident management), Rust agents for low-overhead host-side data collection, React/TypeScript frontend, and a mobile client. ~70k lines across the stack. Built solo end-to-end as an exercise in shipping production systems — not just designing them.
+Full-stack monitoring and control platform for distributed services: Go backend (auth, metrics, alerting, SLO tracking, incident management), Rust agents for low-overhead host-side data collection, React/TypeScript frontend. ~70k lines across the stack. Built solo end-to-end — the exercise was shipping a production system, not just designing one.
 
 ---
 
@@ -89,7 +92,7 @@ A full-stack monitoring and control platform for distributed services: Go backen
   <tr>
     <td><strong>Infra</strong></td>
     <td>
-      <img src="https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black" />
+      <img src="https://img.shields.io/badge/NixOS-5277C3?style=flat-square&logo=nixos&logoColor=white" />
       <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" />
       <img src="https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white" />
     </td>
