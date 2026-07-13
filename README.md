@@ -2,7 +2,7 @@
   <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
   <br/>
   <h1>Mehmet Arda Hakbilen <strong>(Kael Valen)</strong></h1>
-  <p><em>Research engineer — efficient sequence architectures and the infrastructure they run on</em></p>
+  <p><em>Software engineer — efficient sequence architectures and the infrastructure they run on</em></p>
   <br/>
   <p>
     <a href="mailto:mehmetardahakbilen2005@gmail.com">
@@ -50,12 +50,12 @@ LLM training loss spike flight recorder. FastAPI backend, React+Plotly frontend,
 ### [PULSE — Parallel Unified Linear State Engine](https://github.com/kaelvalen/beyond_transformer)
 `PyTorch` `Research` · **Study repo**
 
-Predecessor to PRISM. Single O(n) primitive combining local convolution, linear attention, gated fusion, and key-value memory. Kept public as a reference for the design choices that led to PRISM — including an honest README rewrite that removed fabricated metrics.
+Predecessor to PRISM. Single O(n) primitive combining local convolution, linear attention, gated fusion, and key-value memory. Kept public as a reference for the design choices that led to PRISM.
 
 ### [NanoNet — Microservice Monitoring & Control Platform](https://github.com/kaelvalen/nanonet)
 `Go` `Rust` `TypeScript` `Docker` · **Production-grade**
 
-Full-stack monitoring and control platform for distributed services: Go backend (auth, metrics, alerting, SLO tracking, incident management), Rust agents for low-overhead host-side data collection, React/TypeScript frontend. ~70k lines across the stack. Built solo end-to-end — the exercise was shipping a production system, not just designing one.
+Full-stack monitoring and control platform for distributed services: Go backend (auth, metrics, alerting, SLO tracking, incident management), Rust agents for low-overhead host-side data collection, React/TypeScript frontend. ~70k lines across the stack. Built solo end-to-end. The exercise was shipping a production system, not just designing one.
 
 ---
 
