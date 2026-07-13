@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="assets/github-header-banner.png" width="100%" alt="Kael Valen Banner" />
-  <br/>
   <h1>Mehmet Arda Hakbilen <strong>(Kael Valen)</strong></h1>
   <p><em>Software engineer — efficient sequence architectures and the infrastructure they run on</em></p>
   <br/>
