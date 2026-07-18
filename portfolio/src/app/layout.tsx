@@ -1,35 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const newsreader = Newsreader({
   subsets: ["latin"],
+  variable: "--font-newsreader",
+  style: ["normal", "italic"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jbmono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jbmono",
 });
 
 export const metadata: Metadata = {
-  title: "Kael Valen — ML Architecture Researcher",
+  title: "Mehmet Arda Hakbilen — ML architecture researcher",
   description:
-    "Mehmet Arda Hakbilen (Kael Valen) — Researching non-transformer architectures through systematic implementation. Mamba, RWKV, Flash Attention from scratch.",
+    "Sequence architectures studied from first principles: PRISM, a modality-portable SSD + Gated Delta Rule backbone, and the systems work around it.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
-      >
-        {children}
-      </body>
+    <html lang="en" className={`${newsreader.variable} ${jbmono.variable}`}>
+      <body className="bg-paper text-ink font-serif antialiased">{children}</body>
     </html>
   );
 }
