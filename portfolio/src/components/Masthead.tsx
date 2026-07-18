@@ -23,7 +23,7 @@ export default function Masthead() {
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-muted mb-6">
               ML architecture researcher
             </p>
-            <h1 className="uppercase leading-[0.95] tracking-tight text-[clamp(2.7rem,7.2vw,5.4rem)]">
+            <h1 className="uppercase leading-[0.95] tracking-tight font-medium text-[clamp(2.7rem,7.2vw,5.4rem)]">
               Mehmet&nbsp;Arda
               <br />
               Hakbilen

@@ -9,8 +9,8 @@
   --color-line: #d8d4c5;
   --color-accent: #e53e3e;
   --color-accent-deep: #b02424;
-  --font-serif: var(--font-newsreader), Georgia, serif;
-  --font-mono: var(--font-jbmono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: var(--font-plex-serif), Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 html {

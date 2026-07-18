@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Newsreader, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Serif, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const newsreader = Newsreader({
+const plexSerif = IBM_Plex_Serif({
   subsets: ["latin"],
-  variable: "--font-newsreader",
+  variable: "--font-plex-serif",
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
 });
 
-const jbmono = JetBrains_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-jbmono",
+  variable: "--font-plex-mono",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -25,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${jbmono.variable}`}>
+    <html lang="en" className={`${plexSerif.variable} ${plexMono.variable}`}>
       <body className="bg-paper text-ink font-serif antialiased">{children}</body>
     </html>
   );

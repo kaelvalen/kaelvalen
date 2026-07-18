@@ -24,7 +24,7 @@ export default function Contact() {
         Write to me —{" "}
         <a
           href="mailto:mehmetardahakbilen2005@gmail.com"
-          className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-all"
+          className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-words"
         >
           mehmetardahakbilen2005@gmail.com
         </a>
