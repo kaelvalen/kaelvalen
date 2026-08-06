@@ -6,21 +6,20 @@ I work on efficient sequence architectures and the infrastructure they run on. A
 
 ## Now
 
-My main project is [PRISM](https://github.com/kaelvalen/prism), a hybrid linear-recurrent backbone: Mamba-2-style SSD blocks interleaved with Gated Delta Rule blocks at 3:1, applied with identical hyperparameters to 12-lead ECG (PTB-XL), Speech Commands, and sequential CIFAR-10. The bet is that a single backbone, without language-specific design choices, can get within bootstrap CI of xresnet1d101 (~0.928 macro AUROC) on clinical time series.
+My main project right now is [trainscope](https://pypi.org/project/trainscope/), a post-mortem debugger for LLM training loss spikes. It started as a tool I needed during PRISM runs and has since become the focus: a CUSUM-based change-point detector catches gradual loss drift 5-20 steps before it turns into a full spike, validated with false-positive rate testing across 280+ held-out noise scenarios (0.0%) and sensitivity testing across drift magnitudes from 0.10σ to 0.50σ (100% detection). When a spike hits, the UI reconstructs the chronological failure cascade — which layer moved first, whether it was a distributional shift or a gradient explosion, and how many steps of warning were available before collapse.
 
-Both mixers are written from scratch, with numerical-equivalence tests against `torch.associative_scan` and the FLA Triton kernels. 270+ tests in total (equivalence, fp64 gradcheck, streaming state-passing, property-based). The pipeline is validated end-to-end on an RTX 5060 laptop; the full paper matrix hasn't been run yet. The draft is aimed at the ICML 2026 ES-FoMo IV or NeurIPS 2026 ENLSP-VI workshops.
-
-The current sub-project is MoM, in the same repo: rather than fixing the SSD:GDR ratio by hand, a per-token router chooses which memory primitive handles each token. The first spike gate failed. Routing doesn't collapse, but recall lags the GDR-only baseline, so I'm working through the mitigations. Everything has to fit in 8 GB of VRAM, which is a constraint I've come to appreciate.
+Before this, I closed out [NOESIS](https://github.com/kaelvalen/noesis), a continual-learning system that tried to inject retrieved memory (via a Titans-style associative matrix + test-time training) directly into a frozen LLM's hidden states. The result was negative and I think worth stating plainly: a frozen backbone's hidden manifold cannot be given new semantic content by an untrained vector injection, no matter how carefully the geometry is aligned — verified across KV-cache-purge controls, negative controls, and a 50-fact automated benchmark (0% recall). Full writeup in [FINDINGS.md](https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md).
 
 ## Projects
 
-- [prism](https://github.com/kaelvalen/prism) — see above. PyTorch, active.
-- [trainscope](https://pypi.org/project/trainscope/) — flight recorder for LLM training loss spikes. FastAPI + React, Welford z-score detection, on PyPI. Wrote it because I needed it during PRISM runs.
+- [trainscope](https://pypi.org/project/trainscope/) — see above. Post-mortem debugger for LLM training loss spikes. FastAPI + React, CUSUM change-point detection, WandB auto-attach, on PyPI.
+- [noesis](https://github.com/kaelvalen/noesis) — continual-learning experiment with frozen backbone + vector memory injection. Concluded negative result, documented in FINDINGS.md.
+- [prism](https://github.com/kaelvalen/prism) — hybrid linear-recurrent backbone: Mamba-2-style SSD blocks interleaved with Gated Delta Rule blocks, applied to 12-lead ECG (PTB-XL), Speech Commands, and sequential CIFAR-10. Paused — the pipeline is validated end-to-end but the full paper matrix was never run. Kept public as-is.
 - [connor](https://github.com/kaelvalen/connor) — terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
-- [latch-lang](https://github.com/kaelvalen/latch-lang) — my own programming language. Rust, on crates.io.
+- [latch-lang](https://github.com/kaelvalen/latch-lang) — my own programming language. Rust, on crates.io. Paused.
 - [weave](https://github.com/kaelvalen/weave) — local-first, plugin-based productivity app. Tauri + React + Rust.
 - [open-glyph](https://github.com/kaelvalen/open-glyph) — pixel-art editor for the Nothing Phone glyph matrix. Kotlin.
-- [nanonet](https://github.com/kaelvalen/nanonet) — monitoring platform for distributed services: Go backend, Rust agents, React frontend, ~70k lines, built solo. Mostly an exercise in shipping the boring parts too. Archived.
+- [nanonet](https://github.com/kaelvalen/nanonet) — monitoring platform for distributed services: Go backend, Rust agents, React frontend, ~70k lines, built solo. Archived.
 - [beyond_transformer](https://github.com/kaelvalen/beyond_transformer) — PULSE, the predecessor to PRISM. Kept public as a record of the design choices that led to the current one.
 
 ## Stack
