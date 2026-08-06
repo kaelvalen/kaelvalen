@@ -18,7 +18,6 @@ Before this, I closed out [NOESIS](https://github.com/kaelvalen/noesis), a conti
 - [connor](https://github.com/kaelvalen/connor) — terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
 - [latch-lang](https://github.com/kaelvalen/latch-lang) — my own programming language. Rust, on crates.io. Paused.
 - [weave](https://github.com/kaelvalen/weave) — local-first, plugin-based productivity app. Tauri + React + Rust.
-- [open-glyph](https://github.com/kaelvalen/open-glyph) — pixel-art editor for the Nothing Phone glyph matrix. Kotlin.
 - [nanonet](https://github.com/kaelvalen/nanonet) — monitoring platform for distributed services: Go backend, Rust agents, React frontend, ~70k lines, built solo. Archived.
 - [beyond_transformer](https://github.com/kaelvalen/beyond_transformer) — PULSE, the predecessor to PRISM. Kept public as a record of the design choices that led to the current one.
 
