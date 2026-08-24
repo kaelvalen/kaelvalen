@@ -10,7 +10,7 @@ const rows = [
 ];
 
 const notes = [
-  "270+ tests — numerical equivalence vs torch.associative_scan & the FLA Triton kernels, fp64 gradcheck, streaming state-passing, property-based",
+  "312 tests (1 skipped) — numerical equivalence vs torch.associative_scan & the FLA Triton kernels, fp64 gradcheck, streaming state-passing, property-based",
   "metric — macro one-vs-rest AUROC; baseline to match: xresnet1d101 ≈ 0.928",
   "constraint — everything fits in 8 GB of VRAM",
 ];
@@ -40,9 +40,10 @@ export default function Research() {
             <p>
               The follow-up, MoM, lets a per-token router choose which memory
               primitive handles each token instead of fixing the ratio by
-              hand. The first spike gate failed: routing doesn&apos;t
-              collapse, but recall lags the GDR-only baseline. That&apos;s the
-              current problem.
+              hand. The router now accepts an optional per-token surprise
+              signal (off by default, behavior unchanged), but this remains
+              untested — re-running the spike gate with surprise is planned
+              but pending.
             </p>
           </div>
 
