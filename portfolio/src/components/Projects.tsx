@@ -54,14 +54,6 @@ const projects: Project[] = [
     cat: "apps",
   },
   {
-    name: "open-glyph",
-    blurb: "pixel-art editor for the Nothing Phone glyph matrix",
-    stack: "Kotlin",
-    status: "public",
-    href: "https://github.com/kaelvalen/open-glyph",
-    cat: "apps",
-  },
-  {
     name: "beyond_transformer",
     blurb: "PULSE: predecessor to ENGRAM, kept as design record",
     stack: "PyTorch",
@@ -82,6 +74,11 @@ const projects: Project[] = [
 export default function Projects() {
   const [filter, setFilter] = useState<"all" | "ml" | "systems" | "apps">("all");
 
+  const countAll = projects.length;
+  const countMl = projects.filter((p) => p.cat === "ml").length;
+  const countSystems = projects.filter((p) => p.cat === "systems").length;
+  const countApps = projects.filter((p) => p.cat === "apps").length;
+
   const filtered = filter === "all" ? projects : projects.filter((p) => p.cat === filter);
 
   return (
@@ -97,7 +94,7 @@ export default function Projects() {
               filter === "all" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
             }`}
           >
-            all ({projects.length})
+            all ({countAll})
           </button>
           <button
             onClick={() => setFilter("ml")}
@@ -105,7 +102,7 @@ export default function Projects() {
               filter === "ml" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
             }`}
           >
-            ml & research (3)
+            ml & research ({countMl})
           </button>
           <button
             onClick={() => setFilter("systems")}
@@ -113,7 +110,7 @@ export default function Projects() {
               filter === "systems" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
             }`}
           >
-            systems (3)
+            systems ({countSystems})
           </button>
           <button
             onClick={() => setFilter("apps")}
@@ -121,7 +118,7 @@ export default function Projects() {
               filter === "apps" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
             }`}
           >
-            apps & tools (2)
+            apps & tools ({countApps})
           </button>
         </div>
       </div>

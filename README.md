@@ -26,7 +26,6 @@ Before this, I closed out [NOESIS](https://github.com/kaelvalen/noesis), a conti
 - [connor](https://github.com/kaelvalen/connor): terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
 - [latch-lang](https://github.com/kaelvalen/latch-lang): programming language written in Rust. On crates.io.
 - [weave](https://github.com/kaelvalen/weave): local-first, plugin-based productivity app. Tauri + React + Rust.
-- [open-glyph](https://github.com/kaelvalen/open-glyph): pixel-art editor for the Nothing Phone glyph matrix in Kotlin.
 - [nanonet](https://github.com/kaelvalen/nanonet): distributed service monitoring platform. Go backend, Rust agents, React frontend (~70k lines). Archived.
 
 ---
