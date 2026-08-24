@@ -19,6 +19,25 @@ export const metadata: Metadata = {
   title: "Mehmet Arda Hakbilen · ML architecture researcher",
   description:
     "Sequence architectures studied from first principles: ENGRAM, a modality-portable SSD + Gated Delta Rule backbone, and the systems work around it.",
+  metadataBase: new URL("https://kaelvalen.vercel.app"),
+  openGraph: {
+    title: "Mehmet Arda Hakbilen (kael valen) · ML architecture researcher",
+    description:
+      "Efficient sequence architectures & systems research: ENGRAM backbone, Trainscope debugger, and open systems.",
+    url: "https://kaelvalen.vercel.app",
+    siteName: "Mehmet Arda Hakbilen",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mehmet Arda Hakbilen · ML architecture researcher",
+    description:
+      "Efficient sequence architectures & systems research: ENGRAM backbone, Trainscope debugger, and open systems.",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import SectionHeader from "./SectionHeader";
 
 type Project = {
@@ -6,6 +9,7 @@ type Project = {
   stack: string;
   status: string;
   href: string;
+  cat: "ml" | "systems" | "apps";
 };
 
 const projects: Project[] = [
@@ -15,6 +19,7 @@ const projects: Project[] = [
     stack: "PyTorch",
     status: "active",
     href: "https://github.com/kaelvalen/engram",
+    cat: "ml",
   },
   {
     name: "trainscope",
@@ -22,6 +27,7 @@ const projects: Project[] = [
     stack: "FastAPI · React",
     status: "PyPI",
     href: "https://pypi.org/project/trainscope/",
+    cat: "ml",
   },
   {
     name: "latch-lang",
@@ -29,6 +35,7 @@ const projects: Project[] = [
     stack: "Rust",
     status: "crates.io",
     href: "https://github.com/kaelvalen/latch-lang",
+    cat: "systems",
   },
   {
     name: "connor",
@@ -36,6 +43,7 @@ const projects: Project[] = [
     stack: "Rust",
     status: "public",
     href: "https://github.com/kaelvalen/connor",
+    cat: "systems",
   },
   {
     name: "weave",
@@ -43,6 +51,7 @@ const projects: Project[] = [
     stack: "Tauri · React · Rust",
     status: "active",
     href: "https://github.com/kaelvalen/weave",
+    cat: "apps",
   },
   {
     name: "open-glyph",
@@ -50,6 +59,7 @@ const projects: Project[] = [
     stack: "Kotlin",
     status: "public",
     href: "https://github.com/kaelvalen/open-glyph",
+    cat: "apps",
   },
   {
     name: "beyond_transformer",
@@ -57,6 +67,7 @@ const projects: Project[] = [
     stack: "PyTorch",
     status: "superseded",
     href: "https://github.com/kaelvalen/beyond_transformer",
+    cat: "ml",
   },
   {
     name: "nanonet",
@@ -64,13 +75,56 @@ const projects: Project[] = [
     stack: "Go · Rust · TS",
     status: "archived",
     href: "https://github.com/kaelvalen/nanonet",
+    cat: "systems",
   },
 ];
 
 export default function Projects() {
+  const [filter, setFilter] = useState<"all" | "ml" | "systems" | "apps">("all");
+
+  const filtered = filter === "all" ? projects : projects.filter((p) => p.cat === filter);
+
   return (
     <section id="projects" className="py-16 md:py-24 border-t border-line">
-      <SectionHeader n="02" title="Projects" />
+      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-6">
+        <SectionHeader n="02" title="Projects" />
+
+        {/* Filter buttons */}
+        <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-2.5 py-1 border cursor-pointer transition-all ${
+              filter === "all" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+            }`}
+          >
+            all ({projects.length})
+          </button>
+          <button
+            onClick={() => setFilter("ml")}
+            className={`px-2.5 py-1 border cursor-pointer transition-all ${
+              filter === "ml" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+            }`}
+          >
+            ml & research (3)
+          </button>
+          <button
+            onClick={() => setFilter("systems")}
+            className={`px-2.5 py-1 border cursor-pointer transition-all ${
+              filter === "systems" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+            }`}
+          >
+            systems (3)
+          </button>
+          <button
+            onClick={() => setFilter("apps")}
+            className={`px-2.5 py-1 border cursor-pointer transition-all ${
+              filter === "apps" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+            }`}
+          >
+            apps & tools (2)
+          </button>
+        </div>
+      </div>
 
       <div>
         {/* header row */}
@@ -83,7 +137,7 @@ export default function Projects() {
           <span className="col-span-1 text-right">link</span>
         </div>
 
-        {projects.map((p, i) => (
+        {filtered.map((p, i) => (
           <a
             key={p.name}
             href={p.href}

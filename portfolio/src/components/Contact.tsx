@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import SectionHeader from "./SectionHeader";
 
 const links = [
@@ -16,19 +19,37 @@ const links = [
 ];
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    navigator.clipboard.writeText("mehmetardahakbilen2005@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
   return (
     <section id="contact" className="py-16 md:py-24 border-t border-line">
       <SectionHeader n="04" title="Contact" />
 
-      <p className="text-xl sm:text-2xl md:text-3xl leading-tight max-w-4xl">
-        Write to me at{" "}
-        <a
-          href="mailto:mehmetardahakbilen2005@gmail.com"
-          className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-normal font-medium"
-        >
-          mehmetardahakbilen2005@<wbr />gmail.com
-        </a>
-      </p>
+      <div className="max-w-4xl space-y-3">
+        <p className="text-xl sm:text-2xl md:text-3xl leading-tight">
+          Write to me at{" "}
+          <a
+            href="mailto:mehmetardahakbilen2005@gmail.com"
+            onClick={handleCopyEmail}
+            className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-normal font-medium cursor-pointer"
+            title="Click to email or copy address"
+          >
+            mehmetardahakbilen2005@<wbr />gmail.com
+          </a>
+        </p>
+
+        {copied && (
+          <p className="font-mono text-xs text-accent-deep animate-fade-in flex items-center gap-1.5 pt-1">
+            <span>✓</span> email copied to clipboard
+          </p>
+        )}
+      </div>
 
       <p className="mt-6 text-lg leading-relaxed text-ink-soft max-w-xl">
         Research chatter, collaboration, or just to argue about state-space
