@@ -343,7 +343,7 @@ export default function ArchitectureDiagram() {
               <path d={cusumPathD} fill="none" stroke="#b02424" strokeWidth="1.5" strokeDasharray="3 3" />
               <path d={lossPathD} fill="none" stroke="#161513" strokeWidth="2.5" strokeLinecap="round" />
 
-              {/* Interactive Points */}
+              {/* Interactive Points with Mobile Touch Radius */}
               {lossPoints.map((p) => {
                 const { x, y } = getSvgCoords(p.step, p.loss);
                 const isSelected = p.step === hoverStep;
@@ -351,6 +351,8 @@ export default function ArchitectureDiagram() {
 
                 return (
                   <g key={p.step} className="cursor-pointer" onClick={() => setHoverStep(p.step)}>
+                    {/* Transparent touch area for mobile fingers */}
+                    <circle cx={x} cy={y} r="16" fill="transparent" />
                     <circle
                       cx={x}
                       cy={y}

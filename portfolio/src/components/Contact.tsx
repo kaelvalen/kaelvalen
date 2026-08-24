@@ -20,11 +20,11 @@ export default function Contact() {
     <section id="contact" className="py-16 md:py-24 border-t border-line">
       <SectionHeader n="04" title="Contact" />
 
-      <p className="text-2xl md:text-4xl leading-tight max-w-3xl">
+      <p className="text-xl sm:text-2xl md:text-4xl leading-tight max-w-3xl">
         Write to me at{" "}
         <a
           href="mailto:mehmetardahakbilen2005@gmail.com"
-          className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-words"
+          className="underline decoration-line underline-offset-8 hover:text-accent-deep hover:decoration-accent transition-colors break-all sm:break-words"
         >
           mehmetardahakbilen2005@gmail.com
         </a>

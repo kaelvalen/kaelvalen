@@ -107,11 +107,11 @@ export default function Research() {
 
       {/* Bottom 12-col grid: Benchmark table */}
       <div className="grid md:grid-cols-12 gap-10 md:gap-8 mt-12">
-        <div className="md:col-span-7">
+        <div className="md:col-span-7 w-full overflow-hidden">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted mb-3">
             Pipeline validation: PTB-XL super-diag, val macro-AUC
           </p>
-          <div className="font-mono text-sm">
+          <div className="font-mono text-xs sm:text-sm w-full">
             <div className="flex justify-between gap-4 pb-2 text-[11px] uppercase tracking-[0.14em] text-muted">
               <span>config</span>
               <span>auc</span>
@@ -119,15 +119,15 @@ export default function Research() {
             {rows.map((r) => (
               <div
                 key={r.config}
-                className={`flex justify-between gap-4 border-t border-line py-2.5 tabular-nums px-3 -mx-3 transition-all duration-150 hover:bg-paper-dim hover:pl-4 group ${
+                className={`flex justify-between items-center gap-4 border-t border-line py-2.5 tabular-nums px-2 -mx-2 transition-all duration-150 hover:bg-paper-dim hover:pl-3 group ${
                   r.mine ? "text-accent-deep font-medium" : "text-ink-soft"
                 }`}
               >
-                <span className="flex items-center gap-2">
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-accent-deep text-[10px]">→</span>
-                  {r.config}
+                <span className="flex items-center gap-1.5 sm:gap-2 min-w-0 truncate">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity text-accent-deep text-[10px] shrink-0">→</span>
+                  <span className="truncate">{r.config}</span>
                 </span>
-                <span>{r.auc}</span>
+                <span className="shrink-0">{r.auc}</span>
               </div>
             ))}
             <div className="border-t border-line" />

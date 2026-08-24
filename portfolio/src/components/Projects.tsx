@@ -89,24 +89,42 @@ export default function Projects() {
             href={p.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group grid grid-cols-2 md:grid-cols-12 gap-x-4 gap-y-1 border-t border-line last:border-b py-4 md:py-5 items-baseline hover:bg-ink hover:text-paper transition-all duration-150 px-2 -mx-2"
+            className="group flex flex-col md:grid md:grid-cols-12 gap-y-1.5 md:gap-x-4 border-t border-line last:border-b py-4 md:py-5 items-baseline hover:bg-ink hover:text-paper transition-all duration-150 px-3 -mx-3"
           >
             <span className="hidden md:block col-span-1 font-mono text-xs text-muted group-hover:text-paper/50 transition-colors">
               {String(i + 1).padStart(2, "0")}
             </span>
-            <span className="col-span-1 md:col-span-3 font-mono text-sm font-medium transition-transform duration-150 group-hover:translate-x-1">
-              {p.name}
-            </span>
-            <span className="col-span-2 md:col-span-4 text-base leading-snug text-ink-soft group-hover:text-paper/80 transition-colors">
+
+            {/* Mobile header / Desktop name */}
+            <div className="w-full md:w-auto flex items-baseline justify-between md:col-span-3">
+              <span className="font-mono text-sm font-medium transition-transform duration-150 group-hover:translate-x-1">
+                {p.name}
+              </span>
+              <div className="flex items-center gap-3 md:hidden">
+                <span className="font-mono text-xs text-accent-deep group-hover:text-accent transition-colors">
+                  {p.status}
+                </span>
+                <span className="font-mono text-xs text-muted group-hover:text-paper transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+                  ↗
+                </span>
+              </div>
+            </div>
+
+            {/* Blurb */}
+            <span className="md:col-span-4 text-sm sm:text-base leading-snug text-ink-soft group-hover:text-paper/80 transition-colors">
               {p.blurb}
             </span>
-            <span className="hidden md:block col-span-2 font-mono text-xs text-muted group-hover:text-paper/50 transition-colors">
+
+            {/* Stack */}
+            <span className="md:col-span-2 font-mono text-[11px] sm:text-xs text-muted group-hover:text-paper/60 transition-colors">
               {p.stack}
             </span>
-            <span className="col-span-1 font-mono text-xs text-accent-deep group-hover:text-accent transition-colors">
+
+            {/* Desktop status & link */}
+            <span className="hidden md:block col-span-1 font-mono text-xs text-accent-deep group-hover:text-accent transition-colors">
               {p.status}
             </span>
-            <span className="col-span-1 text-right font-mono text-xs text-muted group-hover:text-paper transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 inline-block">
+            <span className="hidden md:block col-span-1 text-right font-mono text-xs text-muted group-hover:text-paper transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
               ↗
             </span>
           </a>
