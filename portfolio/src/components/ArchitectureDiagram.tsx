@@ -5,7 +5,7 @@ import { useState } from "react";
 type Mode = "engram" | "trainscope";
 
 export default function ArchitectureDiagram() {
-  const [mode, setMode] = useState<Mode>("engram");
+  const [mode, setMode] = useState<Mode>("trainscope");
   const [pattern, setPattern] = useState<"ssd_gdr" | "ssd_swa" | "mom">("ssd_gdr");
   const [activeBlock, setActiveBlock] = useState<number>(0);
   const [hoverStep, setHoverStep] = useState<number>(43);
@@ -385,16 +385,6 @@ export default function ArchitectureDiagram() {
         {/* Mode Tab Buttons */}
         <div className="flex items-center gap-2 text-xs">
           <button
-            onClick={() => setMode("engram")}
-            className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
-              mode === "engram"
-                ? "border-ink bg-ink text-paper font-medium"
-                : "border-line text-muted hover:text-ink hover:border-ink-soft"
-            }`}
-          >
-            01 ENGRAM Hybrid
-          </button>
-          <button
             onClick={() => setMode("trainscope")}
             className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
               mode === "trainscope"
@@ -402,7 +392,17 @@ export default function ArchitectureDiagram() {
                 : "border-line text-muted hover:text-ink hover:border-ink-soft"
             }`}
           >
-            02 Trainscope Recorder
+            01 Trainscope Recorder
+          </button>
+          <button
+            onClick={() => setMode("engram")}
+            className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
+              mode === "engram"
+                ? "border-ink bg-ink text-paper font-medium"
+                : "border-line text-muted hover:text-ink hover:border-ink-soft"
+            }`}
+          >
+            02 ENGRAM Hybrid
           </button>
         </div>
       </div>

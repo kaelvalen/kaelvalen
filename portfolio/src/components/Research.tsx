@@ -25,26 +25,12 @@ export default function Research() {
       <div className="grid md:grid-cols-12 gap-10 md:gap-8">
         <div className="md:col-span-7">
           <h3 className="text-2xl md:text-3xl leading-tight mb-6">
-            ENGRAM: one backbone, three signal types, no per-modality tuning.
+            Loss dynamics, sequence architectures, and empirical limits.
           </h3>
 
           <div className="space-y-5 text-lg leading-relaxed text-ink-soft max-w-prose">
             <p>
-              Hybrid linear-recurrent backbones perform well on language, but their
-              design choices are language-specific. ENGRAM interleaves
-              Mamba-2 SSD blocks with Gated Delta Rule blocks at a 3:1 ratio, applying
-              the same backbone with identical hyperparameters to 12-lead ECG, spoken commands,
-              and sequential images. Both mixers are implemented from scratch and verified with
-              numerical equivalence tests against production kernels.
-            </p>
-            <p>
-              The follow-up, MoM, lets a per-token router choose which memory
-              primitive handles each token instead of fixing ratios manually.
-              The router accepts an optional per-token surprise signal (off by default),
-              with re-running the spike gate planned next.
-            </p>
-            <p>
-              During ENGRAM training runs, sudden loss instability motivated building{" "}
+              My main focus is{" "}
               <a
                 href="https://pypi.org/project/trainscope/"
                 target="_blank"
@@ -53,9 +39,47 @@ export default function Research() {
               >
                 trainscope
               </a>
-              : a post-mortem flight recorder for LLM training spikes. Its CUSUM change-point
-              detector catches loss drift 5–20 steps before collapse, reconstructing per-layer
-              gradient explosions and activation kurtosis leads.
+              : a post-mortem flight recorder for LLM training loss spikes.
+              Its CUSUM change-point detector catches gradual loss drift 5-20 steps before it turns
+              into a full spike, validated with 0.0% false positives across 280+ noise scenarios and
+              100% sensitivity for 0.10σ-0.50σ drift. When failure occurs, it reconstructs which layer
+              moved first, whether from activation kurtosis or gradient explosion.
+            </p>
+            <p>
+              Trainscope grew out of work on{" "}
+              <a
+                href="https://github.com/kaelvalen/engram"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink font-medium underline underline-offset-4 decoration-line hover:text-accent-deep hover:decoration-accent transition-colors"
+              >
+                ENGRAM
+              </a>
+              , a hybrid sequence backbone interleaving Mamba-2 SSD blocks with Gated Delta Rule blocks (3:1 ratio).
+              It applies identical hyperparameters to 12-lead ECG, spoken commands, and sequential images, verified
+              end-to-end across 312 numerical equivalence and streaming tests.
+            </p>
+            <p>
+              Earlier, I closed out{" "}
+              <a
+                href="https://github.com/kaelvalen/noesis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink font-medium underline underline-offset-4 decoration-line hover:text-accent-deep hover:decoration-accent transition-colors"
+              >
+                NOESIS
+              </a>
+              , testing if Titans-style associative memory matrices could inject continual learning directly into a frozen LLM manifold.
+              The result was negative: frozen manifolds cannot assimilate untrained vector injections without distortion (0% recall on a 50-fact benchmark; full analysis in{" "}
+              <a
+                href="https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink font-medium underline underline-offset-4 decoration-line hover:text-accent-deep hover:decoration-accent transition-colors"
+              >
+                FINDINGS.md
+              </a>
+              ).
             </p>
           </div>
         </div>
@@ -76,6 +100,17 @@ export default function Research() {
           <div className="border-t border-b border-line py-4 font-mono text-xs leading-relaxed space-y-2">
             <div>
               <a
+                href="https://pypi.org/project/trainscope/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-line text-accent-deep"
+              >
+                pypi.org/project/trainscope
+              </a>
+              <span className="text-muted"> (loss spike debugger)</span>
+            </div>
+            <div>
+              <a
                 href="https://github.com/kaelvalen/engram"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -87,14 +122,14 @@ export default function Research() {
             </div>
             <div>
               <a
-                href="https://pypi.org/project/trainscope/"
+                href="https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link-line text-accent-deep"
               >
-                pypi.org/project/trainscope
+                noesis / FINDINGS.md
               </a>
-              <span className="text-muted"> (flight recorder)</span>
+              <span className="text-muted"> (continual learning)</span>
             </div>
           </div>
         </aside>

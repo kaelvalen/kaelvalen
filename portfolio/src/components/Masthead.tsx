@@ -71,21 +71,20 @@ export default function Masthead() {
                 Now running
               </p>
               <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em] font-medium text-white">
-                ENGRAM: modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
-                backbone
+                TRAINSCOPE: LOSS-SPIKE FLIGHT RECORDER
               </p>
               <p className="font-mono text-[11px] leading-relaxed mt-3 text-white/90">
-                PTB-XL · Speech Commands · sCIFAR-10
+                CUSUM change-point detection (5-20s lead)
                 <br />
-                Draft aimed at ICML 2026 ES-FoMo&nbsp;IV
+                280+ noise scenarios tested · WandB auto-attach
               </p>
               <a
-                href="https://github.com/kaelvalen/engram"
+                href="https://pypi.org/project/trainscope/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-80 transition-opacity text-white font-medium"
               >
-                read the repo →
+                pypi.org/project/trainscope →
               </a>
             </div>
 

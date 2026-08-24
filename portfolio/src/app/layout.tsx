@@ -18,12 +18,12 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Mehmet Arda Hakbilen · ML architecture researcher",
   description:
-    "Sequence architectures studied from first principles: ENGRAM, a modality-portable SSD + Gated Delta Rule backbone, and the systems work around it.",
+    "ML systems and sequence architecture research: Trainscope loss spike debugger, ENGRAM hybrid backbone, and empirical systems work.",
   metadataBase: new URL("https://kaelvalen.vercel.app"),
   openGraph: {
     title: "Mehmet Arda Hakbilen (kael valen) · ML architecture researcher",
     description:
-      "Efficient sequence architectures & systems research: ENGRAM backbone, Trainscope debugger, and open systems.",
+      "ML systems and sequence architecture research: Trainscope loss spike debugger, ENGRAM hybrid backbone, and empirical systems work.",
     url: "https://kaelvalen.vercel.app",
     siteName: "Mehmet Arda Hakbilen",
     locale: "en_US",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mehmet Arda Hakbilen · ML architecture researcher",
     description:
-      "Efficient sequence architectures & systems research: ENGRAM backbone, Trainscope debugger, and open systems.",
+      "ML systems and sequence architecture research: Trainscope loss spike debugger, ENGRAM hybrid backbone, and empirical systems work.",
   },
   icons: {
     icon: "/favicon.ico",
