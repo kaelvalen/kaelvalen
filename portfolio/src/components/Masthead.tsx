@@ -46,7 +46,7 @@ export default function Masthead() {
                 Now running
               </p>
               <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em]">
-                PRISM — a modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
+                ENGRAM — a modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
                 backbone
               </p>
               <p className="font-mono text-[11px] leading-relaxed mt-3 opacity-80">
@@ -55,7 +55,7 @@ export default function Masthead() {
                 Draft aimed at ICML 2026 ES-FoMo&nbsp;IV
               </p>
               <a
-                href="https://github.com/kaelvalen/prism"
+                href="https://github.com/kaelvalen/engram"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-75 transition-opacity"

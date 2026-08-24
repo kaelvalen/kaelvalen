@@ -18,7 +18,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Mehmet Arda Hakbilen — ML architecture researcher",
   description:
-    "Sequence architectures studied from first principles: PRISM, a modality-portable SSD + Gated Delta Rule backbone, and the systems work around it.",
+    "Sequence architectures studied from first principles: ENGRAM, a modality-portable SSD + Gated Delta Rule backbone, and the systems work around it.",
 };
 
 export default function RootLayout({

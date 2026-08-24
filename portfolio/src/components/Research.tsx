@@ -1,9 +1,9 @@
 import SectionHeader from "./SectionHeader";
 
 const rows = [
-  { config: "PRISM hybrid (SSD + GDR)", auc: "0.8908", mine: true },
+  { config: "ENGRAM hybrid (SSD + GDR)", auc: "0.8908", mine: true },
   { config: "Gated DeltaNet only", auc: "0.8906", mine: false },
-  { config: "PRISM legacy (S4D + GDR)", auc: "0.8882", mine: false },
+  { config: "ENGRAM legacy (S4D + GDR)", auc: "0.8882", mine: false },
   { config: "Mamba-2 only (SSD)", auc: "0.8836", mine: false },
   { config: "ResNet1D", auc: "0.8828", mine: false },
   { config: "small Transformer", auc: "0.8769", mine: false },
@@ -24,13 +24,13 @@ export default function Research() {
         {/* main column */}
         <div className="md:col-span-7">
           <h3 className="text-2xl md:text-3xl leading-tight mb-6">
-            PRISM: one backbone, three signal types, no per-modality tuning.
+            ENGRAM: one backbone, three signal types, no per-modality tuning.
           </h3>
 
           <div className="space-y-5 text-lg leading-relaxed text-ink-soft max-w-2xl">
             <p>
               Hybrid linear-recurrent backbones win on language, but their
-              design choices are language-specific. PRISM interleaves
+              design choices are language-specific. ENGRAM interleaves
               Mamba-2-style SSD blocks with Gated Delta Rule blocks at 3:1 and
               applies the same backbone — identical hyperparameters — to
               12-lead ECG, spoken commands, and sequential images. Both mixers
@@ -92,12 +92,12 @@ export default function Research() {
           ))}
           <p className="border-t border-b border-line py-4 font-mono text-xs leading-relaxed">
             <a
-              href="https://github.com/kaelvalen/prism"
+              href="https://github.com/kaelvalen/engram"
               target="_blank"
               rel="noopener noreferrer"
               className="link-line text-accent-deep"
             >
-              github.com/kaelvalen/prism
+              github.com/kaelvalen/engram
             </a>
             <span className="text-muted"> — code, tests, EXPERIMENTS.md, paper draft</span>
           </p>

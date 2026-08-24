@@ -10,11 +10,11 @@ type Project = {
 
 const projects: Project[] = [
   {
-    name: "prism",
+    name: "engram",
     blurb: "modality-portable SSD + Gated Delta Rule sequence backbone",
     stack: "PyTorch",
     status: "active",
-    href: "https://github.com/kaelvalen/prism",
+    href: "https://github.com/kaelvalen/engram",
   },
   {
     name: "trainscope",
@@ -53,7 +53,7 @@ const projects: Project[] = [
   },
   {
     name: "beyond_transformer",
-    blurb: "PULSE — the predecessor to PRISM, kept as the design record",
+    blurb: "PULSE — the predecessor to ENGRAM, kept as the design record",
     stack: "PyTorch",
     status: "superseded",
     href: "https://github.com/kaelvalen/beyond_transformer",

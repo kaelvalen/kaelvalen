@@ -25,7 +25,7 @@ export default function Toolbox() {
           </div>
         ))}
         <p className="font-mono text-[11px] leading-relaxed text-muted mt-6">
-          the laptop runs NixOS; two of the repos are just dotfiles. PRISM
+          the laptop runs NixOS; two of the repos are just dotfiles. ENGRAM
           trains on a single RTX 5060 — small hardware is a feature: if the
           architecture doesn&apos;t fit in 8 GB, the architecture changes.
         </p>
