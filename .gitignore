@@ -1,1 +1,26 @@
+# Environment variables
+.env
+.env*.local
 .local.env
+
+# Dependencies & Build artifacts
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# OS & Editor files
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.log
+
+# Python / Rust / Cache artifacts
+__pycache__/
+*.py[cod]
+target/
+.pytest_cache/
