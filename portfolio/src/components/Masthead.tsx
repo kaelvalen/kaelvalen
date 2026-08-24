@@ -11,8 +11,8 @@ export default function Masthead() {
       {/* top strip */}
       <div className="border-b border-line">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3 flex items-baseline justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-          <span>M. A. Hakbilen — research notes</span>
-          <span className="hidden sm:inline">Ankara, TR — 2026.07</span>
+          <span>M. A. Hakbilen · research notes</span>
+          <span className="hidden sm:inline">Ankara, TR · 2026</span>
         </div>
       </div>
 
@@ -33,9 +33,8 @@ export default function Masthead() {
             </p>
 
             <p className="mt-10 text-xl md:text-2xl leading-snug text-ink-soft max-w-xl">
-              I study why modern sequence architectures are shaped the way they
-              are — and rebuild them <em>from scratch</em> to find out which of
-              their assumptions survive outside language.
+              I study why sequence architectures are built the way they are,
+              rebuilding them from scratch to test which assumptions hold outside language.
             </p>
           </div>
 
@@ -46,7 +45,7 @@ export default function Masthead() {
                 Now running
               </p>
               <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em]">
-                ENGRAM — a modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
+                ENGRAM: modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
                 backbone
               </p>
               <p className="font-mono text-[11px] leading-relaxed mt-3 opacity-80">

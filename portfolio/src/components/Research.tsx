@@ -11,9 +11,9 @@ const rows = [
 ];
 
 const notes = [
-  "312 tests (1 skipped) — numerical equivalence vs torch.associative_scan & the FLA Triton kernels, fp64 gradcheck, streaming state-passing, property-based",
-  "metric — macro one-vs-rest AUROC; baseline to match: xresnet1d101 ≈ 0.928",
-  "constraint — everything fits in 8 GB of VRAM",
+  "312 tests (1 skipped): numerical equivalence vs torch.associative_scan & Triton kernels, fp64 gradcheck, streaming state passing.",
+  "metric: macro one-vs-rest AUROC (baseline: xresnet1d101 ≈ 0.928).",
+  "constraint: everything runs within 8 GB VRAM.",
 ];
 
 export default function Research() {
@@ -30,21 +30,18 @@ export default function Research() {
 
           <div className="space-y-5 text-lg leading-relaxed text-ink-soft">
             <p>
-              Hybrid linear-recurrent backbones win on language, but their
+              Hybrid linear-recurrent backbones perform well on language, but their
               design choices are language-specific. ENGRAM interleaves
-              Mamba-2-style SSD blocks with Gated Delta Rule blocks at 3:1 and
-              applies the same backbone — identical hyperparameters — to
-              12-lead ECG, spoken commands, and sequential images. Both mixers
-              are implemented from scratch and held honest by
-              numerical-equivalence tests against the production kernels.
+              Mamba-2 SSD blocks with Gated Delta Rule blocks at a 3:1 ratio, applying
+              the same backbone with identical hyperparameters to 12-lead ECG, spoken commands,
+              and sequential images. Both mixers are implemented from scratch and verified with
+              numerical equivalence tests against production kernels.
             </p>
             <p>
               The follow-up, MoM, lets a per-token router choose which memory
-              primitive handles each token instead of fixing the ratio by
-              hand. The router now accepts an optional per-token surprise
-              signal (off by default, behavior unchanged), but this remains
-              untested — re-running the spike gate with surprise is planned
-              but pending.
+              primitive handles each token instead of fixing ratios manually.
+              The router accepts an optional per-token surprise signal (off by default),
+              with re-running the spike gate planned next.
             </p>
           </div>
         </div>
@@ -71,7 +68,7 @@ export default function Research() {
             >
               github.com/kaelvalen/engram
             </a>
-            <span className="text-muted"> — code, tests, EXPERIMENTS.md, paper draft</span>
+            <span className="text-muted"> (code, tests, EXPERIMENTS.md, paper draft)</span>
           </p>
         </aside>
       </div>
@@ -85,7 +82,7 @@ export default function Research() {
       <div className="grid md:grid-cols-12 gap-10 md:gap-8 mt-12">
         <div className="md:col-span-7">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted mb-3">
-            Pipeline validation — PTB-XL super-diag, val macro-AUC
+            Pipeline validation: PTB-XL super-diag, val macro-AUC
           </p>
           <div className="font-mono text-sm">
             <div className="flex justify-between gap-4 pb-2 text-[11px] uppercase tracking-[0.14em] text-muted">
@@ -114,7 +111,7 @@ export default function Research() {
           <div className="border-t border-line pt-4 font-mono text-[11px] leading-relaxed text-muted">
             <span className="uppercase tracking-wider text-ink block mb-1 font-medium">Validation Specs</span>
             hidden 64 · 4 layers · 2 epochs · 1 seed · RTX 5060. Pipeline
-            validation, not the paper&apos;s numbers — the full matrix runs at ~8M params, 3 seeds.
+            validation (not paper numbers): full matrix runs at ~8M params, 3 seeds.
           </div>
         </aside>
       </div>

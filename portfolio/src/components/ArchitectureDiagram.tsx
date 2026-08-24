@@ -297,7 +297,7 @@ export default function ArchitectureDiagram() {
           {/* Controls Bar & Scrub Selector */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs border-b border-line pb-3">
             <p className="text-xs sm:text-sm text-ink-soft leading-relaxed font-serif">
-              Post-mortem flight recorder: scrub timeline steps to inspect CUSUM drift ($0.10\sigma$) & Kurtosis early signals:
+              Post-mortem flight recorder: scrub timeline steps to inspect CUSUM drift (0.10σ-0.25σ) & Kurtosis early signals:
             </p>
             <div className="flex flex-wrap gap-1 font-mono text-[11px]">
               {lossPoints.map((p) => (
@@ -342,14 +342,14 @@ export default function ArchitectureDiagram() {
               <line x1="45" y1="85" x2="515" y2="85" stroke="#d8d4c5" strokeDasharray="3 3" />
               <line x1="45" y1="145" x2="515" y2="145" stroke="#d8d4c5" strokeWidth="1" />
 
-              {/* Early warning markers */}
+              {/* Early warning markers with staggered Y offsets */}
               {/* Kurtosis at step 43 -> x=351.9 */}
-              <line x1="351.9" y1="22" x2="351.9" y2="145" stroke="#b25e00" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="351.9" y="15" fill="#b25e00" fontSize="9" fontWeight="bold" textAnchor="middle">Kurtosis Fire (16.7s lead)</text>
+              <line x1="351.9" y1="18" x2="351.9" y2="145" stroke="#b25e00" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x="351.9" y="12" fill="#b25e00" fontSize="8.5" fontWeight="bold" textAnchor="end">Kurtosis Fire (16.7s lead)</text>
 
               {/* CUSUM at step 50 -> x=417 */}
-              <line x1="417" y1="22" x2="417" y2="145" stroke="#e53e3e" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="417" y="15" fill="#e53e3e" fontSize="9" fontWeight="bold" textAnchor="middle">CUSUM Fire (9.7s lead)</text>
+              <line x1="417" y1="28" x2="417" y2="145" stroke="#e53e3e" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x="417" y="24" fill="#e53e3e" fontSize="8.5" fontWeight="bold" textAnchor="start">CUSUM Fire (9.7s lead)</text>
 
               {/* Loss Area & Paths */}
               <path d={areaD} fill="url(#lossGradient)" />
@@ -368,15 +368,14 @@ export default function ArchitectureDiagram() {
                     <circle
                       cx={x}
                       cy={y}
-                      r={isSelected ? "6" : "4"}
+                      r={isSelected ? "5.5" : "3.5"}
                       fill={p.step === 43 ? "#b25e00" : isSpike ? "#e53e3e" : "#161513"}
-                      className="transition-all duration-150"
                     />
                     {isSelected && (
-                      <circle cx={x} cy={y} r="10" fill="none" stroke={p.step === 43 ? "#b25e00" : "#e53e3e"} strokeWidth="1.5" className="animate-ping" />
+                      <circle cx={x} cy={y} r="8.5" fill="none" stroke={p.step === 43 ? "#b25e00" : "#e53e3e"} strokeWidth="1.5" />
                     )}
-                    <text x={x} y="162" fill="#7a776b" fontSize="9.5" fontFamily="monospace" textAnchor="middle">
-                      step {p.step}
+                    <text x={x} y="160" fill="#7a776b" fontSize="9" fontFamily="monospace" textAnchor="middle">
+                      s{p.step}
                     </text>
                   </g>
                 );

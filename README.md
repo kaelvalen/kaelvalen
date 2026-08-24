@@ -6,20 +6,20 @@ I work on efficient sequence architectures and the infrastructure they run on. A
 
 ## Now
 
-My main project right now is [trainscope](https://pypi.org/project/trainscope/), a post-mortem debugger for LLM training loss spikes. It started as a tool I needed during ENGRAM runs and has since become the focus: a CUSUM-based change-point detector catches gradual loss drift 5-20 steps before it turns into a full spike, validated with false-positive rate testing across 280+ held-out noise scenarios (0.0%) and sensitivity testing across drift magnitudes from 0.10σ to 0.50σ (100% detection). When a spike hits, the UI reconstructs the chronological failure cascade — which layer moved first, whether it was a distributional shift or a gradient explosion, and how many steps of warning were available before collapse.
+My main project right now is [trainscope](https://pypi.org/project/trainscope/), a post-mortem debugger for LLM training loss spikes. It started as a tool I needed during ENGRAM runs and has since become the focus: a CUSUM-based change-point detector catches gradual loss drift 5-20 steps before it turns into a full spike, validated with false-positive rate testing across 280+ held-out noise scenarios (0.0%) and sensitivity testing across drift magnitudes from 0.10σ to 0.50σ (100% detection). When a spike hits, the UI reconstructs the chronological failure cascade: which layer moved first, whether it was a distributional shift or a gradient explosion, and how many steps of warning were available before collapse.
 
-Before this, I closed out [NOESIS](https://github.com/kaelvalen/noesis), a continual-learning system that tried to inject retrieved memory (via a Titans-style associative matrix + test-time training) directly into a frozen LLM's hidden states. The result was negative and I think worth stating plainly: a frozen backbone's hidden manifold cannot be given new semantic content by an untrained vector injection, no matter how carefully the geometry is aligned — verified across KV-cache-purge controls, negative controls, and a 50-fact automated benchmark (0% recall). Full writeup in [FINDINGS.md](https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md).
+Before this, I closed out [NOESIS](https://github.com/kaelvalen/noesis), a continual-learning system that tried to inject retrieved memory (via a Titans-style associative matrix + test-time training) directly into a frozen LLM's hidden states. The result was negative and worth stating plainly: a frozen backbone's hidden manifold cannot be given new semantic content by an untrained vector injection, no matter how carefully the geometry is aligned (verified across KV-cache-purge controls, negative controls, and a 50-fact automated benchmark with 0% recall). Full writeup in [FINDINGS.md](https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md).
 
 ## Projects
 
-- [trainscope](https://pypi.org/project/trainscope/) — see above. Post-mortem debugger for LLM training loss spikes. FastAPI + React, CUSUM change-point detection, WandB auto-attach, on PyPI.
-- [noesis](https://github.com/kaelvalen/noesis) — continual-learning experiment with frozen backbone + vector memory injection. Concluded negative result, documented in FINDINGS.md.
-- [engram](https://github.com/kaelvalen/engram) — hybrid linear-recurrent backbone: Mamba-2-style SSD blocks interleaved with Gated Delta Rule blocks, applied to 12-lead ECG (PTB-XL), Speech Commands, and sequential CIFAR-10. Paused — the pipeline is validated end-to-end but the full paper matrix was never run. Kept public as-is.
-- [connor](https://github.com/kaelvalen/connor) — terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
-- [latch-lang](https://github.com/kaelvalen/latch-lang) — my own programming language. Rust, on crates.io. Paused.
-- [weave](https://github.com/kaelvalen/weave) — local-first, plugin-based productivity app. Tauri + React + Rust.
-- [nanonet](https://github.com/kaelvalen/nanonet) — monitoring platform for distributed services: Go backend, Rust agents, React frontend, ~70k lines, built solo. Archived.
-- [beyond_transformer](https://github.com/kaelvalen/beyond_transformer) — PULSE, the predecessor to ENGRAM. Kept public as a record of the design choices that led to the current one.
+- [trainscope](https://pypi.org/project/trainscope/): see above. Post-mortem debugger for LLM training loss spikes. FastAPI + React, CUSUM change-point detection, WandB auto-attach, on PyPI.
+- [noesis](https://github.com/kaelvalen/noesis): continual-learning experiment with frozen backbone + vector memory injection. Concluded negative result, documented in FINDINGS.md.
+- [engram](https://github.com/kaelvalen/engram): hybrid linear-recurrent backbone with Mamba-2 SSD blocks interleaved 3:1 with Gated Delta Rule blocks. Applied to PTB-XL, Speech Commands, and sCIFAR-10. Pipeline validated end-to-end.
+- [connor](https://github.com/kaelvalen/connor): terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
+- [latch-lang](https://github.com/kaelvalen/latch-lang): programming language written in Rust. On crates.io.
+- [weave](https://github.com/kaelvalen/weave): local-first, plugin-based productivity app. Tauri + React + Rust.
+- [nanonet](https://github.com/kaelvalen/nanonet): distributed service monitoring platform. Go backend, Rust agents, React frontend (~70k lines). Archived.
+- [beyond_transformer](https://github.com/kaelvalen/beyond_transformer): PULSE, predecessor to ENGRAM. Kept public as design record.
 
 ## Stack
 

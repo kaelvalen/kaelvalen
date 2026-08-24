@@ -32,7 +32,7 @@ const projects: Project[] = [
   },
   {
     name: "connor",
-    blurb: "terminal-native CI/CD runner — DAG execution, no YAML",
+    blurb: "terminal-native CI/CD runner (DAG execution, no YAML)",
     stack: "Rust",
     status: "public",
     href: "https://github.com/kaelvalen/connor",
@@ -53,7 +53,7 @@ const projects: Project[] = [
   },
   {
     name: "beyond_transformer",
-    blurb: "PULSE — the predecessor to ENGRAM, kept as the design record",
+    blurb: "PULSE: predecessor to ENGRAM, kept as design record",
     stack: "PyTorch",
     status: "superseded",
     href: "https://github.com/kaelvalen/beyond_transformer",
@@ -70,7 +70,7 @@ const projects: Project[] = [
 export default function Projects() {
   return (
     <section id="projects" className="py-16 md:py-24 border-t border-line">
-      <SectionHeader n="02" title="Projects — an index" />
+      <SectionHeader n="02" title="Projects" />
 
       <div>
         {/* header row */}
@@ -114,8 +114,7 @@ export default function Projects() {
       </div>
 
       <p className="font-mono text-[11px] leading-relaxed text-muted mt-6">
-        everything above is original work — no forks. the full list, including
-        the experiments that didn&apos;t make the cut, is on{" "}
+        all projects above are original work (no forks). full index on{" "}
         <a
           href="https://github.com/kaelvalen"
           target="_blank"
