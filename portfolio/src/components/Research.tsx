@@ -28,7 +28,7 @@ export default function Research() {
             ENGRAM: one backbone, three signal types, no per-modality tuning.
           </h3>
 
-          <div className="space-y-5 text-lg leading-relaxed text-ink-soft">
+          <div className="space-y-5 text-lg leading-relaxed text-ink-soft max-w-prose">
             <p>
               Hybrid linear-recurrent backbones perform well on language, but their
               design choices are language-specific. ENGRAM interleaves

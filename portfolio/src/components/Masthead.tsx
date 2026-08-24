@@ -40,15 +40,15 @@ export default function Masthead() {
 
           <div className="md:col-span-4 md:col-start-9 flex flex-col gap-8">
             {/* red interrupt: current status */}
-            <div className="bg-accent text-white p-5 sm:p-6">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] mb-4 opacity-80">
+            <div className="bg-accent-deep text-white p-5 sm:p-6 shadow-sm">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] mb-4 text-white/90">
                 Now running
               </p>
-              <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em]">
+              <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em] font-medium text-white">
                 ENGRAM: modality-portable SSD&nbsp;+&nbsp;Gated&nbsp;Delta&nbsp;Rule
                 backbone
               </p>
-              <p className="font-mono text-[11px] leading-relaxed mt-3 opacity-80">
+              <p className="font-mono text-[11px] leading-relaxed mt-3 text-white/90">
                 PTB-XL · Speech Commands · sCIFAR-10
                 <br />
                 Draft aimed at ICML 2026 ES-FoMo&nbsp;IV
@@ -57,7 +57,7 @@ export default function Masthead() {
                 href="https://github.com/kaelvalen/engram"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-75 transition-opacity"
+                className="inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-80 transition-opacity text-white font-medium"
               >
                 read the repo →
               </a>
