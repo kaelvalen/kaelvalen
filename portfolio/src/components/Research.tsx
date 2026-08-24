@@ -43,6 +43,20 @@ export default function Research() {
               The router accepts an optional per-token surprise signal (off by default),
               with re-running the spike gate planned next.
             </p>
+            <p>
+              During ENGRAM training runs, sudden loss instability motivated building{" "}
+              <a
+                href="https://pypi.org/project/trainscope/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink font-medium underline underline-offset-4 decoration-line hover:text-accent-deep hover:decoration-accent transition-colors"
+              >
+                trainscope
+              </a>
+              : a post-mortem flight recorder for LLM training spikes. Its CUSUM change-point
+              detector catches loss drift 5–20 steps before collapse, reconstructing per-layer
+              gradient explosions and activation kurtosis leads.
+            </p>
           </div>
         </div>
 
@@ -59,17 +73,30 @@ export default function Research() {
               {note}
             </p>
           ))}
-          <p className="border-t border-b border-line py-4 font-mono text-xs leading-relaxed">
-            <a
-              href="https://github.com/kaelvalen/engram"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-line text-accent-deep"
-            >
-              github.com/kaelvalen/engram
-            </a>
-            <span className="text-muted"> (code, tests, EXPERIMENTS.md, paper draft)</span>
-          </p>
+          <div className="border-t border-b border-line py-4 font-mono text-xs leading-relaxed space-y-2">
+            <div>
+              <a
+                href="https://github.com/kaelvalen/engram"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-line text-accent-deep"
+              >
+                github.com/kaelvalen/engram
+              </a>
+              <span className="text-muted"> (ENGRAM backbone)</span>
+            </div>
+            <div>
+              <a
+                href="https://pypi.org/project/trainscope/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-line text-accent-deep"
+              >
+                pypi.org/project/trainscope
+              </a>
+              <span className="text-muted"> (flight recorder)</span>
+            </div>
+          </div>
         </aside>
       </div>
 
