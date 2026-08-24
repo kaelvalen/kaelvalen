@@ -41,3 +41,31 @@ body {
 .link-line:hover {
   text-decoration-color: var(--color-accent);
 }
+
+/* Custom Editorial Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-accent-deep);
+}

@@ -9,6 +9,7 @@ export default function ArchitectureDiagram() {
   const [pattern, setPattern] = useState<"ssd_gdr" | "ssd_swa" | "mom">("ssd_gdr");
   const [activeBlock, setActiveBlock] = useState<number>(0);
   const [hoverStep, setHoverStep] = useState<number>(43);
+  const [lrSurge, setLrSurge] = useState<"1.0" | "2.5" | "5.0">("1.0");
 
   const patterns = {
     ssd_gdr: [
@@ -34,90 +35,92 @@ export default function ArchitectureDiagram() {
   const currentBlocks = patterns[pattern];
   const activeBlockData = currentBlocks[activeBlock] || currentBlocks[0];
 
+  const surgeMult = parseFloat(lrSurge);
+
   // Trainscope loss curve key points (step, loss, cusum, kurtosis, status, layerGrads)
   const lossPoints = [
     {
       step: 10,
-      loss: 3.42,
-      cusum: 0.02,
-      kurtosis: 3.01,
-      status: "Normal Steady State",
+      loss: 3.42 * (surgeMult > 3 ? 1.4 : 1.0),
+      cusum: 0.02 * surgeMult,
+      kurtosis: 3.01 * (surgeMult > 3 ? 2.5 : 1.0),
+      status: surgeMult > 3 ? "KURTOSIS EARLY SPIKE (Step 10)" : "Normal Steady State",
       layer: "All layers operating within nominal gradients (L2 ≈ 0.12)",
       grads: [
-        { name: "Layer 2", l2: 0.12, pct: 15, status: "normal" },
-        { name: "Layer 8", l2: 0.18, pct: 20, status: "normal" },
-        { name: "Layer 14", l2: 0.15, pct: 18, status: "normal" },
-        { name: "Layer 18", l2: 0.11, pct: 14, status: "normal" },
+        { name: "Layer 2", l2: 0.12 * surgeMult, pct: Math.min(100, 15 * surgeMult), status: surgeMult > 3 ? "warning" : "normal" },
+        { name: "Layer 8", l2: 0.18 * surgeMult, pct: Math.min(100, 20 * surgeMult), status: surgeMult > 3 ? "warning" : "normal" },
+        { name: "Layer 14", l2: 0.15 * surgeMult, pct: Math.min(100, 18 * surgeMult), status: surgeMult > 3 ? "alert" : "normal" },
+        { name: "Layer 18", l2: 0.11 * surgeMult, pct: Math.min(100, 14 * surgeMult), status: "normal" },
       ],
     },
     {
       step: 25,
-      loss: 2.85,
-      cusum: 0.08,
-      kurtosis: 3.12,
-      status: "Normal Steady State",
+      loss: 2.85 * (surgeMult > 1.5 ? 1.6 : 1.0),
+      cusum: 0.08 * surgeMult,
+      kurtosis: 3.12 * (surgeMult > 1.5 ? 3.2 : 1.0),
+      status: surgeMult > 1.5 ? "CUSUM DRIFT ALERT (Step 25)" : "Normal Steady State",
       layer: "Loss decreasing smoothly (L2 ≈ 0.18)",
       grads: [
-        { name: "Layer 2", l2: 0.14, pct: 16, status: "normal" },
-        { name: "Layer 8", l2: 0.22, pct: 22, status: "normal" },
-        { name: "Layer 14", l2: 0.19, pct: 20, status: "normal" },
-        { name: "Layer 18", l2: 0.12, pct: 15, status: "normal" },
+        { name: "Layer 2", l2: 0.14 * surgeMult, pct: Math.min(100, 16 * surgeMult), status: "normal" },
+        { name: "Layer 8", l2: 0.22 * surgeMult, pct: Math.min(100, 22 * surgeMult), status: "normal" },
+        { name: "Layer 14", l2: 0.19 * surgeMult, pct: Math.min(100, 20 * surgeMult), status: surgeMult > 1.5 ? "alert" : "normal" },
+        { name: "Layer 18", l2: 0.12 * surgeMult, pct: Math.min(100, 15 * surgeMult), status: "normal" },
       ],
     },
     {
       step: 43,
-      loss: 2.41,
-      cusum: 0.28,
-      kurtosis: 7.84,
+      loss: Math.min(9.8, 2.41 * surgeMult),
+      cusum: 0.28 * surgeMult,
+      kurtosis: 7.84 * surgeMult,
       status: "KURTOSIS ALERT (16.7 steps early warning)",
       layer: "Block 14 activation kurtosis spike (7.84 > 3.5 margin)",
       grads: [
-        { name: "Layer 2", l2: 0.25, pct: 25, status: "normal" },
-        { name: "Layer 8", l2: 0.41, pct: 35, status: "normal" },
-        { name: "Layer 14", l2: 1.85, pct: 65, status: "warning" },
-        { name: "Layer 18", l2: 0.38, pct: 30, status: "normal" },
+        { name: "Layer 2", l2: 0.25 * surgeMult, pct: Math.min(100, 25 * surgeMult), status: "normal" },
+        { name: "Layer 8", l2: 0.41 * surgeMult, pct: Math.min(100, 35 * surgeMult), status: "normal" },
+        { name: "Layer 14", l2: 1.85 * surgeMult, pct: Math.min(100, 65 * surgeMult), status: "warning" },
+        { name: "Layer 18", l2: 0.38 * surgeMult, pct: Math.min(100, 30 * surgeMult), status: "normal" },
       ],
     },
     {
       step: 50,
-      loss: 2.48,
-      cusum: 0.95,
-      kurtosis: 12.4,
+      loss: Math.min(9.9, 2.48 * (surgeMult > 1.5 ? 2.8 : 1.0)),
+      cusum: 0.95 * surgeMult,
+      kurtosis: 12.4 * surgeMult,
       status: "CUSUM DRIFT ALERT (9.7 steps early warning)",
       layer: "Persistent loss drift (+0.22σ) detected in Block 14",
       grads: [
-        { name: "Layer 2", l2: 0.38, pct: 30, status: "normal" },
-        { name: "Layer 8", l2: 0.95, pct: 45, status: "warning" },
-        { name: "Layer 14", l2: 4.82, pct: 85, status: "alert" },
-        { name: "Layer 18", l2: 1.12, pct: 50, status: "warning" },
+        { name: "Layer 2", l2: 0.38 * surgeMult, pct: Math.min(100, 30 * surgeMult), status: "normal" },
+        { name: "Layer 8", l2: 0.95 * surgeMult, pct: Math.min(100, 45 * surgeMult), status: "warning" },
+        { name: "Layer 14", l2: 4.82 * surgeMult, pct: Math.min(100, 85 * surgeMult), status: "alert" },
+        { name: "Layer 18", l2: 1.12 * surgeMult, pct: Math.min(100, 50 * surgeMult), status: "warning" },
       ],
     },
     {
       step: 56,
-      loss: 3.12,
-      cusum: 3.40,
-      kurtosis: 28.1,
+      loss: Math.min(9.95, 3.12 * (surgeMult > 1.5 ? 2.5 : 1.0)),
+      cusum: 3.40 * surgeMult,
+      kurtosis: 28.1 * surgeMult,
       status: "GRADIENT EXPLOSION CASCADE",
       layer: "Layer 14 L2 norm explosion (14.82) propagating to Layer 18",
       grads: [
-        { name: "Layer 2", l2: 1.15, pct: 50, status: "warning" },
-        { name: "Layer 8", l2: 3.84, pct: 75, status: "alert" },
-        { name: "Layer 14", l2: 14.82, pct: 100, status: "critical" },
-        { name: "Layer 18", l2: 8.15, pct: 88, status: "critical" },
+        { name: "Layer 2", l2: 1.15 * surgeMult, pct: Math.min(100, 50 * surgeMult), status: "warning" },
+        { name: "Layer 8", l2: 3.84 * surgeMult, pct: Math.min(100, 75 * surgeMult), status: "alert" },
+        { name: "Layer 14", l2: 14.82 * surgeMult, pct: 100, status: "critical" },
+        { name: "Layer 18", l2: 8.15 * surgeMult, pct: Math.min(100, 88 * surgeMult), status: "critical" },
       ],
     },
     {
       step: 60,
       loss: 9.84,
-      cusum: 11.2,
-      kurtosis: 95.0,
+      cusum: 11.2 * surgeMult,
+      kurtosis: 95.0 * surgeMult,
       status: "FULL SPIKE COLLAPSE",
       layer: "NaN parameters / Optimizer update corrupted",
       grads: [
-        { name: "Layer 2", l2: 12.4, pct: 90, status: "critical" },
-        { name: "Layer 8", l2: 45.2, pct: 98, status: "critical" },
-        { name: "Layer 14", l2: 182.0, pct: 100, status: "critical" },
-        { name: "Layer 18", l2: 96.4, pct: 99, status: "critical" },
+        { name: "Layer 2", l2: 12.4 * surgeMult, pct: 90, status: "critical" },
+        { name: "Layer 8", l2: 45.2 * surgeMult, pct: 98, status: "critical" },
+        { name: "Layer 14", l2: 182.0 * surgeMult, pct: 100, status: "critical" },
+        { name: "Layer 18", l2: 96.4 * surgeMult, pct: 99, status: "critical" },
       ],
     },
   ];
@@ -284,9 +287,38 @@ export default function ArchitectureDiagram() {
         <div className="space-y-6">
           {/* Controls Bar & Scrub Selector */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs border-b border-line pb-3">
-            <p className="text-xs sm:text-sm text-ink-soft leading-relaxed font-serif">
-              Post-mortem flight recorder: scrub timeline steps to inspect CUSUM drift (0.10σ-0.25σ) & Kurtosis early signals:
-            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-xs text-ink-soft font-serif">
+                Simulate LR Surge:
+              </p>
+              <div className="flex gap-1 font-mono text-[10px]">
+                <button
+                  onClick={() => setLrSurge("1.0")}
+                  className={`px-2 py-0.5 border cursor-pointer transition-all ${
+                    lrSurge === "1.0" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+                  }`}
+                >
+                  1.0x (Nominal)
+                </button>
+                <button
+                  onClick={() => setLrSurge("2.5")}
+                  className={`px-2 py-0.5 border cursor-pointer transition-all ${
+                    lrSurge === "2.5" ? "border-accent-deep bg-accent-deep text-white" : "border-line bg-paper text-muted hover:text-ink"
+                  }`}
+                >
+                  2.5x (Drift)
+                </button>
+                <button
+                  onClick={() => setLrSurge("5.0")}
+                  className={`px-2 py-0.5 border cursor-pointer transition-all ${
+                    lrSurge === "5.0" ? "border-accent-deep bg-accent-deep text-white font-bold" : "border-line bg-paper text-muted hover:text-ink"
+                  }`}
+                >
+                  5.0x (Spike)
+                </button>
+              </div>
+            </div>
+
             <div className="flex flex-wrap gap-1 font-mono text-[11px]">
               {lossPoints.map((p) => (
                 <button

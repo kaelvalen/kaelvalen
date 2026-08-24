@@ -1,11 +1,37 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 const index = [
-  { n: "01", label: "Research", href: "#research" },
-  { n: "02", label: "Projects", href: "#projects" },
-  { n: "03", label: "Toolbox", href: "#toolbox" },
-  { n: "04", label: "Contact", href: "#contact" },
+  { n: "01", label: "Research", href: "#research", id: "research" },
+  { n: "02", label: "Projects", href: "#projects", id: "projects" },
+  { n: "03", label: "Toolbox", href: "#toolbox", id: "toolbox" },
+  { n: "04", label: "Contact", href: "#contact", id: "contact" },
 ];
 
 export default function Masthead() {
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -60% 0px" }
+    );
+
+    index.forEach((item) => {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <header>
       {/* top strip */}
@@ -65,21 +91,26 @@ export default function Masthead() {
 
             {/* index */}
             <nav aria-label="Index">
-              {index.map((item) => (
-                <a
-                  key={item.n}
-                  href={item.href}
-                  className="group flex items-baseline gap-4 border-t border-line last:border-b py-3 font-mono text-xs uppercase tracking-[0.18em] hover:text-accent-deep transition-colors"
-                >
-                  <span className="text-muted group-hover:text-accent-deep transition-colors">
-                    {item.n}
-                  </span>
-                  <span>{item.label}</span>
-                  <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                    ↓
-                  </span>
-                </a>
-              ))}
+              {index.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <a
+                    key={item.n}
+                    href={item.href}
+                    className={`group flex items-baseline gap-4 border-t border-line last:border-b py-3 font-mono text-xs uppercase tracking-[0.18em] transition-colors ${
+                      isActive ? "text-accent-deep font-semibold" : "hover:text-accent-deep"
+                    }`}
+                  >
+                    <span className={isActive ? "text-accent-deep" : "text-muted group-hover:text-accent-deep"}>
+                      {item.n}
+                    </span>
+                    <span>{item.label}</span>
+                    <span className={`ml-auto transition-opacity ${isActive ? "opacity-100 text-accent-deep font-bold" : "opacity-0 group-hover:opacity-100"}`}>
+                      ↓
+                    </span>
+                  </a>
+                );
+              })}
             </nav>
           </div>
         </div>
