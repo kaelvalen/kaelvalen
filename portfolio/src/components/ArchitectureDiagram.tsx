@@ -138,7 +138,6 @@ export default function ArchitectureDiagram() {
 
   const kurtosisPathD = lossPoints
     .map((p, i) => {
-      // Scale kurtosis (3.0 - 95.0) to Y space
       const { x, y } = getSvgCoords(p.step, p.kurtosis, 0, 100);
       return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
     })
@@ -146,7 +145,6 @@ export default function ArchitectureDiagram() {
 
   const cusumPathD = lossPoints
     .map((p, i) => {
-      // Scale cusum (0.0 - 12.0) to Y space
       const { x, y } = getSvgCoords(p.step, p.cusum, 0, 12);
       return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
     })
@@ -158,37 +156,37 @@ export default function ArchitectureDiagram() {
   const activePoint = lossPoints.find((p) => p.step === hoverStep) || lossPoints[2];
 
   return (
-    <div className="my-10 border border-line bg-paper-dim/40 p-5 sm:p-7 font-mono w-full">
+    <div className="my-10 border border-line bg-paper p-5 sm:p-7 font-mono w-full">
       {/* Header controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-line pb-4 mb-6">
         <div className="flex items-center gap-2.5">
-          <span className="inline-block w-2.5 h-2.5 rounded-full bg-accent-deep animate-pulse" />
+          <span className="inline-block w-2 h-2 rounded-full bg-accent-deep" />
           <span className="text-[11px] uppercase tracking-[0.18em] text-ink font-medium">
-            Interactive System Architecture & Flight Recorder
+            System Architecture & Flight Recorder
           </span>
         </div>
 
-        {/* Tab Buttons */}
+        {/* Mode Tab Buttons */}
         <div className="flex items-center gap-2 text-xs">
           <button
             onClick={() => setMode("engram")}
             className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
               mode === "engram"
-                ? "border-accent-deep bg-paper text-accent-deep font-medium shadow-sm"
+                ? "border-ink bg-ink text-paper font-medium"
                 : "border-line text-muted hover:text-ink hover:border-ink-soft"
             }`}
           >
-            [01] ENGRAM Backbone (SSD + GDR + MoM)
+            01 ENGRAM Hybrid
           </button>
           <button
             onClick={() => setMode("trainscope")}
             className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
               mode === "trainscope"
-                ? "border-accent-deep bg-paper text-accent-deep font-medium shadow-sm"
+                ? "border-accent-deep bg-accent-deep text-white font-medium"
                 : "border-line text-muted hover:text-ink hover:border-ink-soft"
             }`}
           >
-            [02] Trainscope (Flight Recorder UI)
+            02 Trainscope Recorder
           </button>
         </div>
       </div>
@@ -198,7 +196,7 @@ export default function ArchitectureDiagram() {
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <p className="text-xs sm:text-sm text-ink-soft leading-relaxed font-serif">
-              Interleaved sequence backbone architecture. Select layer pattern (`block_pattern` config):
+              Interleaved sequence backbone architecture. Layer pattern config:
             </p>
 
             {/* Pattern Switcher */}
@@ -222,7 +220,7 @@ export default function ArchitectureDiagram() {
               <button
                 onClick={() => { setPattern("mom"); setActiveBlock(3); }}
                 className={`px-2.5 py-1 border cursor-pointer transition-all ${
-                  pattern === "mom" ? "border-amber-700 bg-amber-700 text-white" : "border-line bg-paper text-muted hover:text-ink"
+                  pattern === "mom" ? "border-accent-deep bg-accent-deep text-white" : "border-line bg-paper text-muted hover:text-ink"
                 }`}
               >
                 MoM Router
@@ -233,27 +231,17 @@ export default function ArchitectureDiagram() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {currentBlocks.map((blk, idx) => {
               const isActive = activeBlock === idx;
-              const isGDR = blk.type === "GDR";
-              const isSWA = blk.type === "SWA";
-              const isMoM = blk.type === "MoM";
+              const isAccent = blk.type === "GDR" || blk.type === "MoM";
               return (
                 <button
                   key={idx}
                   onClick={() => setActiveBlock(idx)}
                   className={`p-3.5 text-left border transition-all cursor-pointer ${
                     isActive
-                      ? isMoM
-                        ? "border-amber-700 bg-amber-700 text-white shadow-md transform -translate-y-0.5"
-                        : isSWA
-                        ? "border-blue-700 bg-blue-700 text-white shadow-md transform -translate-y-0.5"
-                        : isGDR
-                        ? "border-accent-deep bg-accent-deep text-white shadow-md transform -translate-y-0.5"
-                        : "border-ink bg-ink text-paper shadow-md transform -translate-y-0.5"
-                      : isMoM
-                      ? "border-amber-700/50 bg-amber-700/10 text-amber-900 hover:border-amber-700"
-                      : isSWA
-                      ? "border-blue-700/40 bg-blue-700/5 text-blue-900 hover:border-blue-700"
-                      : isGDR
+                      ? isAccent
+                        ? "border-accent-deep bg-accent-deep text-white shadow-sm"
+                        : "border-ink bg-ink text-paper shadow-sm"
+                      : isAccent
                       ? "border-accent-deep/40 bg-accent-deep/5 text-accent-deep hover:border-accent-deep"
                       : "border-line bg-paper text-ink hover:border-ink-soft hover:bg-paper-dim"
                   }`}
@@ -270,7 +258,7 @@ export default function ArchitectureDiagram() {
           </div>
 
           {/* Active Block Spec Inspector */}
-          <div className="border-t border-line pt-4 bg-paper/80 p-4 sm:p-5 border-l-2 border-l-accent-deep text-xs space-y-2">
+          <div className="border-t border-line pt-4 bg-paper-dim/60 p-4 sm:p-5 border-l-2 border-l-accent-deep text-xs space-y-2">
             <div className="flex justify-between items-center font-medium text-ink">
               <span className="text-sm font-semibold">{activeBlockData.name}</span>
               <span className="text-[10px] text-accent-deep uppercase tracking-widest px-2 py-0.5 bg-accent-deep/10 font-mono">
@@ -278,7 +266,7 @@ export default function ArchitectureDiagram() {
               </span>
             </div>
             <p className="text-ink-soft leading-relaxed font-serif text-sm">{activeBlockData.desc}</p>
-            <div className="p-2.5 bg-paper-dim/80 border border-line/60 font-mono text-[11px] text-accent-deep">
+            <div className="p-2.5 bg-paper border border-line font-mono text-[11px] text-accent-deep">
               Formula: {activeBlockData.formula}
             </div>
             <div className="text-[11px] text-muted font-mono pt-1 flex flex-wrap gap-6">
@@ -304,11 +292,9 @@ export default function ArchitectureDiagram() {
                 <button
                   key={p.step}
                   onClick={() => setHoverStep(p.step)}
-                  className={`px-2 py-1 border cursor-pointer transition-all ${
+                  className={`px-2.5 py-1 border cursor-pointer transition-all ${
                     hoverStep === p.step
-                      ? p.step === 43
-                        ? "border-amber-700 bg-amber-700 text-white font-bold"
-                        : p.step >= 50
+                      ? p.step >= 43
                         ? "border-accent-deep bg-accent-deep text-white font-bold"
                         : "border-ink bg-ink text-paper font-bold"
                       : "border-line bg-paper text-muted hover:text-ink"
@@ -323,17 +309,17 @@ export default function ArchitectureDiagram() {
           {/* Multi-Signal SVG Chart */}
           <div className="relative border border-line bg-paper p-4 overflow-hidden w-full">
             {/* Chart Legend */}
-            <div className="flex items-center gap-5 text-[10px] uppercase tracking-wider text-muted mb-2 font-mono">
+            <div className="flex items-center gap-6 text-[10px] uppercase tracking-wider text-muted mb-2 font-mono">
               <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-ink inline-block" /> Loss ℒ(t)</span>
-              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-amber-700 inline-block stroke-dashed" /> Kurtosis κ(t)</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-muted inline-block stroke-dashed" /> Kurtosis κ(t)</span>
               <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-accent-deep inline-block stroke-dashed" /> CUSUM S_k</span>
             </div>
 
             <svg viewBox="0 0 580 170" className="w-full h-48">
               <defs>
                 <linearGradient id="lossGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#e53e3e" stopOpacity="0.20" />
-                  <stop offset="100%" stopColor="#e53e3e" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#b02424" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#b02424" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
@@ -344,17 +330,17 @@ export default function ArchitectureDiagram() {
 
               {/* Early warning markers with staggered Y offsets */}
               {/* Kurtosis at step 43 -> x=351.9 */}
-              <line x1="351.9" y1="18" x2="351.9" y2="145" stroke="#b25e00" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="351.9" y="12" fill="#b25e00" fontSize="8.5" fontWeight="bold" textAnchor="end">Kurtosis Fire (16.7s lead)</text>
+              <line x1="351.9" y1="18" x2="351.9" y2="145" stroke="#7a776b" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x="351.9" y="12" fill="#7a776b" fontSize="8.5" fontWeight="medium" textAnchor="end">Kurtosis Fire (16.7s lead)</text>
 
               {/* CUSUM at step 50 -> x=417 */}
-              <line x1="417" y1="28" x2="417" y2="145" stroke="#e53e3e" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="417" y="24" fill="#e53e3e" fontSize="8.5" fontWeight="bold" textAnchor="start">CUSUM Fire (9.7s lead)</text>
+              <line x1="417" y1="28" x2="417" y2="145" stroke="#b02424" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x="417" y="24" fill="#b02424" fontSize="8.5" fontWeight="medium" textAnchor="start">CUSUM Fire (9.7s lead)</text>
 
               {/* Loss Area & Paths */}
               <path d={areaD} fill="url(#lossGradient)" />
-              <path d={kurtosisPathD} fill="none" stroke="#b25e00" strokeWidth="1.5" strokeDasharray="4 2" />
-              <path d={cusumPathD} fill="none" stroke="#e53e3e" strokeWidth="1.5" strokeDasharray="3 3" />
+              <path d={kurtosisPathD} fill="none" stroke="#7a776b" strokeWidth="1.5" strokeDasharray="4 2" />
+              <path d={cusumPathD} fill="none" stroke="#b02424" strokeWidth="1.5" strokeDasharray="3 3" />
               <path d={lossPathD} fill="none" stroke="#161513" strokeWidth="2.5" strokeLinecap="round" />
 
               {/* Interactive Points */}
@@ -369,10 +355,10 @@ export default function ArchitectureDiagram() {
                       cx={x}
                       cy={y}
                       r={isSelected ? "5.5" : "3.5"}
-                      fill={p.step === 43 ? "#b25e00" : isSpike ? "#e53e3e" : "#161513"}
+                      fill={isSpike ? "#b02424" : "#161513"}
                     />
                     {isSelected && (
-                      <circle cx={x} cy={y} r="8.5" fill="none" stroke={p.step === 43 ? "#b25e00" : "#e53e3e"} strokeWidth="1.5" />
+                      <circle cx={x} cy={y} r="8.5" fill="none" stroke={isSpike ? "#b02424" : "#161513"} strokeWidth="1.5" />
                     )}
                     <text x={x} y="160" fill="#7a776b" fontSize="9" fontFamily="monospace" textAnchor="middle">
                       s{p.step}
@@ -386,7 +372,7 @@ export default function ArchitectureDiagram() {
           {/* Diagnostics Panel: Layer L2 Heatmap & Chronological Story */}
           <div className="grid md:grid-cols-12 gap-4">
             {/* Left: Selected Step Story */}
-            <div className="md:col-span-6 border-l-2 border-accent-deep bg-paper/80 p-4 text-xs space-y-2">
+            <div className="md:col-span-6 border-l-2 border-accent-deep bg-paper-dim/60 p-4 text-xs space-y-2 border border-line border-l-accent-deep">
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-accent-deep text-sm">Step {activePoint.step} · {activePoint.status}</span>
                 <span className="text-muted font-mono text-xs">Loss: {activePoint.loss.toFixed(2)}</span>
@@ -400,7 +386,7 @@ export default function ArchitectureDiagram() {
             </div>
 
             {/* Right: Per-Layer Gradient L2 Inspector */}
-            <div className="md:col-span-6 border border-line bg-paper/80 p-4 text-xs space-y-2">
+            <div className="md:col-span-6 border border-line bg-paper-dim/60 p-4 text-xs space-y-2">
               <div className="flex justify-between items-center text-[11px] font-mono text-muted uppercase tracking-wider">
                 <span>Per-Block Gradient L2 Norm</span>
                 <span>Step {activePoint.step}</span>
@@ -410,7 +396,7 @@ export default function ArchitectureDiagram() {
                 {activePoint.grads.map((g) => (
                   <div key={g.name} className="flex items-center gap-3">
                     <span className="w-16 shrink-0 text-muted">{g.name}</span>
-                    <div className="flex-1 bg-paper-dim border border-line/60 h-3 relative overflow-hidden">
+                    <div className="flex-1 bg-paper border border-line h-3 relative overflow-hidden">
                       <div
                         className={`h-full transition-all duration-300 ${
                           g.status === "critical"
@@ -418,8 +404,8 @@ export default function ArchitectureDiagram() {
                             : g.status === "alert"
                             ? "bg-accent"
                             : g.status === "warning"
-                            ? "bg-amber-600"
-                            : "bg-ink/40"
+                            ? "bg-ink/70"
+                            : "bg-line"
                         }`}
                         style={{ width: `${g.pct}%` }}
                       />
