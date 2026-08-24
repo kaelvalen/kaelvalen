@@ -35,128 +35,341 @@ export default function ArchitectureDiagram() {
   const currentBlocks = patterns[pattern];
   const activeBlockData = currentBlocks[activeBlock] || currentBlocks[0];
 
-  const surgeMult = parseFloat(lrSurge);
+  // Realistic simulated data profiles for 1.0x, 2.5x, and 5.0x LR surge
+  const getSimulationProfile = (surge: "1.0" | "2.5" | "5.0") => {
+    if (surge === "1.0") {
+      return {
+        kurtosisAlertStep: 43,
+        cusumAlertStep: 50,
+        kurtosisLabel: "Kurtosis Fire (16.7s lead)",
+        cusumLabel: "CUSUM Fire (9.7s lead)",
+        points: [
+          {
+            step: 10,
+            loss: 3.42,
+            cusum: 0.02,
+            kurtosis: 3.01,
+            status: "Normal Steady State",
+            layer: "All layers operating within nominal gradients (L2 ≈ 0.12)",
+            grads: [
+              { name: "Layer 2", l2: 0.12, pct: 15, status: "normal" },
+              { name: "Layer 8", l2: 0.18, pct: 20, status: "normal" },
+              { name: "Layer 14", l2: 0.15, pct: 18, status: "normal" },
+              { name: "Layer 18", l2: 0.11, pct: 14, status: "normal" },
+            ],
+          },
+          {
+            step: 25,
+            loss: 2.38,
+            cusum: 0.08,
+            kurtosis: 3.12,
+            status: "Normal Steady State",
+            layer: "Loss decreasing smoothly (L2 ≈ 0.18)",
+            grads: [
+              { name: "Layer 2", l2: 0.14, pct: 16, status: "normal" },
+              { name: "Layer 8", l2: 0.22, pct: 22, status: "normal" },
+              { name: "Layer 14", l2: 0.19, pct: 20, status: "normal" },
+              { name: "Layer 18", l2: 0.12, pct: 15, status: "normal" },
+            ],
+          },
+          {
+            step: 43,
+            loss: 2.12,
+            cusum: 0.28,
+            kurtosis: 7.84,
+            status: "KURTOSIS ALERT (16.7 steps early warning)",
+            layer: "Block 14 activation kurtosis spike (7.84 > 3.5 margin)",
+            grads: [
+              { name: "Layer 2", l2: 0.25, pct: 25, status: "normal" },
+              { name: "Layer 8", l2: 0.41, pct: 35, status: "normal" },
+              { name: "Layer 14", l2: 1.85, pct: 65, status: "warning" },
+              { name: "Layer 18", l2: 0.38, pct: 30, status: "normal" },
+            ],
+          },
+          {
+            step: 50,
+            loss: 2.26,
+            cusum: 0.95,
+            kurtosis: 12.4,
+            status: "CUSUM DRIFT ALERT (9.7 steps early warning)",
+            layer: "Persistent loss drift (+0.22σ) detected in Block 14",
+            grads: [
+              { name: "Layer 2", l2: 0.38, pct: 30, status: "normal" },
+              { name: "Layer 8", l2: 0.95, pct: 45, status: "warning" },
+              { name: "Layer 14", l2: 4.82, pct: 85, status: "alert" },
+              { name: "Layer 18", l2: 1.12, pct: 50, status: "warning" },
+            ],
+          },
+          {
+            step: 56,
+            loss: 3.45,
+            cusum: 3.40,
+            kurtosis: 28.1,
+            status: "GRADIENT EXPLOSION CASCADE",
+            layer: "Layer 14 L2 norm explosion (14.82) propagating to Layer 18",
+            grads: [
+              { name: "Layer 2", l2: 1.15, pct: 50, status: "warning" },
+              { name: "Layer 8", l2: 3.84, pct: 75, status: "alert" },
+              { name: "Layer 14", l2: 14.82, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 8.15, pct: 88, status: "critical" },
+            ],
+          },
+          {
+            step: 60,
+            loss: 9.84,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "FULL SPIKE COLLAPSE",
+            layer: "NaN parameters / Optimizer update corrupted",
+            grads: [
+              { name: "Layer 2", l2: 12.4, pct: 90, status: "critical" },
+              { name: "Layer 8", l2: 45.2, pct: 98, status: "critical" },
+              { name: "Layer 14", l2: 182.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 96.4, pct: 99, status: "critical" },
+            ],
+          },
+        ],
+      };
+    } else if (surge === "2.5") {
+      return {
+        kurtosisAlertStep: 25,
+        cusumAlertStep: 43,
+        kurtosisLabel: "Kurtosis Fire (Step 25)",
+        cusumLabel: "CUSUM Drift (Step 43)",
+        points: [
+          {
+            step: 10,
+            loss: 3.42,
+            cusum: 0.05,
+            kurtosis: 3.08,
+            status: "Accelerated Learning",
+            layer: "Higher learning rate causes rapid gradient changes",
+            grads: [
+              { name: "Layer 2", l2: 0.28, pct: 28, status: "normal" },
+              { name: "Layer 8", l2: 0.42, pct: 40, status: "normal" },
+              { name: "Layer 14", l2: 0.38, pct: 36, status: "normal" },
+              { name: "Layer 18", l2: 0.24, pct: 25, status: "normal" },
+            ],
+          },
+          {
+            step: 25,
+            loss: 2.55,
+            cusum: 0.35,
+            kurtosis: 7.90,
+            status: "KURTOSIS ALERT (Accelerated Drift)",
+            layer: "Layer 14 activation kurtosis cross >3.5σ threshold early",
+            grads: [
+              { name: "Layer 2", l2: 0.35, pct: 35, status: "normal" },
+              { name: "Layer 8", l2: 0.65, pct: 50, status: "warning" },
+              { name: "Layer 14", l2: 2.95, pct: 75, status: "alert" },
+              { name: "Layer 18", l2: 0.45, pct: 35, status: "normal" },
+            ],
+          },
+          {
+            step: 43,
+            loss: 3.65,
+            cusum: 1.85,
+            kurtosis: 22.4,
+            status: "CUSUM DRIFT ALERT (Step 43)",
+            layer: "Persistent loss rise (+0.48σ) confirmed in Block 14",
+            grads: [
+              { name: "Layer 2", l2: 0.85, pct: 45, status: "warning" },
+              { name: "Layer 8", l2: 2.40, pct: 70, status: "alert" },
+              { name: "Layer 14", l2: 8.50, pct: 95, status: "critical" },
+              { name: "Layer 18", l2: 2.80, pct: 72, status: "alert" },
+            ],
+          },
+          {
+            step: 50,
+            loss: 6.80,
+            cusum: 5.40,
+            kurtosis: 55.0,
+            status: "EARLY EXPLOSION CASCADE",
+            layer: "Gradient explosion propagating through transformer layers",
+            grads: [
+              { name: "Layer 2", l2: 2.40, pct: 70, status: "alert" },
+              { name: "Layer 8", l2: 8.50, pct: 92, status: "critical" },
+              { name: "Layer 14", l2: 32.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 16.5, pct: 96, status: "critical" },
+            ],
+          },
+          {
+            step: 56,
+            loss: 9.90,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "FULL SPIKE COLLAPSE",
+            layer: "Unrecoverable divergence triggered 4 steps early",
+            grads: [
+              { name: "Layer 2", l2: 18.0, pct: 95, status: "critical" },
+              { name: "Layer 8", l2: 65.0, pct: 99, status: "critical" },
+              { name: "Layer 14", l2: 210.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 120.0, pct: 100, status: "critical" },
+            ],
+          },
+          {
+            step: 60,
+            loss: 9.90,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "NaN COLLAPSE",
+            layer: "NaN parameters",
+            grads: [
+              { name: "Layer 2", l2: 22.0, pct: 96, status: "critical" },
+              { name: "Layer 8", l2: 80.0, pct: 100, status: "critical" },
+              { name: "Layer 14", l2: 250.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 140.0, pct: 100, status: "critical" },
+            ],
+          },
+        ],
+      };
+    } else {
+      return {
+        kurtosisAlertStep: 10,
+        cusumAlertStep: 25,
+        kurtosisLabel: "Kurtosis Fire (Step 10)",
+        cusumLabel: "CUSUM Drift (Step 25)",
+        points: [
+          {
+            step: 10,
+            loss: 3.60,
+            cusum: 0.40,
+            kurtosis: 8.20,
+            status: "IMMEDIATE KURTOSIS ALERT",
+            layer: "Violent LR surge causes immediate heavy-tail activations",
+            grads: [
+              { name: "Layer 2", l2: 0.65, pct: 45, status: "warning" },
+              { name: "Layer 8", l2: 1.20, pct: 55, status: "warning" },
+              { name: "Layer 14", l2: 3.40, pct: 80, status: "alert" },
+              { name: "Layer 18", l2: 0.85, pct: 50, status: "warning" },
+            ],
+          },
+          {
+            step: 25,
+            loss: 5.80,
+            cusum: 3.20,
+            kurtosis: 35.0,
+            status: "CUSUM SHIFT + EXPLOSION",
+            layer: "Rapid divergence in Block 14 gradients",
+            grads: [
+              { name: "Layer 2", l2: 1.80, pct: 65, status: "alert" },
+              { name: "Layer 8", l2: 5.60, pct: 85, status: "critical" },
+              { name: "Layer 14", l2: 22.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 11.0, pct: 92, status: "critical" },
+            ],
+          },
+          {
+            step: 43,
+            loss: 9.85,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "TOTAL LOSS EXPLOSION",
+            layer: "Full numerical collapse at step 43",
+            grads: [
+              { name: "Layer 2", l2: 15.0, pct: 92, status: "critical" },
+              { name: "Layer 8", l2: 55.0, pct: 99, status: "critical" },
+              { name: "Layer 14", l2: 190.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 98.0, pct: 100, status: "critical" },
+            ],
+          },
+          {
+            step: 50,
+            loss: 9.85,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "NaN COLLAPSE",
+            layer: "Model weights corrupted",
+            grads: [
+              { name: "Layer 2", l2: 20.0, pct: 95, status: "critical" },
+              { name: "Layer 8", l2: 70.0, pct: 100, status: "critical" },
+              { name: "Layer 14", l2: 230.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 120.0, pct: 100, status: "critical" },
+            ],
+          },
+          {
+            step: 56,
+            loss: 9.85,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "NaN COLLAPSE",
+            layer: "Model weights corrupted",
+            grads: [
+              { name: "Layer 2", l2: 20.0, pct: 95, status: "critical" },
+              { name: "Layer 8", l2: 70.0, pct: 100, status: "critical" },
+              { name: "Layer 14", l2: 230.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 120.0, pct: 100, status: "critical" },
+            ],
+          },
+          {
+            step: 60,
+            loss: 9.85,
+            cusum: 11.2,
+            kurtosis: 95.0,
+            status: "NaN COLLAPSE",
+            layer: "Model weights corrupted",
+            grads: [
+              { name: "Layer 2", l2: 20.0, pct: 95, status: "critical" },
+              { name: "Layer 8", l2: 70.0, pct: 100, status: "critical" },
+              { name: "Layer 14", l2: 230.0, pct: 100, status: "critical" },
+              { name: "Layer 18", l2: 120.0, pct: 100, status: "critical" },
+            ],
+          },
+        ],
+      };
+    }
+  };
 
-  // Trainscope loss curve key points (step, loss, cusum, kurtosis, status, layerGrads)
-  const lossPoints = [
-    {
-      step: 10,
-      loss: 3.42 * (surgeMult > 3 ? 1.4 : 1.0),
-      cusum: 0.02 * surgeMult,
-      kurtosis: 3.01 * (surgeMult > 3 ? 2.5 : 1.0),
-      status: surgeMult > 3 ? "KURTOSIS EARLY SPIKE (Step 10)" : "Normal Steady State",
-      layer: "All layers operating within nominal gradients (L2 ≈ 0.12)",
-      grads: [
-        { name: "Layer 2", l2: 0.12 * surgeMult, pct: Math.min(100, 15 * surgeMult), status: surgeMult > 3 ? "warning" : "normal" },
-        { name: "Layer 8", l2: 0.18 * surgeMult, pct: Math.min(100, 20 * surgeMult), status: surgeMult > 3 ? "warning" : "normal" },
-        { name: "Layer 14", l2: 0.15 * surgeMult, pct: Math.min(100, 18 * surgeMult), status: surgeMult > 3 ? "alert" : "normal" },
-        { name: "Layer 18", l2: 0.11 * surgeMult, pct: Math.min(100, 14 * surgeMult), status: "normal" },
-      ],
-    },
-    {
-      step: 25,
-      loss: 2.85 * (surgeMult > 1.5 ? 1.6 : 1.0),
-      cusum: 0.08 * surgeMult,
-      kurtosis: 3.12 * (surgeMult > 1.5 ? 3.2 : 1.0),
-      status: surgeMult > 1.5 ? "CUSUM DRIFT ALERT (Step 25)" : "Normal Steady State",
-      layer: "Loss decreasing smoothly (L2 ≈ 0.18)",
-      grads: [
-        { name: "Layer 2", l2: 0.14 * surgeMult, pct: Math.min(100, 16 * surgeMult), status: "normal" },
-        { name: "Layer 8", l2: 0.22 * surgeMult, pct: Math.min(100, 22 * surgeMult), status: "normal" },
-        { name: "Layer 14", l2: 0.19 * surgeMult, pct: Math.min(100, 20 * surgeMult), status: surgeMult > 1.5 ? "alert" : "normal" },
-        { name: "Layer 18", l2: 0.12 * surgeMult, pct: Math.min(100, 15 * surgeMult), status: "normal" },
-      ],
-    },
-    {
-      step: 43,
-      loss: Math.min(9.8, 2.41 * surgeMult),
-      cusum: 0.28 * surgeMult,
-      kurtosis: 7.84 * surgeMult,
-      status: "KURTOSIS ALERT (16.7 steps early warning)",
-      layer: "Block 14 activation kurtosis spike (7.84 > 3.5 margin)",
-      grads: [
-        { name: "Layer 2", l2: 0.25 * surgeMult, pct: Math.min(100, 25 * surgeMult), status: "normal" },
-        { name: "Layer 8", l2: 0.41 * surgeMult, pct: Math.min(100, 35 * surgeMult), status: "normal" },
-        { name: "Layer 14", l2: 1.85 * surgeMult, pct: Math.min(100, 65 * surgeMult), status: "warning" },
-        { name: "Layer 18", l2: 0.38 * surgeMult, pct: Math.min(100, 30 * surgeMult), status: "normal" },
-      ],
-    },
-    {
-      step: 50,
-      loss: Math.min(9.9, 2.48 * (surgeMult > 1.5 ? 2.8 : 1.0)),
-      cusum: 0.95 * surgeMult,
-      kurtosis: 12.4 * surgeMult,
-      status: "CUSUM DRIFT ALERT (9.7 steps early warning)",
-      layer: "Persistent loss drift (+0.22σ) detected in Block 14",
-      grads: [
-        { name: "Layer 2", l2: 0.38 * surgeMult, pct: Math.min(100, 30 * surgeMult), status: "normal" },
-        { name: "Layer 8", l2: 0.95 * surgeMult, pct: Math.min(100, 45 * surgeMult), status: "warning" },
-        { name: "Layer 14", l2: 4.82 * surgeMult, pct: Math.min(100, 85 * surgeMult), status: "alert" },
-        { name: "Layer 18", l2: 1.12 * surgeMult, pct: Math.min(100, 50 * surgeMult), status: "warning" },
-      ],
-    },
-    {
-      step: 56,
-      loss: Math.min(9.95, 3.12 * (surgeMult > 1.5 ? 2.5 : 1.0)),
-      cusum: 3.40 * surgeMult,
-      kurtosis: 28.1 * surgeMult,
-      status: "GRADIENT EXPLOSION CASCADE",
-      layer: "Layer 14 L2 norm explosion (14.82) propagating to Layer 18",
-      grads: [
-        { name: "Layer 2", l2: 1.15 * surgeMult, pct: Math.min(100, 50 * surgeMult), status: "warning" },
-        { name: "Layer 8", l2: 3.84 * surgeMult, pct: Math.min(100, 75 * surgeMult), status: "alert" },
-        { name: "Layer 14", l2: 14.82 * surgeMult, pct: 100, status: "critical" },
-        { name: "Layer 18", l2: 8.15 * surgeMult, pct: Math.min(100, 88 * surgeMult), status: "critical" },
-      ],
-    },
-    {
-      step: 60,
-      loss: 9.84,
-      cusum: 11.2 * surgeMult,
-      kurtosis: 95.0 * surgeMult,
-      status: "FULL SPIKE COLLAPSE",
-      layer: "NaN parameters / Optimizer update corrupted",
-      grads: [
-        { name: "Layer 2", l2: 12.4 * surgeMult, pct: 90, status: "critical" },
-        { name: "Layer 8", l2: 45.2 * surgeMult, pct: 98, status: "critical" },
-        { name: "Layer 14", l2: 182.0 * surgeMult, pct: 100, status: "critical" },
-        { name: "Layer 18", l2: 96.4 * surgeMult, pct: 99, status: "critical" },
-      ],
-    },
-  ];
+  const currentProfile = getSimulationProfile(lrSurge);
+  const lossPoints = currentProfile.points;
 
-  // Convert step (10-60) and loss (2.0-10.0) to SVG coordinates (viewBox 0 0 580 170)
-  const getSvgCoords = (step: number, val: number, minV = 2.0, maxV = 10.0) => {
-    const x = 45 + ((step - 10) / 50) * 465;
-    const y = 145 - ((val - minV) / (maxV - minV)) * 115;
+  // Convert step (10-60) and value to SVG coordinates (viewBox 0 0 580 180)
+  // Strictly clamp value to [minV, maxV] so curves never exceed chart bounds!
+  const getSvgCoords = (step: number, val: number, minV = 1.0, maxV = 10.0) => {
+    const x = 50 + ((step - 10) / 50) * 465;
+    const clamped = Math.max(minV, Math.min(maxV, val));
+    const y = 145 - ((clamped - minV) / (maxV - minV)) * 105;
     return { x, y };
   };
 
-  const lossPathD = lossPoints
-    .map((p, i) => {
-      const { x, y } = getSvgCoords(p.step, p.loss);
-      return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
-    })
-    .join(" ");
+  // Smooth Catmull-Rom / Monotone cubic bezier spline generator
+  const getCurvedPath = (pts: { x: number; y: number }[]) => {
+    if (pts.length === 0) return "";
+    if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
 
-  const kurtosisPathD = lossPoints
-    .map((p, i) => {
-      const { x, y } = getSvgCoords(p.step, p.kurtosis, 0, 100);
-      return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
-    })
-    .join(" ");
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(pts.length - 1, i + 2)];
 
-  const cusumPathD = lossPoints
-    .map((p, i) => {
-      const { x, y } = getSvgCoords(p.step, p.cusum, 0, 12);
-      return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
-    })
-    .join(" ");
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
 
-  const lastCoord = getSvgCoords(60, 9.84);
-  const areaD = `${lossPathD} L ${lastCoord.x} 145 L 45 145 Z`;
+      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    }
+    return d;
+  };
+
+  const lossPointsCoords = lossPoints.map((p) => getSvgCoords(p.step, p.loss, 1.0, 10.0));
+  const kurtosisPointsCoords = lossPoints.map((p) => getSvgCoords(p.step, p.kurtosis, 0, 100));
+  const cusumPointsCoords = lossPoints.map((p) => getSvgCoords(p.step, p.cusum, 0, 12));
+
+  const lossPathD = getCurvedPath(lossPointsCoords);
+  const kurtosisPathD = getCurvedPath(kurtosisPointsCoords);
+  const cusumPathD = getCurvedPath(cusumPointsCoords);
+
+  const firstLoss = lossPointsCoords[0];
+  const lastLoss = lossPointsCoords[lossPointsCoords.length - 1];
+  const areaD = `${lossPathD} L ${lastLoss.x} 145 L ${firstLoss.x} 145 Z`;
 
   const activePoint = lossPoints.find((p) => p.step === hoverStep) || lossPoints[2];
+  const activeCoord = getSvgCoords(activePoint.step, activePoint.loss, 1.0, 10.0);
+
+  const kurtosisAlertX = 50 + ((currentProfile.kurtosisAlertStep - 10) / 50) * 465;
+  const cusumAlertX = 50 + ((currentProfile.cusumAlertStep - 10) / 50) * 465;
 
   return (
     <div className="my-10 border border-line bg-paper p-5 sm:p-7 font-mono w-full">
@@ -293,7 +506,7 @@ export default function ArchitectureDiagram() {
               </p>
               <div className="flex gap-1 font-mono text-[10px]">
                 <button
-                  onClick={() => setLrSurge("1.0")}
+                  onClick={() => { setLrSurge("1.0"); setHoverStep(43); }}
                   className={`px-2 py-0.5 border cursor-pointer transition-all ${
                     lrSurge === "1.0" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
                   }`}
@@ -301,7 +514,7 @@ export default function ArchitectureDiagram() {
                   1.0x (Nominal)
                 </button>
                 <button
-                  onClick={() => setLrSurge("2.5")}
+                  onClick={() => { setLrSurge("2.5"); setHoverStep(25); }}
                   className={`px-2 py-0.5 border cursor-pointer transition-all ${
                     lrSurge === "2.5" ? "border-accent-deep bg-accent-deep text-white" : "border-line bg-paper text-muted hover:text-ink"
                   }`}
@@ -309,7 +522,7 @@ export default function ArchitectureDiagram() {
                   2.5x (Drift)
                 </button>
                 <button
-                  onClick={() => setLrSurge("5.0")}
+                  onClick={() => { setLrSurge("5.0"); setHoverStep(10); }}
                   className={`px-2 py-0.5 border cursor-pointer transition-all ${
                     lrSurge === "5.0" ? "border-accent-deep bg-accent-deep text-white font-bold" : "border-line bg-paper text-muted hover:text-ink"
                   }`}
@@ -326,7 +539,7 @@ export default function ArchitectureDiagram() {
                   onClick={() => setHoverStep(p.step)}
                   className={`px-2.5 py-1 border cursor-pointer transition-all ${
                     hoverStep === p.step
-                      ? p.step >= 43
+                      ? p.step >= currentProfile.kurtosisAlertStep
                         ? "border-accent-deep bg-accent-deep text-white font-bold"
                         : "border-ink bg-ink text-paper font-bold"
                       : "border-line bg-paper text-muted hover:text-ink"
@@ -347,39 +560,49 @@ export default function ArchitectureDiagram() {
               <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-accent-deep inline-block stroke-dashed" /> CUSUM S_k</span>
             </div>
 
-            <svg viewBox="0 0 580 170" className="w-full h-48">
+            <svg viewBox="0 0 580 180" className="w-full h-52 select-none">
               <defs>
                 <linearGradient id="lossGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#b02424" stopOpacity="0.12" />
+                  <stop offset="0%" stopColor="#b02424" stopOpacity="0.15" />
                   <stop offset="100%" stopColor="#b02424" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
-              {/* Grid lines */}
-              <line x1="45" y1="30" x2="515" y2="30" stroke="#d8d4c5" strokeDasharray="3 3" />
-              <line x1="45" y1="85" x2="515" y2="85" stroke="#d8d4c5" strokeDasharray="3 3" />
-              <line x1="45" y1="145" x2="515" y2="145" stroke="#d8d4c5" strokeWidth="1" />
+              {/* Y-Axis Value Labels & Grid Lines */}
+              <text x="42" y="43" fill="#7a776b" fontSize="8" fontFamily="monospace" textAnchor="end">10.0</text>
+              <line x1="48" y1="40" x2="520" y2="40" stroke="#d8d4c5" strokeDasharray="3 3" />
 
-              {/* Early warning markers with staggered Y offsets */}
-              {/* Kurtosis at step 43 -> x=351.9 */}
-              <line x1="351.9" y1="18" x2="351.9" y2="145" stroke="#7a776b" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="351.9" y="12" fill="#7a776b" fontSize="8.5" fontWeight="medium" textAnchor="end">Kurtosis Fire (16.7s lead)</text>
+              <text x="42" y="95" fill="#7a776b" fontSize="8" fontFamily="monospace" textAnchor="end">5.0</text>
+              <line x1="48" y1="92" x2="520" y2="92" stroke="#d8d4c5" strokeDasharray="3 3" />
 
-              {/* CUSUM at step 50 -> x=417 */}
-              <line x1="417" y1="28" x2="417" y2="145" stroke="#b02424" strokeDasharray="2 2" strokeWidth="1.5" />
-              <text x="417" y="24" fill="#b02424" fontSize="8.5" fontWeight="medium" textAnchor="start">CUSUM Fire (9.7s lead)</text>
+              <text x="42" y="148" fill="#7a776b" fontSize="8" fontFamily="monospace" textAnchor="end">1.0</text>
+              <line x1="48" y1="145" x2="520" y2="145" stroke="#d8d4c5" strokeWidth="1" />
 
-              {/* Loss Area & Paths */}
+              {/* Dynamic Early Warning Trigger Lines */}
+              <line x1={kurtosisAlertX} y1="24" x2={kurtosisAlertX} y2="145" stroke="#646156" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x={kurtosisAlertX} y="16" fill="#646156" fontSize="8.5" fontWeight="bold" textAnchor={kurtosisAlertX > 300 ? "end" : "start"}>
+                {currentProfile.kurtosisLabel}
+              </text>
+
+              <line x1={cusumAlertX} y1="32" x2={cusumAlertX} y2="145" stroke="#b02424" strokeDasharray="2 2" strokeWidth="1.5" />
+              <text x={cusumAlertX} y="26" fill="#b02424" fontSize="8.5" fontWeight="bold" textAnchor={cusumAlertX > 400 ? "end" : "start"}>
+                {currentProfile.cusumLabel}
+              </text>
+
+              {/* Tracking Guide Line for Hovered Step */}
+              <line x1={activeCoord.x} y1="40" x2={activeCoord.x} y2="145" stroke="#d8d4c5" strokeDasharray="1 2" strokeWidth="1" />
+
+              {/* Smooth Curves & Area Fill */}
               <path d={areaD} fill="url(#lossGradient)" />
-              <path d={kurtosisPathD} fill="none" stroke="#7a776b" strokeWidth="1.5" strokeDasharray="4 2" />
+              <path d={kurtosisPathD} fill="none" stroke="#646156" strokeWidth="1.5" strokeDasharray="4 2" />
               <path d={cusumPathD} fill="none" stroke="#b02424" strokeWidth="1.5" strokeDasharray="3 3" />
               <path d={lossPathD} fill="none" stroke="#161513" strokeWidth="2.5" strokeLinecap="round" />
 
               {/* Interactive Points with Mobile Touch Radius */}
               {lossPoints.map((p) => {
-                const { x, y } = getSvgCoords(p.step, p.loss);
+                const { x, y } = getSvgCoords(p.step, p.loss, 1.0, 10.0);
                 const isSelected = p.step === hoverStep;
-                const isSpike = p.step >= 43;
+                const isSpike = p.step >= currentProfile.kurtosisAlertStep;
 
                 return (
                   <g key={p.step} className="cursor-pointer" onClick={() => setHoverStep(p.step)}>
@@ -394,7 +617,7 @@ export default function ArchitectureDiagram() {
                     {isSelected && (
                       <circle cx={x} cy={y} r="8.5" fill="none" stroke={isSpike ? "#b02424" : "#161513"} strokeWidth="1.5" />
                     )}
-                    <text x={x} y="160" fill="#7a776b" fontSize="9" fontFamily="monospace" textAnchor="middle">
+                    <text x={x} y="162" fill="#7a776b" fontSize="9" fontFamily="monospace" textAnchor="middle">
                       s{p.step}
                     </text>
                   </g>
