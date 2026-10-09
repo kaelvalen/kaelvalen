@@ -36,16 +36,26 @@ export default function Masthead() {
     <header>
       {/* top strip */}
       <div className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3 flex items-baseline justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3 flex items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
           <span>M. A. Hakbilen · research notes</span>
-          <span className="hidden sm:inline">Ankara, TR · 2026</span>
+          <div className="flex items-center gap-4">
+            <span className="hidden sm:inline">Ankara, TR · 2026</span>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+              className="border border-line px-2 py-0.5 text-muted transition-colors hover:border-ink-soft hover:text-ink cursor-pointer"
+              aria-label="Open command palette"
+            >
+              ⌘K
+            </button>
+          </div>
         </div>
       </div>
 
       {/* hero */}
       <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-14 md:pt-24 pb-16 md:pb-24">
         <div className="grid md:grid-cols-12 gap-10 md:gap-8">
-          <div className="md:col-span-7">
+          <div className="md:col-span-7 animate-rise-in">
             <p className="font-mono text-xs uppercase tracking-[0.22em] text-muted mb-6">
               ML architecture researcher
             </p>
@@ -64,9 +74,12 @@ export default function Masthead() {
             </p>
           </div>
 
-          <div className="md:col-span-4 md:col-start-9 flex flex-col gap-8">
+          <div
+            className="md:col-span-4 md:col-start-9 flex flex-col gap-8 animate-rise-in"
+            style={{ animationDelay: "90ms" }}
+          >
             {/* red interrupt: current status */}
-            <div className="bg-accent-deep text-white p-5 sm:p-6 shadow-sm">
+            <div className="bg-accent-deep text-white p-5 sm:p-6">
               <p className="font-mono text-[11px] uppercase tracking-[0.22em] mb-4 text-white/90">
                 Now running
               </p>
@@ -74,7 +87,7 @@ export default function Masthead() {
                 TRAINSCOPE: LOSS-SPIKE FLIGHT RECORDER
               </p>
               <p className="font-mono text-[11px] leading-relaxed mt-3 text-white/90">
-                CUSUM change-point detection (5-20s lead)
+                CUSUM change-point detection (5-20 steps early)
                 <br />
                 280+ noise scenarios tested · WandB auto-attach
               </p>
@@ -82,7 +95,7 @@ export default function Masthead() {
                 href="https://pypi.org/project/trainscope/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-80 transition-opacity text-white font-medium"
+                className="focus-on-dark inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-80 transition-opacity text-white font-medium"
               >
                 pypi.org/project/trainscope →
               </a>

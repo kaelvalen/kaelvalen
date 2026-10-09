@@ -44,11 +44,13 @@ export default function Contact() {
           </a>
         </p>
 
-        {copied && (
-          <p className="font-mono text-xs text-accent-deep animate-fade-in flex items-center gap-1.5 pt-1">
-            <span>✓</span> email copied to clipboard
-          </p>
-        )}
+        <div aria-live="polite" className="min-h-5 pt-1">
+          {copied && (
+            <p className="font-mono text-xs text-accent-deep animate-fade-in flex items-center gap-1.5">
+              <span>✓</span> email copied to clipboard
+            </p>
+          )}
+        </div>
       </div>
 
       <p className="mt-6 text-lg leading-relaxed text-ink-soft max-w-xl">

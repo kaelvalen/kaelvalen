@@ -1,6 +1,6 @@
 # kaelvalen · Personal Research Portfolio
 
-Personal academic and research portfolio website for **Mehmet Arda Hakbilen (kael valen)**, focusing on efficient sequence architectures, state-space duality (SSD), and distributed systems work.
+Personal academic and research portfolio website for **Mehmet Arda Hakbilen (kael valen)**, focusing on efficient sequence architectures, learning after deployment on frozen models, and distributed systems work.
 
 Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
@@ -21,14 +21,14 @@ Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
 - **`ArchitectureDiagram.tsx`**:
   Interactive dual-mode SVG engine:
-  1. *ENGRAM Hybrid*: Block layout explorer for Mamba-2 SSD + Gated Delta Rule (GDR) and Mixture-of-Memory (MoM) router.
+  1. *CERATA*: Architecture explorer for one fixed address space and its three time scales (FAST key-value memory, MEDIUM closed-form edit, SLOW consolidation), plus the four write guards.
   2. *Trainscope Flight Recorder*: Multi-signal loss spike visualization featuring Catmull-Rom cubic spline interpolation, CUSUM drift detection, activation Kurtosis alerts, and real-time Learning Rate surge simulation.
 - **`CommandPalette.tsx`**:
   Keyboard-native command launcher (`⌘K`, `Ctrl+K`, or `/`) enabling instant navigation, repository access, and email copying.
 - **`Projects.tsx`**:
   Live category filterable project directory (`All`, `ML & Research`, `Systems`, `Apps & Tools`).
 - **`Research.tsx`**:
-  Prose and benchmark breakdown for the ENGRAM sequence architecture (PTB-XL, Speech Commands, sCIFAR-10) with constrained line widths (`max-w-prose`) for optimal reading rhythm.
+  Prose and benchmark breakdown for the research sections (trainscope and CERATA on CIFAR-100 / frozen ViT-B/16) with constrained line widths (`max-w-prose`) for optimal reading rhythm.
 - **`Contact.tsx`**:
   Fluid responsive contact section with click-to-copy email feedback.
 

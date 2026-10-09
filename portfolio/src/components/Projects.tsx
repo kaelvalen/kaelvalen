@@ -14,11 +14,11 @@ type Project = {
 
 const projects: Project[] = [
   {
-    name: "engram",
-    blurb: "modality-portable SSD + Gated Delta Rule sequence backbone",
+    name: "cerata",
+    blurb: "learning after deployment on a frozen model: closed-form edits, exact forgetting",
     stack: "PyTorch",
     status: "active",
-    href: "https://github.com/kaelvalen/engram",
+    href: "https://github.com/kaelvalen/cerata",
     cat: "ml",
   },
   {
@@ -55,7 +55,7 @@ const projects: Project[] = [
   },
   {
     name: "beyond_transformer",
-    blurb: "PULSE: predecessor to ENGRAM, kept as design record",
+    blurb: "PULSE: early sequence-architecture prototype, kept as design record",
     stack: "PyTorch",
     status: "superseded",
     href: "https://github.com/kaelvalen/beyond_transformer",
@@ -83,8 +83,8 @@ export default function Projects() {
 
   return (
     <section id="projects" className="py-16 md:py-24 border-t border-line">
-      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-6">
-        <SectionHeader n="02" title="Projects" />
+      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-10 md:mb-14">
+        <SectionHeader n="02" title="Projects" className="mb-0" />
 
         {/* Filter buttons */}
         <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
@@ -152,7 +152,7 @@ export default function Projects() {
                 {p.name}
               </span>
               <div className="flex items-center gap-3 md:hidden">
-                <span className="font-mono text-xs text-accent-deep group-hover:text-accent transition-colors">
+                <span className="font-mono text-xs text-ink-soft group-hover:text-paper/70 transition-colors">
                   {p.status}
                 </span>
                 <span className="font-mono text-xs text-muted group-hover:text-paper transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
@@ -162,7 +162,7 @@ export default function Projects() {
             </div>
 
             {/* Blurb */}
-            <span className="md:col-span-4 text-sm sm:text-base leading-snug text-ink-soft group-hover:text-paper/80 transition-colors">
+            <span className="md:col-span-4 text-sm sm:text-base leading-snug text-ink-soft text-pretty group-hover:text-paper/80 transition-colors">
               {p.blurb}
             </span>
 
@@ -172,7 +172,7 @@ export default function Projects() {
             </span>
 
             {/* Desktop status & link */}
-            <span className="hidden md:block col-span-1 font-mono text-xs text-accent-deep group-hover:text-accent transition-colors">
+            <span className="hidden md:block col-span-1 font-mono text-xs text-ink-soft group-hover:text-paper/70 transition-colors">
               {p.status}
             </span>
             <span className="hidden md:block col-span-1 text-right font-mono text-xs text-muted group-hover:text-paper transition-transform duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">

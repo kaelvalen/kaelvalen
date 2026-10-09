@@ -2,38 +2,167 @@
 
 import { useState } from "react";
 
-type Mode = "engram" | "trainscope";
+type Mode = "cerata" | "trainscope";
+type CerataScale = "fast" | "medium" | "slow";
+type CerataCard = {
+  type: string;
+  name: string;
+  desc: string;
+  formula: string;
+  metric: string;
+  specs: string[];
+};
+type CerataLane = {
+  id: CerataScale;
+  tab: string;
+  sub: string;
+  title: string;
+  mechanics: string[];
+  api: string[];
+};
+
+function Connector({ label }: { label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-0.5 py-2 text-muted">
+      <span aria-hidden className="text-[11px] leading-none">│</span>
+      <span className="text-[9px] uppercase tracking-[0.14em] font-mono text-center max-w-[16rem]">{label}</span>
+      <span aria-hidden className="text-[11px] leading-none">▼</span>
+    </div>
+  );
+}
 
 export default function ArchitectureDiagram() {
   const [mode, setMode] = useState<Mode>("trainscope");
-  const [pattern, setPattern] = useState<"ssd_gdr" | "ssd_swa" | "mom">("ssd_gdr");
-  const [activeBlock, setActiveBlock] = useState<number>(0);
+  const [cerataScale, setCerataScale] = useState<CerataScale>("fast");
+  const [activeCard, setActiveCard] = useState<number>(0);
   const [hoverStep, setHoverStep] = useState<number>(43);
   const [lrSurge, setLrSurge] = useState<"1.0" | "2.5" | "5.0">("1.0");
 
-  const patterns = {
-    ssd_gdr: [
-      { type: "SSD", name: "Mamba-2 SSD Layer 1", desc: "Structured State Space Duality · Scalar-per-head decay A(t) with per-channel state & selective Δ/B/C.", formula: "h_t = A_t h_{t-1} + B_t x_t,  y_t = C_t h_t", ratio: "3:1 ratio" },
-      { type: "SSD", name: "Mamba-2 SSD Layer 2", desc: "Structured State Space Duality · Triton associative scan kernel with exact fp64 streaming equivalence.", formula: "associative_scan(A_t, B_t x_t)", ratio: "3:1 ratio" },
-      { type: "SSD", name: "Mamba-2 SSD Layer 3", desc: "Structured State Space Duality · Multi-head 1D Conv + selective state passing.", formula: "y_t = Conv1D(x_t) ⊗ StateScan(A_t, B_t, C_t)", ratio: "3:1 ratio" },
-      { type: "GDR", name: "Gated Delta Rule Layer 4", desc: "Associative Delta Memory · Data-dependent write/forget gates with targeted recall & overwrite.", formula: "S_t = S_{t-1} + k_t (v_t - k_t^T S_{t-1})", ratio: "Mixer Interleave" },
+  const cerataLanes: CerataLane[] = [
+    {
+      id: "fast",
+      tab: "FAST",
+      sub: "single item",
+      title: "Append-only KV memory",
+      mechanics: ["key = h · value = label / text", "O(1) write · exact delete"],
+      api: ["write", "forget"],
+    },
+    {
+      id: "medium",
+      tab: "MEDIUM",
+      sub: "new batch",
+      title: "Closed-form linear edit",
+      mechanics: [
+        "A = ΣKᵀK · B = ΣKᵀV",
+        "W = A⁻¹B · one accumulator pair",
+        "learn adds · forget subtracts",
+      ],
+      api: ["write", "forget"],
+    },
+    {
+      id: "slow",
+      tab: "SLOW",
+      sub: "consolidation",
+      title: "Frozen representation experts",
+      mechanics: [
+        "identity-init → train once → freeze",
+        "by_arrival control · by_confusion gated",
+      ],
+      api: ["consolidate"],
+    },
+  ];
+
+  const cerataGuards: { n: number; name: string; check: string }[] = [
+    { n: 1, name: "Locality", check: "canary argmax flip rate + max |Δoutput|" },
+    { n: 2, name: "Reversibility", check: "trial undo/redo · max |dW| ≤ 1e-10, canary identical" },
+    { n: 3, name: "Order invariance", check: "accumulator vs contributions re-summed in a seeded permutation" },
+    { n: 4, name: "Router purity", check: "0 trainable scalars reachable from the router" },
+  ];
+
+  const cerataPaths: Record<CerataScale, CerataCard[]> = {
+    fast: [
+      {
+        type: "FAST",
+        name: "Append-only Key-Value Memory",
+        desc: "The frozen base emits the hidden state h at a chosen layer; h is the key and the label or text is the value. One fixed address space, never trained.",
+        formula: "write: M ← M ∪ {(h, label)}",
+        metric: "O(1) write",
+        specs: ["key: h (frozen address)", "value: label or text", "base: content-hashed, immutable"],
+      },
+      {
+        type: "FAST",
+        name: "Parameter-free Retrieval",
+        desc: "Keys are never trained. Retrieval is exact cosine over the frozen addresses. No learned query, no router parameters on the fast path.",
+        formula: "ŷ = argmax_i cos(h, h_i)",
+        metric: "exact cosine",
+        specs: ["retrieval: exact cosine", "learned params: 0", "index: ExactCosineIndex"],
+      },
+      {
+        type: "FAST",
+        name: "Exact Delete",
+        desc: "forget(id) removes a single memory row exactly, with no retraining and no drift.",
+        formula: "forget(id): M ← M \\ {(h_id, v_id)}",
+        metric: "exact delete",
+        specs: ["forget: exact delete", "cost: O(1)", "keys trained: never"],
+      },
     ],
-    ssd_swa: [
-      { type: "SSD", name: "Mamba-2 SSD Layer 1", desc: "Structured State Space Duality · Fast state space scan backbone.", formula: "h_t = A_t h_{t-1} + B_t x_t", ratio: "3:1 ratio" },
-      { type: "SSD", name: "Mamba-2 SSD Layer 2", desc: "Structured State Space Duality · Parallel associative scan.", formula: "associative_scan(A_t, B_t x_t)", ratio: "3:1 ratio" },
-      { type: "SSD", name: "Mamba-2 SSD Layer 3", desc: "Structured State Space Duality · Selective state passing.", formula: "y_t = C_t h_t", ratio: "3:1 ratio" },
-      { type: "SWA", name: "Sliding Window Attention (SWAState)", desc: "RoPE Attention with real streaming KV-cache · Chunked/token-by-token decode bit-exact with full forward.", formula: "Attention(Q, K, V) ⊗ SWAState(window=256)", ratio: "H1 Hybrid" },
+    medium: [
+      {
+        type: "MEDIUM",
+        name: "Sufficient Statistics",
+        desc: "A new batch becomes a closed-form linear edit from float64 sufficient statistics, held in one accumulator pair.",
+        formula: "A = Σ KᵀK,  B = Σ KᵀV",
+        metric: "accumulator",
+        specs: ["stats: float64", "accumulators: A, B", "size: independent of #edits"],
+      },
+      {
+        type: "MEDIUM",
+        name: "Closed-Form Solution",
+        desc: "The solution W = A⁻¹B is order-invariant: contributions are additive, so the edit does not depend on when it lands.",
+        formula: "W = A⁻¹ B",
+        metric: "order-invariant",
+        specs: ["solution: W = A⁻¹B", "order: invariant", "matches one-shot ridge"],
+      },
+      {
+        type: "MEDIUM",
+        name: "Downdate / Forget",
+        desc: "Learning adds an edit's contribution; forget subtracts it. Removal is exact, fp-close rather than bitwise, with drift measured by the guards.",
+        formula: "A ← A − ΔA,  B ← B − ΔB",
+        metric: "downdate",
+        specs: ["learn: add contribution", "forget: subtract (downdate)", "tolerance: 1e-10 · drift ≤ 4.2e-13"],
+      },
     ],
-    mom: [
-      { type: "SSD", name: "Mamba-2 SSD Primitive", desc: "Compressed recurrent state space primitive for smooth sequences.", formula: "h_t = A_t h_{t-1} + B_t x_t", ratio: "Expert 1" },
-      { type: "GDR", name: "Gated Delta Primitive", desc: "Associative delta memory primitive for targeted key-value overwrite.", formula: "S_t = S_{t-1} + k_t (v_t - k_t^T S_{t-1})", ratio: "Expert 2" },
-      { type: "SWA", name: "SWA Attention Primitive", desc: "Exact streaming KV-cache attention primitive for surprising tokens.", formula: "Attention(Q, K, V)", ratio: "Expert 3" },
-      { type: "MoM", name: "MoM Surprise Router (mom/)", desc: "Mixture of Memory Primitives · Per-token surprise-gated router deciding primitive allocation.", formula: "g_t = σ(W_s · surprise_signal(t) + W_x x_t)", ratio: "Surprise Gate" },
+    slow: [
+      {
+        type: "SLOW",
+        name: "Frozen Representation Experts",
+        desc: "Representation experts are trained once at consolidation, then frozen. They are identity-initialized and function-preserving.",
+        formula: "E(z) = z + Δ(z),  E_init = id",
+        metric: "train once, freeze",
+        specs: ["map: Z → Z", "init: identity (function-preserving)", "after fit: frozen"],
+      },
+      {
+        type: "SLOW",
+        name: "Boundary Policy",
+        desc: "Which data trains which expert is a pluggable policy, not a fixed rule: by_arrival is the control, by_confusion is experimental and gated.",
+        formula: "π: data ↦ expert ∈ {by_arrival, by_confusion}",
+        metric: "pluggable policy",
+        specs: ["by_arrival: control", "by_confusion: gated behind prereg", "boundaries: policy-defined"],
+      },
+      {
+        type: "SLOW",
+        name: "Consolidate & Freeze",
+        desc: "Consolidation runs over pending data under the guards, then freezes the experts. The bank buys isolation, not capacity.",
+        formula: "consolidate(policy) → ConsolidationReport",
+        metric: "immutable after fit",
+        specs: ["experts added: isolated", "after fit: frozen", "reversibility: bitwise"],
+      },
     ],
   };
 
-  const currentBlocks = patterns[pattern];
-  const activeBlockData = currentBlocks[activeBlock] || currentBlocks[0];
+  const currentCards = cerataPaths[cerataScale];
+  const activeCardData = currentCards[activeCard] || currentCards[0];
+  const currentScale = cerataLanes.find((l) => l.id === cerataScale);
 
   // Realistic simulated data profiles for 1.0x, 2.5x, and 5.0x LR surge
   const getSimulationProfile = (surge: "1.0" | "2.5" | "5.0") => {
@@ -372,11 +501,11 @@ export default function ArchitectureDiagram() {
   const cusumAlertX = 50 + ((currentProfile.cusumAlertStep - 10) / 50) * 465;
 
   return (
-    <div className="my-10 border border-line bg-paper p-5 sm:p-7 font-mono w-full">
+    <div className="border border-line bg-paper p-5 sm:p-7 font-mono w-full">
       {/* Header controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-line pb-4 mb-6">
         <div className="flex items-center gap-2.5">
-          <span className="inline-block w-2 h-2 rounded-full bg-accent-deep" />
+          <span className="inline-block w-2 h-2 bg-accent-deep" />
           <span className="text-[11px] uppercase tracking-[0.18em] text-ink font-medium">
             System Architecture & Flight Recorder
           </span>
@@ -395,101 +524,207 @@ export default function ArchitectureDiagram() {
             01 Trainscope Recorder
           </button>
           <button
-            onClick={() => setMode("engram")}
+            onClick={() => setMode("cerata")}
             className={`px-3.5 py-1.5 border transition-all cursor-pointer ${
-              mode === "engram"
+              mode === "cerata"
                 ? "border-ink bg-ink text-paper font-medium"
                 : "border-line text-muted hover:text-ink hover:border-ink-soft"
             }`}
           >
-            02 ENGRAM Hybrid
+            02 CERATA
           </button>
         </div>
       </div>
 
-      {/* Mode 1: ENGRAM Hybrid Blocks */}
-      {mode === "engram" && (
+      {/* Mode 1: CERATA (one fixed address space, three time scales) */}
+      {mode === "cerata" && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-            <p className="text-xs sm:text-sm text-ink-soft leading-relaxed font-serif">
-              Interleaved sequence backbone architecture. Layer pattern config:
-            </p>
+          <p className="text-xs sm:text-sm text-ink-soft leading-relaxed font-serif">
+            Learning after deployment: one fixed address space, three time scales.
+          </p>
 
-            {/* Pattern Switcher */}
-            <div className="flex gap-1.5 font-mono text-[11px]">
-              <button
-                onClick={() => { setPattern("ssd_gdr"); setActiveBlock(0); }}
-                className={`px-2.5 py-1 border cursor-pointer transition-all ${
-                  pattern === "ssd_gdr" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
-                }`}
-              >
-                SSD + GDR (3:1)
-              </button>
-              <button
-                onClick={() => { setPattern("ssd_swa"); setActiveBlock(0); }}
-                className={`px-2.5 py-1 border cursor-pointer transition-all ${
-                  pattern === "ssd_swa" ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
-                }`}
-              >
-                SSD + SWA (H1)
-              </button>
-              <button
-                onClick={() => { setPattern("mom"); setActiveBlock(3); }}
-                className={`px-2.5 py-1 border cursor-pointer transition-all ${
-                  pattern === "mom" ? "border-accent-deep bg-accent-deep text-white" : "border-line bg-paper text-muted hover:text-ink"
-                }`}
-              >
-                MoM Router
-              </button>
+          {/* ---- Architecture schematic ---- */}
+          <div className="border border-line bg-paper-dim/40 p-4 sm:p-5">
+            {/* Stage 1: frozen base */}
+            <div className="flex justify-center">
+              <div className="w-full sm:w-3/4 border border-line bg-paper px-4 py-3">
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-muted">Frozen base</span>
+                  <span className="text-[10px] font-mono text-muted">content-hashed · immutable</span>
+                </div>
+                <div className="text-xs font-semibold text-ink mt-1">
+                  Backbone: frozen, never trained
+                </div>
+              </div>
+            </div>
+
+            <Connector label="emits h at the chosen layer" />
+
+            {/* Stage 2: fixed address (key) */}
+            <div className="flex justify-center">
+              <div className="w-full sm:w-3/4 border-2 border-ink bg-ink text-paper px-4 py-3">
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span className="text-[10px] uppercase tracking-[0.18em] opacity-70">Fixed address</span>
+                  <span className="text-[10px] font-mono opacity-70">key</span>
+                </div>
+                <div className="text-sm font-semibold font-mono mt-1">h = hidden state at chosen layer</div>
+                <div className="text-[10px] mt-0.5 opacity-75">keys are never trained</div>
+              </div>
+            </div>
+
+            <Connector label="retrieval over fixed addresses" />
+
+            {/* Stage 3: parameter-free retrieval + router */}
+            <div className="flex justify-center">
+              <div className="w-full sm:w-3/4 border border-line border-l-2 border-l-accent-deep bg-paper px-4 py-3">
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-accent-deep">
+                    Router · on retrieval path
+                  </span>
+                  <span className="text-[10px] font-mono text-muted">0 trainable scalars</span>
+                </div>
+                <div className="text-xs font-semibold text-ink mt-1">
+                  Parameter-free retrieval · exact cosine
+                </div>
+                <div className="flex flex-wrap gap-1.5 mt-2 font-mono text-[10px]">
+                  <span className="px-1.5 py-0.5 border border-line bg-paper-dim text-ink-soft">prototype</span>
+                  <span className="px-1.5 py-0.5 border border-line bg-paper-dim text-ink-soft">ridge_class</span>
+                  <span className="px-1.5 py-0.5 border border-accent-deep/40 bg-accent-deep/5 text-accent-deep">
+                    purity asserted at runtime
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Fan-out into the three guarded lanes */}
+            <div className="pt-1 px-3 sm:px-4">
+              <div className="hidden md:grid grid-cols-3 gap-3 text-center text-muted" aria-hidden="true">
+                <span className="text-[11px] leading-none">▼</span>
+                <span className="text-[11px] leading-none">▼</span>
+                <span className="text-[11px] leading-none">▼</span>
+              </div>
+              <div className="md:hidden text-center text-muted" aria-hidden="true">
+                <span className="text-[11px] leading-none">▼</span>
+              </div>
+              <div className="text-center text-[9px] uppercase tracking-[0.14em] font-mono text-muted pt-0.5">
+                branches into three time scales
+              </div>
+            </div>
+
+            {/* Guards envelope: wraps every write / forget / consolidate */}
+            <div className="border-2 border-dashed border-accent-deep/50 bg-accent-deep/5 p-3 sm:p-4">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-3">
+                <span className="text-[10px] uppercase tracking-[0.18em] text-accent-deep font-medium">
+                  Guards · every write / forget / consolidate
+                </span>
+                <span className="text-[10px] font-mono text-muted">tolerance 1e-10</span>
+                <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
+                  {cerataGuards.map((g) => (
+                    <span
+                      key={g.n}
+                      title={g.check}
+                      className="px-1.5 py-0.5 border border-accent-deep/40 bg-paper text-accent-deep cursor-help"
+                    >
+                      {g.n} {g.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-3">
+                {cerataLanes.map((lane) => {
+                  const isActive = cerataScale === lane.id;
+                  return (
+                    <button
+                      key={lane.id}
+                      onClick={() => { setCerataScale(lane.id); setActiveCard(0); }}
+                      aria-pressed={isActive}
+                      className={`text-left p-3.5 border transition-all cursor-pointer ${
+                        isActive
+                          ? "border-ink bg-ink text-paper shadow-sm"
+                          : "border-line bg-paper text-ink hover:border-ink-soft hover:bg-paper-dim"
+                      }`}
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] uppercase tracking-wider mb-2 opacity-80">
+                        <span>{lane.tab}</span>
+                        <span>{lane.sub}</span>
+                      </div>
+                      <div className="text-xs font-semibold">{lane.title}</div>
+                      <div className="mt-2 space-y-0.5 font-mono text-[10px] leading-relaxed">
+                        {lane.mechanics.map((m) => (
+                          <div key={m} className={isActive ? "text-paper/80" : "text-muted"}>{m}</div>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 mt-2.5 font-mono text-[10px]">
+                        {lane.api.map((a) => (
+                          <span
+                            key={a}
+                            className={`px-1.5 py-0.5 border ${
+                              isActive ? "border-paper/40 text-paper" : "border-line bg-paper-dim text-accent-deep"
+                            }`}
+                          >
+                            {a}()
+                          </span>
+                        ))}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <Connector label="all paths converge → prediction" />
+
+            {/* Stage 4: readout */}
+            <div className="flex justify-center">
+              <div className="w-full sm:w-3/4 border border-line bg-paper px-4 py-3">
+                <div className="flex flex-wrap items-center justify-between gap-1">
+                  <span className="text-[10px] uppercase tracking-[0.18em] text-muted">Readout</span>
+                  <span className="text-[10px] font-mono text-muted">predict(x) · state()</span>
+                </div>
+                <div className="text-xs font-semibold text-ink mt-1">
+                  Prediction: labels, logits, routed expert ids, source
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {currentBlocks.map((blk, idx) => {
-              const isActive = activeBlock === idx;
-              const isAccent = blk.type === "GDR" || blk.type === "MoM";
-              return (
-                <button
-                  key={idx}
-                  onClick={() => setActiveBlock(idx)}
-                  className={`p-3.5 text-left border transition-all cursor-pointer ${
-                    isActive
-                      ? isAccent
-                        ? "border-accent-deep bg-accent-deep text-white shadow-sm"
-                        : "border-ink bg-ink text-paper shadow-sm"
-                      : isAccent
-                      ? "border-accent-deep/40 bg-accent-deep/5 text-accent-deep hover:border-accent-deep"
-                      : "border-line bg-paper text-ink hover:border-ink-soft hover:bg-paper-dim"
-                  }`}
-                >
-                  <div className="flex justify-between items-center text-[10px] uppercase tracking-wider mb-2 opacity-80">
-                    <span>{blk.type === "MoM" ? "Router" : `L${idx + 1}`}</span>
-                    <span className={isActive ? "text-paper/80" : "text-muted"}>{blk.type}</span>
-                  </div>
-                  <div className="text-xs font-semibold">{blk.name}</div>
-                  <div className="text-[10px] mt-1 opacity-75">{blk.ratio}</div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Block Spec Inspector */}
-          <div className="border-t border-line pt-4 bg-paper-dim/60 p-4 sm:p-5 border-l-2 border-l-accent-deep text-xs space-y-2">
-            <div className="flex justify-between items-center font-medium text-ink">
-              <span className="text-sm font-semibold">{activeBlockData.name}</span>
+          {/* ---- Spec Inspector ---- */}
+          <div className="border-t border-line pt-4 bg-paper-dim/60 p-4 sm:p-5 border-l-2 border-l-accent-deep text-xs space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="text-sm font-semibold text-ink">{activeCardData.name}</span>
               <span className="text-[10px] text-accent-deep uppercase tracking-widest px-2 py-0.5 bg-accent-deep/10 font-mono">
-                Tensor Inspector
+                Spec Inspector · {currentScale?.tab}
               </span>
             </div>
-            <p className="text-ink-soft leading-relaxed font-serif text-sm">{activeBlockData.desc}</p>
-            <div className="p-2.5 bg-paper border border-line font-mono text-[11px] text-accent-deep">
-              Formula: {activeBlockData.formula}
+
+            {/* Mechanism sub-selector for the selected scale */}
+            <div className="flex flex-wrap gap-1.5 font-mono text-[10px]">
+              {currentCards.map((card, idx) => (
+                <button
+                  key={card.name}
+                  onClick={() => setActiveCard(idx)}
+                  aria-pressed={activeCard === idx}
+                  className={`px-2 py-0.5 border cursor-pointer transition-all ${
+                    activeCard === idx ? "border-ink bg-ink text-paper" : "border-line bg-paper text-muted hover:text-ink"
+                  }`}
+                >
+                  {card.metric}
+                </button>
+              ))}
             </div>
-            <div className="text-[11px] text-muted font-mono pt-1 flex flex-wrap gap-6">
-              <span>dim: 64</span>
-              <span>heads: 4</span>
-              <span>state: S_t ∈ ℝ^(64×64)</span>
-              <span>numerical_test: bit-exact fp64</span>
+
+            <p className="text-ink-soft leading-relaxed font-serif text-sm">{activeCardData.desc}</p>
+            <div className="p-2.5 bg-paper border border-line font-mono text-[11px] text-accent-deep">
+              Formula: {activeCardData.formula}
+            </div>
+            <div className="text-[11px] text-muted font-mono flex flex-wrap gap-6">
+              {activeCardData.specs.map((spec) => (
+                <span key={spec}>{spec}</span>
+              ))}
+            </div>
+            <div className="text-[11px] text-muted font-mono pt-2 border-t border-line/60">
+              latent: 768 · tolerance: 1e-10 · storage: 5.3 MB/task · guards: 4
             </div>
           </div>
         </div>

@@ -2,18 +2,18 @@ import SectionHeader from "./SectionHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
 
 const rows = [
-  { config: "ENGRAM hybrid (SSD + GDR)", auc: "0.8908", mine: true },
-  { config: "Gated DeltaNet only", auc: "0.8906", mine: false },
-  { config: "ENGRAM legacy (S4D + GDR)", auc: "0.8882", mine: false },
-  { config: "Mamba-2 only (SSD)", auc: "0.8836", mine: false },
-  { config: "ResNet1D", auc: "0.8828", mine: false },
-  { config: "small Transformer", auc: "0.8769", mine: false },
+  { config: "oracle routing (ceiling)", acc: "97.46", mine: false },
+  { config: "cerata: closed-form ridge, 0 params", acc: "76.77", mine: true },
+  { config: "per-task expert bank", acc: "70.58", mine: false },
+  { config: "NCM prototype, training-free", acc: "70.34", mine: false },
+  { config: "iCaRL", acc: "64.94", mine: false },
+  { config: "v1 PAL-MoE", acc: "59.30", mine: false },
 ];
 
 const notes = [
-  "312 tests (1 skipped): numerical equivalence vs torch.associative_scan & Triton kernels, fp64 gradcheck, streaming state passing.",
-  "metric: macro one-vs-rest AUROC (baseline: xresnet1d101 ≈ 0.928).",
-  "constraint: everything runs within 8 GB VRAM.",
+  "guards on every write / forget / consolidate: locality (canary argmax flips), reversibility (trial undo/redo, max|dW| ≤ 1e-10), order invariance (seeded permutation re-sum), router purity (0 trainable scalars).",
+  "forget is a downdate: the medium path subtracts an edit's float64 sufficient statistics; removing the last edit restores the base model bitwise.",
+  "constraint: everything runs on a single RTX 5060 Laptop within 8 GB VRAM.",
 ];
 
 export default function Research() {
@@ -24,7 +24,7 @@ export default function Research() {
       {/* Top 12-col grid: Text & Marginalia */}
       <div className="grid md:grid-cols-12 gap-10 md:gap-8">
         <div className="md:col-span-7">
-          <h3 className="text-2xl md:text-3xl leading-tight mb-6">
+          <h3 className="text-2xl md:text-3xl leading-tight text-balance mb-6">
             Loss dynamics, sequence architectures, and empirical limits.
           </h3>
 
@@ -46,18 +46,21 @@ export default function Research() {
               moved first, whether from activation kurtosis or gradient explosion.
             </p>
             <p>
-              Trainscope grew out of work on{" "}
+              Where trainscope watches training runs,{" "}
               <a
-                href="https://github.com/kaelvalen/engram"
+                href="https://github.com/kaelvalen/cerata"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ink font-medium underline underline-offset-4 decoration-line hover:text-accent-deep hover:decoration-accent transition-colors"
               >
-                ENGRAM
-              </a>
-              , a hybrid sequence backbone interleaving Mamba-2 SSD blocks with Gated Delta Rule blocks (3:1 ratio).
-              It applies identical hyperparameters to 12-lead ECG, spoken commands, and sequential images, verified
-              end-to-end across 312 numerical equivalence and streaming tests.
+                CERATA
+              </a>{" "}
+              asks what a frozen model can still learn after deployment. Learning is an API call: a FAST key-value
+              write for a single item, a MEDIUM closed-form edit from float64 sufficient statistics, and a SLOW
+              consolidation into frozen experts. Every write and forget is guarded: locality, reversibility, order
+              invariance, zero-parameter routing. Forget is an exact downdate. On frozen ViT-B/16 features
+              (CIFAR-100, 20 tasks), its closed-form readout beats the v1 expert bank with zero trained parameters:
+              76.77 vs 59.30.
             </p>
             <p>
               Earlier, I closed out{" "}
@@ -103,7 +106,7 @@ export default function Research() {
                 href="https://pypi.org/project/trainscope/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-line text-accent-deep"
+                className="link-line text-ink hover:text-accent-deep"
               >
                 pypi.org/project/trainscope
               </a>
@@ -111,21 +114,21 @@ export default function Research() {
             </div>
             <div>
               <a
-                href="https://github.com/kaelvalen/engram"
+                href="https://github.com/kaelvalen/cerata"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-line text-accent-deep"
+                className="link-line text-ink hover:text-accent-deep"
               >
-                github.com/kaelvalen/engram
+                github.com/kaelvalen/cerata
               </a>
-              <span className="text-muted"> (ENGRAM backbone)</span>
+              <span className="text-muted"> (learning after deployment)</span>
             </div>
             <div>
               <a
                 href="https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-line text-accent-deep"
+                className="link-line text-ink hover:text-accent-deep"
               >
                 noesis / FINDINGS.md
               </a>
@@ -136,7 +139,7 @@ export default function Research() {
       </div>
 
       {/* Full-width Diagram across 12 cols */}
-      <div className="mt-10">
+      <div className="mt-12">
         <ArchitectureDiagram />
       </div>
 
@@ -144,12 +147,12 @@ export default function Research() {
       <div className="grid md:grid-cols-12 gap-10 md:gap-8 mt-12">
         <div className="md:col-span-7 w-full overflow-hidden">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted mb-3">
-            Pipeline validation: PTB-XL super-diag, val macro-AUC
+            Learning after deployment: CIFAR-100, 20 tasks, frozen ViT-B/16
           </p>
           <div className="font-mono text-xs sm:text-sm w-full">
             <div className="flex justify-between gap-4 pb-2 text-[11px] uppercase tracking-[0.14em] text-muted">
               <span>config</span>
-              <span>auc</span>
+              <span>acc</span>
             </div>
             {rows.map((r) => (
               <div
@@ -158,11 +161,11 @@ export default function Research() {
                   r.mine ? "text-accent-deep font-medium" : "text-ink-soft"
                 }`}
               >
-                <span className="flex items-center gap-1.5 sm:gap-2 min-w-0 truncate">
+                <span className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                   <span className="opacity-0 group-hover:opacity-100 transition-opacity text-accent-deep text-[10px] shrink-0">→</span>
-                  <span className="truncate">{r.config}</span>
+                  <span className="min-w-0 text-pretty">{r.config}</span>
                 </span>
-                <span className="shrink-0">{r.auc}</span>
+                <span className="shrink-0">{r.acc}</span>
               </div>
             ))}
             <div className="border-t border-line" />
@@ -172,8 +175,9 @@ export default function Research() {
         <aside className="md:col-span-4 md:col-start-9 flex flex-col justify-end">
           <div className="border-t border-line pt-4 font-mono text-[11px] leading-relaxed text-muted">
             <span className="uppercase tracking-wider text-ink block mb-1 font-medium">Validation Specs</span>
-            hidden 64 · 4 layers · 2 epochs · 1 seed · RTX 5060. Pipeline
-            validation (not paper numbers): full matrix runs at ~8M params, 3 seeds.
+            frozen ViT-B/16 · CIFAR-100 · 20 tasks · 3 seeds · RTX 5060. Closed-form
+            readouts: 0 parameters, 0 optimizer steps; not comparable to published CIL
+            tables (ImageNet-1K features, not 21K).
           </div>
         </aside>
       </div>

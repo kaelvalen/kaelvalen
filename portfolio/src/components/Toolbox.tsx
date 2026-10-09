@@ -25,7 +25,7 @@ export default function Toolbox() {
           </div>
         ))}
         <p className="font-mono text-[11px] leading-relaxed text-muted mt-6">
-          laptop runs NixOS. ENGRAM trains on a single RTX 5060: if the architecture
+          laptop runs NixOS. CERATA runs on a single RTX 5060: if the architecture
           does not fit in 8 GB, the architecture changes.
         </p>
       </div>

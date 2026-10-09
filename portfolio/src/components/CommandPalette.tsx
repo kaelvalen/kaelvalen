@@ -19,8 +19,8 @@ export default function CommandPalette() {
   const items: Item[] = [
     {
       id: "nav-research",
-      title: "01 Research · ENGRAM Architecture",
-      desc: "Jump to section 01 (SSD + GDR + MoM backbone)",
+      title: "01 Research · CERATA Architecture",
+      desc: "Jump to section 01 (closed-form edits, exact forgetting)",
       category: "navigation",
       action: () => {
         window.location.hash = "#research";
@@ -58,12 +58,12 @@ export default function CommandPalette() {
       },
     },
     {
-      id: "repo-engram",
-      title: "engram repository",
-      desc: "Open github.com/kaelvalen/engram in new tab",
+      id: "repo-cerata",
+      title: "cerata repository",
+      desc: "Open github.com/kaelvalen/cerata in new tab",
       category: "repositories",
       action: () => {
-        window.open("https://github.com/kaelvalen/engram", "_blank");
+        window.open("https://github.com/kaelvalen/cerata", "_blank");
         setOpen(false);
       },
     },
@@ -127,6 +127,16 @@ export default function CommandPalette() {
     setSelectedIndex(0);
   }, [query]);
 
+  useEffect(() => {
+    const openPalette = () => {
+      setOpen(true);
+      setQuery("");
+      setSelectedIndex(0);
+    };
+    window.addEventListener("open-command-palette", openPalette);
+    return () => window.removeEventListener("open-command-palette", openPalette);
+  }, []);
+
   if (!open) return null;
 
   const handleKeyDownInMenu = (e: React.KeyboardEvent) => {
@@ -143,19 +153,26 @@ export default function CommandPalette() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-ink/60 backdrop-blur-xs font-mono">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-ink/60 backdrop-blur-xs font-mono animate-fade-in"
+      onClick={() => setOpen(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette"
+    >
       <div
-        className="w-full max-w-xl border border-line bg-paper shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+        className="w-full max-w-xl border border-line bg-paper shadow-2xl overflow-hidden animate-rise-in"
         onKeyDown={handleKeyDownInMenu}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center border-b border-line px-4 py-3 bg-paper">
+        <div className="flex items-center border-b border-line px-4 py-3 bg-paper transition-colors focus-within:border-ink">
           <input
             type="text"
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type a command or search (e.g. engram, trainscope)..."
+            placeholder="Type a command or search (e.g. cerata, trainscope)..."
             className="w-full bg-transparent text-ink text-xs sm:text-sm focus:outline-none placeholder:text-muted"
           />
           {copiedNote && (
@@ -166,13 +183,15 @@ export default function CommandPalette() {
         </div>
 
         {/* Results List */}
-        <div className="max-h-72 overflow-y-auto p-2 space-y-1">
+        <div className="max-h-72 overflow-y-auto p-2 space-y-1" role="listbox" aria-label="Commands">
           {filtered.length === 0 ? (
             <div className="p-4 text-center text-xs text-muted">No matching commands</div>
           ) : (
             filtered.map((item, idx) => (
               <button
                 key={item.id}
+                role="option"
+                aria-selected={selectedIndex === idx}
                 onClick={item.action}
                 onMouseEnter={() => setSelectedIndex(idx)}
                 className={`w-full text-left px-3 py-2.5 flex items-baseline justify-between transition-all cursor-pointer ${
