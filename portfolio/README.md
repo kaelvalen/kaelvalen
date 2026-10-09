@@ -10,27 +10,31 @@ Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
 - **UI Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) with custom CSS theme tokens
-- **Typography**: IBM Plex Serif & IBM Plex Mono via `next/font/google`
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) with semantic CSS-variable tokens (`--paper`, `--ink`, `--accent`, …) that swap per theme
+- **Typography**: Instrument Serif (display), Geist (text) & Geist Mono (labels) via `next/font/google`, with `latin-ext` for Turkish
+- **Theming**: light / dark, resolved before first paint (saved choice → system preference), no flash
+- **i18n**: English / Türkçe, all copy in `src/lib/dictionary.ts`; language is saved and defaults to the browser language
 - **Graphics**: Zero-dependency custom SVG spline charts & tensor layout diagrams
-- **Accessibility**: WCAG AA/AAA compliant color contrast (`--color-muted`: 5.35:1, `--color-accent-deep`: 8.01:1)
+- **Accessibility**: every text/background pair meets WCAG AA (e.g. light `--muted` 5.4:1, `--accent-deep` 5.1:1; dark `--muted` 5.8:1, `--accent-deep` 7.7:1), skip link, tablist/combobox/`aria-pressed` semantics, `prefers-reduced-motion` support
 
 ---
 
 ## Key Components & Architecture
 
-- **`ArchitectureDiagram.tsx`**:
+- **`Navbar.tsx`**:
+  Sticky blurred header with scroll-spy, mobile menu, search, language and theme controls; `ScrollProgress.tsx` adds a reading-progress bar.
+- **`ArchitectureDiagram.tsx`** (+ `diagram/`):
   Interactive dual-mode SVG engine:
-  1. *CERATA*: Architecture explorer for one fixed address space and its three time scales (FAST key-value memory, MEDIUM closed-form edit, SLOW consolidation), plus the four write guards.
-  2. *Trainscope Flight Recorder*: Multi-signal loss spike visualization featuring Catmull-Rom cubic spline interpolation, CUSUM drift detection, activation Kurtosis alerts, and real-time Learning Rate surge simulation.
+  1. *CERATA* (`CerataPanel.tsx`): Architecture explorer for one fixed address space and its three time scales (FAST key-value memory, MEDIUM closed-form edit, SLOW consolidation), plus the four write guards.
+  2. *Trainscope Flight Recorder* (`TrainscopePanel.tsx`): Multi-signal loss spike visualization featuring Catmull-Rom cubic spline interpolation, CUSUM drift detection, activation Kurtosis alerts, and Learning Rate surge simulation (data in `src/lib/trainscope-sim.ts`; telemetry is simulated).
 - **`CommandPalette.tsx`**:
-  Keyboard-native command launcher (`⌘K`, `Ctrl+K`, or `/`) enabling instant navigation, repository access, and email copying.
+  Keyboard-native command launcher (`⌘K`, `Ctrl+K`, or `/`) for navigation, repository access, email copying, and switching theme / language.
 - **`Projects.tsx`**:
-  Live category filterable project directory (`All`, `ML & Research`, `Systems`, `Apps & Tools`).
+  Card grid with category filters (`All`, `ML & Research`, `Systems`, `Apps & Tools`).
 - **`Research.tsx`**:
-  Prose and benchmark breakdown for the research sections (trainscope and CERATA on CIFAR-100 / frozen ViT-B/16) with constrained line widths (`max-w-prose`) for optimal reading rhythm.
+  Prose and benchmark breakdown (trainscope and CERATA on CIFAR-100 / frozen ViT-B/16) with proportional accuracy bars and constrained line widths (`max-w-prose`).
 - **`Contact.tsx`**:
-  Fluid responsive contact section with click-to-copy email feedback.
+  Mail link plus a separate copy-to-clipboard button with live-region feedback.
 
 ---
 

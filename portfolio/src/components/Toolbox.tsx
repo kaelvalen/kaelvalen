@@ -1,34 +1,32 @@
+"use client";
+
+import { useI18n } from "@/lib/i18n";
+import Reveal from "./Reveal";
 import SectionHeader from "./SectionHeader";
 
-const groups = [
-  { label: "machine learning", items: "PyTorch · Triton · CUDA" },
-  { label: "systems", items: "Rust · Go · C++" },
-  { label: "web", items: "TypeScript · React · Next.js" },
-  { label: "environment", items: "NixOS · Docker · Git" },
-];
-
 export default function Toolbox() {
-  return (
-    <section id="toolbox" className="py-16 md:py-24 border-t border-line">
-      <SectionHeader n="03" title="Toolbox" />
+  const { t } = useI18n();
 
-      <div className="max-w-3xl">
-        {groups.map((g) => (
-          <div
-            key={g.label}
-            className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 border-t border-line last:border-b py-4"
-          >
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted sm:w-44 shrink-0">
-              {g.label}
-            </span>
-            <span className="font-mono text-sm">{g.items}</span>
-          </div>
-        ))}
-        <p className="font-mono text-[11px] leading-relaxed text-muted mt-6">
-          laptop runs NixOS. CERATA runs on a single RTX 5060: if the architecture
-          does not fit in 8 GB, the architecture changes.
-        </p>
-      </div>
+  return (
+    <section id="toolbox" className="border-t border-line py-20 md:py-28">
+      <SectionHeader n="03" title={t.toolbox.title} />
+
+      <Reveal className="max-w-3xl">
+        <dl className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
+          {t.toolbox.groups.map((g) => (
+            <div
+              key={g.label}
+              className="flex flex-col gap-1 border-b border-line px-5 py-4 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-6"
+            >
+              <dt className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted sm:w-44">
+                {g.label}
+              </dt>
+              <dd className="font-mono text-sm text-ink">{g.items}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-6 font-mono text-xs leading-relaxed text-muted">{t.toolbox.note}</p>
+      </Reveal>
     </section>
   );
 }

@@ -1,131 +1,97 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-const index = [
-  { n: "01", label: "Research", href: "#research", id: "research" },
-  { n: "02", label: "Projects", href: "#projects", id: "projects" },
-  { n: "03", label: "Toolbox", href: "#toolbox", id: "toolbox" },
-  { n: "04", label: "Contact", href: "#contact", id: "contact" },
-];
+import { useI18n } from "@/lib/i18n";
 
 export default function Masthead() {
-  const [activeSection, setActiveSection] = useState<string>("");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-20% 0px -60% 0px" }
-    );
-
-    index.forEach((item) => {
-      const el = document.getElementById(item.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const { t } = useI18n();
+  const h = t.hero;
 
   return (
-    <header>
-      {/* top strip */}
-      <div className="border-b border-line">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-3 flex items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-          <span>M. A. Hakbilen · research notes</span>
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline">Ankara, TR · 2026</span>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
-              className="border border-line px-2 py-0.5 text-muted transition-colors hover:border-ink-soft hover:text-ink cursor-pointer"
-              aria-label="Open command palette"
-            >
-              ⌘K
-            </button>
-          </div>
-        </div>
-      </div>
+    <header id="top" className="relative overflow-hidden">
+      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-60" />
 
-      {/* hero */}
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-14 md:pt-24 pb-16 md:pb-24">
-        <div className="grid md:grid-cols-12 gap-10 md:gap-8">
-          <div className="md:col-span-7 animate-rise-in">
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-muted mb-6">
-              ML architecture researcher
+      <div className="relative mx-auto max-w-6xl px-5 pb-14 pt-14 sm:px-8 md:pb-20 md:pt-24">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
+          <div className="animate-rise-in lg:col-span-7">
+            <p className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 py-1.5 pl-3 pr-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted backdrop-blur-sm">
+              <span aria-hidden className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-deep" />
+              {h.eyebrow}
+              <span className="hidden items-center gap-2.5 sm:inline-flex">
+                <span aria-hidden className="text-line-strong">/</span>
+                {h.location}
+              </span>
             </p>
-            <h1 className="uppercase leading-[0.95] tracking-tight font-medium text-[clamp(2.7rem,7.2vw,5.4rem)]">
-              Mehmet&nbsp;Arda
+
+            <h1 className="font-display text-[clamp(3.4rem,9.5vw,7.4rem)] font-normal leading-[0.92] tracking-[-0.02em] text-ink">
+              {h.firstName}
               <br />
-              Hakbilen
+              <span className="italic text-accent-deep">{h.lastName}</span>
             </h1>
-            <p className="font-mono text-xs text-accent-deep mt-4 tracking-[0.14em]">
-              ( kael valen )
+            <p className="mt-4 font-mono text-xs tracking-[0.14em] text-muted">{h.alias}</p>
+
+            <p className="mt-9 max-w-xl text-xl leading-[1.5] text-ink-soft text-pretty md:text-[1.4rem]">
+              {h.lead}
             </p>
 
-            <p className="mt-10 text-xl md:text-2xl leading-snug text-ink-soft max-w-xl">
-              I study why sequence architectures are built the way they are,
-              rebuilding them from scratch to test which assumptions hold outside language.
-            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <a
+                href="#research"
+                className="group inline-flex items-center gap-2 rounded-md bg-ink px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-85"
+              >
+                {h.ctaPrimary}
+                <span aria-hidden className="transition-transform group-hover:translate-y-0.5">↓</span>
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-ink"
+              >
+                {h.ctaSecondary}
+              </a>
+            </div>
           </div>
 
-          <div
-            className="md:col-span-4 md:col-start-9 flex flex-col gap-8 animate-rise-in"
-            style={{ animationDelay: "90ms" }}
+          <aside
+            className="animate-rise-in lg:col-span-5 lg:pt-14"
+            style={{ animationDelay: "120ms" }}
+            aria-label={h.status.label}
           >
-            {/* red interrupt: current status */}
-            <div className="bg-accent-deep text-white p-5 sm:p-6">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] mb-4 text-white/90">
-                Now running
+            <div className="rounded-[var(--radius-card)] bg-accent-deep p-6 text-on-accent shadow-card sm:p-7">
+              <p className="mb-5 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.22em]">
+                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-on-accent" />
+                {h.status.label}
               </p>
-              <p className="font-mono text-xs leading-relaxed uppercase tracking-[0.08em] font-medium text-white">
-                TRAINSCOPE: LOSS-SPIKE FLIGHT RECORDER
-              </p>
-              <p className="font-mono text-[11px] leading-relaxed mt-3 text-white/90">
-                CUSUM change-point detection (5-20 steps early)
-                <br />
-                280+ noise scenarios tested · WandB auto-attach
-              </p>
+              <p className="font-display text-[1.9rem] leading-[1.1]">{h.status.title}</p>
+              <ul className="mt-5 space-y-1.5 font-mono text-xs leading-relaxed opacity-90">
+                {h.status.lines.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
               <a
                 href="https://pypi.org/project/trainscope/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-on-dark inline-block mt-5 font-mono text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 hover:opacity-80 transition-opacity text-white font-medium"
+                className="focus-on-accent mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] underline underline-offset-4 transition-opacity hover:opacity-80"
               >
-                pypi.org/project/trainscope →
+                {h.status.cta} <span aria-hidden>→</span>
               </a>
             </div>
-
-            {/* index */}
-            <nav aria-label="Index">
-              {index.map((item) => {
-                const isActive = activeSection === item.id;
-                return (
-                  <a
-                    key={item.n}
-                    href={item.href}
-                    className={`group flex items-baseline gap-4 border-t border-line last:border-b py-3 font-mono text-xs uppercase tracking-[0.18em] transition-colors ${
-                      isActive ? "text-accent-deep font-semibold" : "hover:text-accent-deep"
-                    }`}
-                  >
-                    <span className={isActive ? "text-accent-deep" : "text-muted group-hover:text-accent-deep"}>
-                      {item.n}
-                    </span>
-                    <span>{item.label}</span>
-                    <span className={`ml-auto transition-opacity ${isActive ? "opacity-100 text-accent-deep font-bold" : "opacity-0 group-hover:opacity-100"}`}>
-                      ↓
-                    </span>
-                  </a>
-                );
-              })}
-            </nav>
-          </div>
+          </aside>
         </div>
+
+        <dl
+          aria-label={h.metricsLabel}
+          className="animate-rise-in mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line md:mt-20 lg:grid-cols-4"
+          style={{ animationDelay: "220ms" }}
+        >
+          {h.metrics.map((m) => (
+            <div key={m.label} className="bg-surface p-5 sm:p-6">
+              <dd className="font-display text-4xl leading-none tracking-tight text-ink sm:text-5xl">
+                {m.value}
+              </dd>
+              <dt className="mt-3 text-[13px] leading-snug text-muted text-pretty">{m.label}</dt>
+            </div>
+          ))}
+        </dl>
       </div>
     </header>
   );

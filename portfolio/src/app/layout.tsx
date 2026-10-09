@@ -1,18 +1,26 @@
-import type { Metadata } from "next";
-import { IBM_Plex_Serif, IBM_Plex_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { I18nProvider } from "@/lib/i18n";
 import "./globals.css";
 
-const plexSerif = IBM_Plex_Serif({
-  subsets: ["latin"],
-  variable: "--font-plex-serif",
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+const sans = Geist({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-geist-sans",
+  display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  variable: "--font-plex-mono",
-  weight: ["400", "500"],
+const mono = Geist_Mono({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
+
+const display = Instrument_Serif({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-instrument",
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,6 +35,7 @@ export const metadata: Metadata = {
     url: "https://kaelvalen.vercel.app",
     siteName: "Mehmet Arda Hakbilen",
     locale: "en_US",
+    alternateLocale: ["tr_TR"],
     type: "website",
   },
   twitter: {
@@ -40,14 +49,33 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0d0d0b" },
+  ],
+};
+
+// Runs before first paint: applies the saved/system theme and enables scroll-reveal styling.
+const prePaint = `(function(){try{var d=document.documentElement;d.classList.add('js');var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t;d.style.colorScheme=t}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plexSerif.variable} ${plexMono.variable}`}>
-      <body className="bg-paper text-ink font-serif antialiased">{children}</body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${sans.variable} ${mono.variable} ${display.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: prePaint }} />
+      </head>
+      <body className="bg-paper text-ink font-sans antialiased">
+        <I18nProvider>{children}</I18nProvider>
+      </body>
     </html>
   );
 }

@@ -1,121 +1,174 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/* Design tokens. Semantic names stay stable; values swap per theme.    */
+/* ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+  --paper: #fbfaf6;
+  --paper-dim: #f1efe7;
+  --surface: #ffffff;
+  --ink: #14130f;
+  --ink-soft: #3d3b34;
+  --muted: #6a675b;
+  --line: #e3dfd2;
+  --line-strong: #c8c3b0;
+  --accent: #e4482a;
+  --accent-deep: #c23a1d;
+  --on-accent: #ffffff;
+  --shadow: 0 1px 2px rgb(20 19 15 / 0.04), 0 8px 24px -12px rgb(20 19 15 / 0.12);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0d0d0b;
+  --paper-dim: #151512;
+  --surface: #121210;
+  --ink: #ecebe3;
+  --ink-soft: #c6c4b9;
+  --muted: #908d80;
+  --line: #2a2924;
+  --line-strong: #46443c;
+  --accent: #ff6b4a;
+  --accent-deep: #ff7d5f;
+  --on-accent: #1a0b06;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+}
+
 @theme inline {
-  --color-paper: #f6f4ed;
-  --color-paper-dim: #eeece2;
-  --color-ink: #161513;
-  --color-ink-soft: #413f39;
-  --color-muted: #646156;
-  --color-line: #d8d4c5;
-  --color-accent: #e53e3e;
-  --color-accent-deep: #b02424;
-  --font-serif: var(--font-plex-serif), Georgia, serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-on-accent: var(--on-accent);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-instrument), Georgia, "Times New Roman", serif;
+
+  --radius-card: 0.875rem;
+  --shadow-card: var(--shadow);
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--color-paper);
+  scroll-padding-top: 5rem;
+  background-color: var(--paper);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: #ffffff;
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent-deep);
+  outline: 2px solid var(--accent-deep);
   outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* Focus ring on dark / accent surfaces (accent-deep ring would vanish there) */
-.focus-on-dark:focus-visible {
-  outline-color: var(--color-paper);
+.focus-on-accent:focus-visible {
+  outline-color: var(--on-accent);
 }
 
-/* underline that breathes on hover */
+/* ------------------------------------------------------------------ */
+/* Small shared primitives                                              */
+/* ------------------------------------------------------------------ */
 .link-line {
   text-decoration: underline;
-  text-decoration-color: var(--color-line);
-  text-underline-offset: 0.22em;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
   transition: text-decoration-color 150ms ease, color 150ms ease;
 }
 .link-line:hover {
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--accent);
+  color: var(--accent-deep);
 }
 
-/* Motion: restrained, editorial. One well-timed reveal over scattered micro-interactions. */
+/* subtle paper grain + grid for the hero */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 30% 20%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 20%, #000 20%, transparent 75%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion: restrained. One reveal, one pulse.                           */
+/* ------------------------------------------------------------------ */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(0.6rem); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fade-in 200ms ease-out both;
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+  80%, 100% { box-shadow: 0 0 0 7px transparent; }
 }
 
-.animate-rise-in {
-  animation: rise-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+.animate-fade-in { animation: fade-in 200ms ease-out both; }
+.animate-rise-in { animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.pulse-dot { animation: pulse-ring 2s ease-out infinite; }
+
+/* Scroll reveal: content stays visible without JS (the .js class is set pre-paint). */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
+  .js .reveal { opacity: 1; transform: none; }
 }
 
-/* Custom Editorial Scrollbars */
+/* ------------------------------------------------------------------ */
+/* Scrollbars                                                           */
+/* ------------------------------------------------------------------ */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-line) var(--color-paper);
+  scrollbar-color: var(--line-strong) transparent;
 }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-paper);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-line);
-  border-radius: 0px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-muted);
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: var(--color-accent-deep);
+@media print {
+  nav, [data-no-print] { display: none !important; }
+  .js .reveal { opacity: 1; transform: none; }
 }
