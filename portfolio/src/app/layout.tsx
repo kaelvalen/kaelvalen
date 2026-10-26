@@ -1,25 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
 import "./globals.css";
 
-const sans = Geist({
+// One family carries the page; its width axis separates drawing lettering from titles.
+const sans = Archivo({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-geist-sans",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const mono = Geist_Mono({
+// Only for literal code: commands, hashes, formulas.
+const mono = IBM_Plex_Mono({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-geist-mono",
-  display: "swap",
-});
-
-const display = Instrument_Serif({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-instrument",
-  weight: "400",
-  style: ["normal", "italic"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
@@ -51,8 +47,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0d0b" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f9" },
+    { media: "(prefers-color-scheme: dark)", color: "#13365f" },
   ],
 };
 
@@ -68,7 +64,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${sans.variable} ${mono.variable} ${display.variable}`}
+      className={`${sans.variable} ${mono.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: prePaint }} />

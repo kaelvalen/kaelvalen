@@ -1,97 +1,149 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import TensorName from "./TensorName";
+import { SHEETS } from "./SheetHeader";
+
+const PYPI = "https://pypi.org/project/trainscope/";
 
 export default function Masthead() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const h = t.hero;
+  const tb = h.titleBlock;
+
+  const [keys, setKeys] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const qRef = useRef<HTMLElement>(null);
+  const peakRef = useRef<HTMLElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const onKeys = useCallback((n: number) => setKeys(n), []);
+
+  const copyInstall = async () => {
+    try {
+      await navigator.clipboard.writeText(h.install);
+      setCopied(true);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable: the command stays visible to copy by hand */
+    }
+  };
+
+  const cell = "border-line px-5 py-3 sm:px-6";
+  const cellLabel = "letter-cond block text-[11px] uppercase text-muted";
 
   return (
-    <header id="top" className="relative overflow-hidden">
-      <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-60" />
-
-      <div className="relative mx-auto max-w-6xl px-5 pb-14 pt-14 sm:px-8 md:pb-20 md:pt-24">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="animate-rise-in lg:col-span-7">
-            <p className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line bg-surface/70 py-1.5 pl-3 pr-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted backdrop-blur-sm">
-              <span aria-hidden className="pulse-dot inline-block h-1.5 w-1.5 rounded-full bg-accent-deep" />
-              {h.eyebrow}
-              <span className="hidden items-center gap-2.5 sm:inline-flex">
-                <span aria-hidden className="text-line-strong">/</span>
-                {h.location}
-              </span>
-            </p>
-
-            <h1 className="font-display text-[clamp(3.4rem,9.5vw,7.4rem)] font-normal leading-[0.92] tracking-[-0.02em] text-ink">
-              {h.firstName}
-              <br />
-              <span className="italic text-accent-deep">{h.lastName}</span>
-            </h1>
-            <p className="mt-4 font-mono text-xs tracking-[0.14em] text-muted">{h.alias}</p>
-
-            <p className="mt-9 max-w-xl text-xl leading-[1.5] text-ink-soft text-pretty md:text-[1.4rem]">
-              {h.lead}
-            </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <a
-                href="#research"
-                className="group inline-flex items-center gap-2 rounded-md bg-ink px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-85"
-              >
-                {h.ctaPrimary}
-                <span aria-hidden className="transition-transform group-hover:translate-y-0.5">↓</span>
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-3 text-sm font-medium text-ink transition-colors hover:border-ink"
-              >
-                {h.ctaSecondary}
-              </a>
-            </div>
+    <header id="top" className="border-b border-ink">
+      <figure className="drafting-grid border-b border-ink">
+        <figcaption className="flex flex-col gap-3 px-5 pt-5 sm:flex-row sm:items-start sm:justify-between sm:px-8">
+          <div className="text-sm text-ink-soft">
+            <span className="font-semibold text-accent">{h.fig}</span>{" "}
+            <h1 className="inline font-semibold text-ink">{h.name}</h1>{" "}
+            <span className="text-muted">({h.alias})</span>
+            <span className="block text-muted sm:inline">
+              <span className="hidden sm:inline">, </span>
+              {h.figCaption(keys ? keys.toLocaleString(locale === "tr" ? "tr-TR" : "en-US") : "…")}
+            </span>
           </div>
+          <dl className="hidden shrink-0 grid-cols-[auto_auto] gap-x-4 font-mono text-xs leading-relaxed text-muted sm:grid">
+            <dt>{h.query}</dt>
+            <dd ref={qRef} className="text-right text-ink">0.30, 0.50</dd>
+            <dt>{h.temperature}</dt>
+            <dd className="text-right text-ink">τ = 0.6</dd>
+            <dt>{h.peak}</dt>
+            <dd ref={peakRef} className="text-right text-ink">–</dd>
+          </dl>
+        </figcaption>
 
-          <aside
-            className="animate-rise-in lg:col-span-5 lg:pt-14"
-            style={{ animationDelay: "120ms" }}
-            aria-label={h.status.label}
-          >
-            <div className="rounded-[var(--radius-card)] bg-accent-deep p-6 text-on-accent shadow-card sm:p-7">
-              <p className="mb-5 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.22em]">
-                <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-on-accent" />
-                {h.status.label}
-              </p>
-              <p className="font-display text-[1.9rem] leading-[1.1]">{h.status.title}</p>
-              <ul className="mt-5 space-y-1.5 font-mono text-xs leading-relaxed opacity-90">
-                {h.status.lines.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-              <a
-                href="https://pypi.org/project/trainscope/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-on-accent mt-6 inline-flex items-center gap-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.18em] underline underline-offset-4 transition-opacity hover:opacity-80"
-              >
-                {h.status.cta} <span aria-hidden>→</span>
-              </a>
-            </div>
-          </aside>
+        <TensorName text="HAKBILEN" onKeys={onKeys} readoutQ={qRef} readoutPeak={peakRef} />
+
+        <div className="px-5 pb-6 sm:px-8">
+          <p className="dim-line letter-cond text-xs uppercase text-ink">
+            <span>{h.role}</span>
+          </p>
+        </div>
+      </figure>
+
+      <div className="grid lg:grid-cols-12">
+        <div className="flex flex-col gap-10 border-b border-ink px-5 py-10 sm:px-8 lg:col-span-7 lg:border-r lg:border-b-0 lg:py-12">
+          <p className="max-w-[34ch] text-[clamp(1.4rem,2.4vw,2rem)] leading-[1.25] text-ink text-pretty">{h.lead}</p>
+
+          <div className="flex flex-wrap items-stretch gap-3">
+            <a
+              href="#research"
+              className="inline-flex items-center bg-ink px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-85"
+            >
+              {h.ctaPrimary}
+            </a>
+            <button
+              type="button"
+              onClick={copyInstall}
+              aria-label={h.installLabel}
+              className="inline-flex cursor-pointer items-center gap-3 border border-ink px-4 py-3 font-mono text-[13px] text-ink transition-colors hover:bg-paper-dim"
+            >
+              <span aria-hidden className="text-muted">$</span>
+              {h.install}
+              <span aria-live="polite" className="letter-cond font-sans text-xs uppercase text-accent">
+                {copied ? h.installCopied : ""}
+              </span>
+            </button>
+          </div>
         </div>
 
-        <dl
-          aria-label={h.metricsLabel}
-          className="animate-rise-in mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-line bg-line md:mt-20 lg:grid-cols-4"
-          style={{ animationDelay: "220ms" }}
-        >
-          {h.metrics.map((m) => (
-            <div key={m.label} className="bg-surface p-5 sm:p-6">
-              <dd className="font-display text-4xl leading-none tracking-tight text-ink sm:text-5xl">
-                {m.value}
+        <div className="flex flex-col lg:col-span-5">
+          <div className="flex-1 px-5 py-8 sm:px-8">
+            <h2 className="letter-cond mb-4 text-xs font-semibold uppercase text-ink">{h.notesTitle}</h2>
+            <ol className="space-y-2.5 text-[0.95rem] leading-snug text-ink-soft">
+              {h.notes.map((note, i) => (
+                <li key={note} className="grid grid-cols-[1.75rem_1fr]">
+                  <span className="tabular-nums text-muted">{i + 1}.</span>
+                  <span className="text-pretty">{note}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <dl aria-label={tb.label} className="grid grid-cols-2 border-t border-ink text-sm text-ink">
+            <div className={`${cell} col-span-2 flex items-baseline justify-between gap-4 border-b`}>
+              <dt className="sr-only">{tb.label}</dt>
+              <dd className="letter-wide text-base font-semibold">{tb.title}</dd>
+              <dd className="letter-cond text-xs uppercase text-muted">
+                {tb.sheet} 1 / {SHEETS}
               </dd>
-              <dt className="mt-3 text-[13px] leading-snug text-muted text-pretty">{m.label}</dt>
             </div>
-          ))}
-        </dl>
+            <div className={`${cell} border-r border-b`}>
+              <dt className={cellLabel}>{tb.drawn}</dt>
+              <dd>M. A. Hakbilen</dd>
+            </div>
+            <div className={`${cell} border-b`}>
+              <dt className={cellLabel}>{tb.alias}</dt>
+              <dd>{h.alias}</dd>
+            </div>
+            <div className={`${cell} border-r border-b`}>
+              <dt className={cellLabel}>{tb.based}</dt>
+              <dd>{tb.basedValue}</dd>
+            </div>
+            <div className={`${cell} border-b`}>
+              <dt className={cellLabel}>{tb.hardware}</dt>
+              <dd>{tb.hardwareValue}</dd>
+            </div>
+            <div className={`${cell} border-r`}>
+              <dt className={cellLabel}>{tb.current}</dt>
+              <dd>
+                <a href={PYPI} target="_blank" rel="noopener noreferrer" className="link-line">
+                  {tb.currentValue}
+                </a>
+              </dd>
+            </div>
+            <div className={cell}>
+              <dt className={cellLabel}>{tb.revision}</dt>
+              <dd>{tb.revisionValue}</dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </header>
   );

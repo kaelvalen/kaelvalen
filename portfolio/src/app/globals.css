@@ -1,38 +1,41 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* Design tokens. Semantic names stay stable; values swap per theme.    */
+/* Design tokens. The page is a drawing set printed on two real media: */
+/* light = diazo whiteprint (blue-violet line on cool white stock),    */
+/* dark  = cyanotype (white line on Prussian blue).                    */
+/* The accent is the reviewer's markup: red pencil / yellow chalk.     */
 /* ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
-  --paper: #fbfaf6;
-  --paper-dim: #f1efe7;
-  --surface: #ffffff;
-  --ink: #14130f;
-  --ink-soft: #3d3b34;
-  --muted: #6a675b;
-  --line: #e3dfd2;
-  --line-strong: #c8c3b0;
-  --accent: #e4482a;
-  --accent-deep: #c23a1d;
+  --paper: #f4f6f9;
+  --paper-dim: #e9edf4;
+  --surface: #fbfcfd;
+  --ink: #1d2b64;
+  --ink-soft: #36447a;
+  --muted: #5f6a94;
+  --line: #d3d9e8;
+  --line-strong: #9aa5c7;
+  --accent: #c4122f;
+  --accent-deep: #a50e27;
   --on-accent: #ffffff;
-  --shadow: 0 1px 2px rgb(20 19 15 / 0.04), 0 8px 24px -12px rgb(20 19 15 / 0.12);
+  --ok: #1b7a4b;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --paper: #0d0d0b;
-  --paper-dim: #151512;
-  --surface: #121210;
-  --ink: #ecebe3;
-  --ink-soft: #c6c4b9;
-  --muted: #908d80;
-  --line: #2a2924;
-  --line-strong: #46443c;
-  --accent: #ff6b4a;
-  --accent-deep: #ff7d5f;
-  --on-accent: #1a0b06;
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  --paper: #13365f;
+  --paper-dim: #0f2e53;
+  --surface: #173d6a;
+  --ink: #f1f5fb;
+  --ink-soft: #cdd9ec;
+  --muted: #9db2d3;
+  --line: #2d5283;
+  --line-strong: #5a7cab;
+  --accent: #f6d55c;
+  --accent-deep: #f6d55c;
+  --on-accent: #13365f;
+  --ok: #9fe3bd;
 }
 
 @theme inline {
@@ -47,128 +50,126 @@
   --color-accent: var(--accent);
   --color-accent-deep: var(--accent-deep);
   --color-on-accent: var(--on-accent);
+  --color-ok: var(--ok);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-display: var(--font-instrument), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 
-  --radius-card: 0.875rem;
-  --shadow-card: var(--shadow);
+  /* Drawings have square corners; only dots stay round (rounded-full). */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 4rem;
   background-color: var(--paper);
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   text-rendering: optimizeLegibility;
-  font-feature-settings: "ss01", "cv11";
-  transition: background-color 200ms ease, color 200ms ease;
+  font-variant-numeric: tabular-nums;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-deep);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-.focus-on-accent:focus-visible {
-  outline-color: var(--on-accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ------------------------------------------------------------------ */
-/* Small shared primitives                                              */
+/* Lettering. Archivo's width axis does the work a second family would: */
+/* condensed for drawing furniture, expanded for titles.                */
 /* ------------------------------------------------------------------ */
+.letter-cond {
+  font-stretch: 75%;
+  letter-spacing: 0.04em;
+}
+.letter-wide {
+  font-stretch: 112%;
+  letter-spacing: -0.01em;
+}
+.letter-xwide {
+  font-stretch: 125%;
+  letter-spacing: -0.02em;
+}
+
 .link-line {
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.25em;
-  transition: text-decoration-color 150ms ease, color 150ms ease;
+  text-underline-offset: 0.22em;
 }
 .link-line:hover {
   text-decoration-color: var(--accent);
-  color: var(--accent-deep);
 }
 
-/* subtle paper grain + grid for the hero */
-.bg-grid {
+/* Drafting grid, used only inside figures. */
+.drafting-grid {
   background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 60% at 30% 20%, #000 20%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 20%, #000 20%, transparent 75%);
+    linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px);
+  background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
 }
 
-/* ------------------------------------------------------------------ */
-/* Motion: restrained. One reveal, one pulse.                           */
-/* ------------------------------------------------------------------ */
+/* Dimension line: |<—— label ——>| */
+.dim-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1rem;
+}
+.dim-line::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  border-top: 1px solid var(--ink);
+}
+.dim-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-inline: 1px solid var(--ink);
+}
+.dim-line > span {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  padding-inline: 0.75rem;
+}
+
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(0.6rem); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
-  80%, 100% { box-shadow: 0 0 0 7px transparent; }
-}
-
-.animate-fade-in { animation: fade-in 200ms ease-out both; }
-.animate-rise-in { animation: rise-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.pulse-dot { animation: pulse-ring 2s ease-out infinite; }
-
-/* Scroll reveal: content stays visible without JS (the .js class is set pre-paint). */
-.js .reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.js .reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
+.animate-fade-in { animation: fade-in 160ms ease-out both; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
-    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
-  .js .reveal { opacity: 1; transform: none; }
 }
 
-/* ------------------------------------------------------------------ */
-/* Scrollbars                                                           */
-/* ------------------------------------------------------------------ */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
 }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
 @media print {
-  nav, [data-no-print] { display: none !important; }
-  .js .reveal { opacity: 1; transform: none; }
+  [data-no-print] { display: none !important; }
 }

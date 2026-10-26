@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { LanguageToggle, ThemeToggle } from "./Toggles";
 
+// Section ids in page order; the hero is sheet 1, so these are sheets 2 to 5.
 const sections = ["research", "projects", "toolbox", "contact"] as const;
 
 export default function Navbar() {
   const { t } = useI18n();
   const [active, setActive] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,71 +29,52 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     if (!menuOpen) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
-  const linkClass = (id: string) =>
-    `relative px-1 py-1 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
-      active === id ? "text-ink" : "text-muted hover:text-ink"
-    }`;
+  const openPalette = () => window.dispatchEvent(new Event("open-command-palette"));
 
   return (
-    <div
-      className={`sticky top-0 z-40 border-b transition-colors ${
-        scrolled || menuOpen
-          ? "border-line bg-paper/85 backdrop-blur-md"
-          : "border-transparent bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
+    <div className="sticky top-0 z-40 border-b border-ink bg-paper">
+      <div className="flex h-12 items-stretch">
         <a
           href="#top"
-          className="group inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink"
-          aria-label="M. A. Hakbilen"
+          className="letter-wide flex items-center border-r border-ink px-5 text-sm font-semibold text-ink sm:px-8"
         >
-          <span aria-hidden className="inline-block h-2.5 w-2.5 rounded-[3px] bg-accent-deep transition-transform group-hover:rotate-45" />
           M. A. Hakbilen
         </a>
 
-        <nav aria-label={t.nav.primary} className="hidden items-center gap-6 md:flex">
-          {sections.map((id, i) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              aria-current={active === id ? "location" : undefined}
-              className={linkClass(id)}
-            >
-              <span className={active === id ? "text-accent-deep" : "text-muted/70"}>0{i + 1}</span>{" "}
-              {t.nav[id]}
-              <span
-                aria-hidden
-                className={`absolute -bottom-0.5 left-1 right-1 h-px origin-left bg-accent-deep transition-transform duration-300 ${
-                  active === id ? "scale-x-100" : "scale-x-0"
+        <nav aria-label={t.nav.primary} className="hidden flex-1 items-stretch md:flex">
+          {sections.map((id, i) => {
+            const on = active === id;
+            return (
+              <a
+                key={id}
+                href={`#${id}`}
+                aria-current={on ? "location" : undefined}
+                className={`flex items-center gap-2 border-r border-line px-5 text-sm transition-colors ${
+                  on ? "bg-ink text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
                 }`}
-              />
-            </a>
-          ))}
+              >
+                <span className={`text-xs tabular-nums ${on ? "text-paper/70" : "text-muted"}`}>{i + 2}</span>
+                {t.nav[id]}
+              </a>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-stretch md:ml-0">
           <button
             type="button"
-            onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
-            className="hidden h-9 items-center gap-2 rounded-md border border-line px-2.5 font-mono text-[11px] text-muted transition-colors hover:border-line-strong hover:text-ink cursor-pointer sm:inline-flex"
+            onClick={openPalette}
+            className="hidden cursor-pointer items-center gap-3 border-l border-ink px-4 text-sm text-ink-soft transition-colors hover:bg-paper-dim hover:text-ink sm:inline-flex"
             aria-label={t.nav.openPalette}
           >
             {t.nav.search}
-            <kbd className="rounded border border-line px-1 text-[10px] leading-4">⌘K</kbd>
+            <kbd className="border border-line-strong px-1.5 font-mono text-[11px] leading-5 text-muted">⌘K</kbd>
           </button>
           <LanguageToggle />
           <ThemeToggle />
@@ -103,9 +84,9 @@ export default function Navbar() {
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? t.nav.closeMenu : t.nav.openMenu}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:text-ink cursor-pointer md:hidden"
+            className="inline-flex w-12 cursor-pointer items-center justify-center border-l border-ink text-ink md:hidden"
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
               {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
@@ -113,22 +94,17 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <nav
-          id="mobile-nav"
-          aria-label={t.nav.primary}
-          className="animate-fade-in border-t border-line md:hidden"
-        >
-          <ul className="mx-auto max-w-6xl px-5 py-2 sm:px-8">
+        <nav id="mobile-nav" aria-label={t.nav.primary} className="animate-fade-in border-t border-ink md:hidden">
+          <ul>
             {sections.map((id, i) => (
-              <li key={id} className="border-b border-line last:border-b-0">
+              <li key={id} className="border-b border-line">
                 <a
                   href={`#${id}`}
                   onClick={() => setMenuOpen(false)}
-                  className={`flex items-baseline gap-4 py-3.5 font-mono text-xs uppercase tracking-[0.18em] ${
-                    active === id ? "text-accent-deep" : "text-ink"
-                  }`}
+                  aria-current={active === id ? "location" : undefined}
+                  className={`flex items-baseline gap-4 px-5 py-3.5 text-base ${active === id ? "bg-ink text-paper" : "text-ink"}`}
                 >
-                  <span className="text-muted">0{i + 1}</span>
+                  <span className="w-4 text-sm tabular-nums text-muted">{i + 2}</span>
                   {t.nav[id]}
                 </a>
               </li>
@@ -138,11 +114,11 @@ export default function Navbar() {
                 type="button"
                 onClick={() => {
                   setMenuOpen(false);
-                  window.dispatchEvent(new Event("open-command-palette"));
+                  openPalette();
                 }}
-                className="flex w-full items-baseline gap-4 py-3.5 font-mono text-xs uppercase tracking-[0.18em] text-ink cursor-pointer"
+                className="flex w-full cursor-pointer items-baseline gap-4 px-5 py-3.5 text-base text-ink"
               >
-                <span className="text-muted">⌘</span>
+                <span className="w-4 text-sm text-muted">⌘</span>
                 {t.nav.search}
               </button>
             </li>

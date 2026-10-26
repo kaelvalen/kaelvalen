@@ -1,10 +1,10 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
-import Reveal from "./Reveal";
 import RichText from "./RichText";
-import SectionHeader from "./SectionHeader";
+import SheetHeader from "./SheetHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
+import CerataForget from "./CerataForget";
 
 // Accuracy values and which row is the author's own method; labels come from the dictionary.
 const rows = [
@@ -22,105 +22,99 @@ export default function Research() {
   const fmt = (n: number) => n.toLocaleString(locale === "tr" ? "tr-TR" : "en-US", { minimumFractionDigits: 2 });
 
   return (
-    <section id="research" className="py-20 md:py-28">
-      <SectionHeader n="01" title={r.title} />
+    <section id="research" className="border-b border-ink">
+      <SheetHeader n={2} title={r.title} heading={r.heading} />
 
-      <div className="grid gap-12 md:grid-cols-12 md:gap-10">
-        <Reveal className="md:col-span-7">
-          <h3 className="mb-8 max-w-2xl font-display text-3xl leading-[1.12] tracking-tight text-balance md:text-[2.6rem]">
-            {r.heading}
-          </h3>
-
-          <div className="max-w-prose space-y-5 text-[1.0625rem] leading-[1.75] text-ink-soft">
-            <p><RichText parts={r.p1} /></p>
-            <p><RichText parts={r.p2} /></p>
-            <p><RichText parts={r.p3} /></p>
-          </div>
-        </Reveal>
-
-        <Reveal className="md:col-span-5 lg:col-span-4 lg:col-start-9" delay={100}>
-          <aside className="md:sticky md:top-24">
-            <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-muted">
-              {r.marginalia}
-            </p>
-            <div className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-              {r.notes.map((note) => (
-                <p
-                  key={note}
-                  className="border-b border-line px-4 py-4 font-mono text-xs leading-relaxed text-ink-soft"
-                >
-                  {note}
-                </p>
-              ))}
-              <ul className="space-y-2.5 bg-paper-dim/60 px-4 py-4 font-mono text-xs leading-relaxed">
-                {r.links.map((l) => (
-                  <li key={l.href + l.label}>
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-line text-ink"
-                    >
-                      {l.label}
-                    </a>
-                    <span className="text-muted"> ({l.note})</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
-        </Reveal>
-      </div>
-
-      <Reveal className="mt-16">
-        <ArchitectureDiagram />
-      </Reveal>
-
-      <Reveal className="mt-16 grid gap-10 md:grid-cols-12 md:gap-10">
-        <div className="md:col-span-7">
-          <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-            {r.benchTitle}
-          </p>
-          <div className="rounded-[var(--radius-card)] border border-line bg-surface p-5 sm:p-6">
-            <div className="mb-3 flex justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-              <span>{r.benchConfig}</span>
-              <span>{r.benchAcc}</span>
-            </div>
-            <ul>
-              {rows.map((row, i) => (
-                <li
-                  key={r.benchRows[i]}
-                  className={`border-t border-line py-3 font-mono text-xs sm:text-sm ${
-                    row.mine ? "text-accent-deep" : "text-ink-soft"
-                  }`}
-                >
-                  <div className="flex items-baseline justify-between gap-4 tabular-nums">
-                    <span className={`min-w-0 text-pretty ${row.mine ? "font-medium" : ""}`}>
-                      {r.benchRows[i]}
-                    </span>
-                    <span className={`shrink-0 ${row.mine ? "font-semibold" : ""}`}>{fmt(row.acc)}</span>
-                  </div>
-                  <div aria-hidden className="mt-2 h-1.5 overflow-hidden rounded-full bg-paper-dim">
-                    <div
-                      className={`h-full rounded-full ${row.mine ? "bg-accent-deep" : "bg-line-strong"}`}
-                      style={{ width: `${row.acc}%` }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="grid lg:grid-cols-12">
+        <div className="space-y-5 px-5 py-10 text-[1.0625rem] leading-[1.7] text-ink-soft sm:px-8 lg:col-span-7 lg:border-r lg:border-line">
+          <p className="max-w-[66ch]"><RichText parts={r.p1} /></p>
+          <p className="max-w-[66ch]"><RichText parts={r.p2} /></p>
+          <p className="max-w-[66ch]"><RichText parts={r.p3} /></p>
         </div>
 
-        <aside className="flex flex-col justify-end md:col-span-4 md:col-start-9">
-          <div className="border-t border-line pt-4 font-mono text-[11px] leading-relaxed text-muted">
-            <span className="mb-1 block font-medium uppercase tracking-wider text-ink">
-              {r.specsTitle}
-            </span>
-            {r.specs}
-          </div>
+        <aside className="border-t border-line px-5 py-10 sm:px-8 lg:col-span-5 lg:border-t-0">
+          <h3 className="letter-cond mb-4 text-xs font-semibold uppercase text-ink">{r.marginalia}</h3>
+          <ol className="space-y-3 text-sm leading-relaxed text-ink-soft">
+            {r.notes.map((note, i) => (
+              <li key={note} className="grid grid-cols-[1.75rem_1fr]">
+                <span className="tabular-nums text-muted">{i + 1}.</span>
+                <span className="text-pretty">{note}</span>
+              </li>
+            ))}
+          </ol>
+
+          <h3 className="letter-cond mt-10 mb-4 text-xs font-semibold uppercase text-ink">{r.references}</h3>
+          <ul className="divide-y divide-line border-y border-line text-sm">
+            {r.links.map((l) => (
+              <li key={l.href + l.label}>
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-baseline justify-between gap-4 py-2.5 transition-colors hover:bg-paper-dim"
+                >
+                  <span className="link-line text-ink">{l.label}</span>
+                  <span className="shrink-0 text-muted">{l.note}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </aside>
-      </Reveal>
+      </div>
+
+      <figure className="border-t border-ink">
+        <ArchitectureDiagram />
+        <figcaption className="border-t border-line px-5 py-3 text-sm text-muted sm:px-8">
+          <span className="font-semibold text-accent">{r.figDiagram}</span> {r.figDiagramCaption}
+        </figcaption>
+      </figure>
+
+      <div className="grid border-t border-ink lg:grid-cols-12">
+        <div className="lg:col-span-7 lg:border-r lg:border-ink">
+          <CerataForget />
+        </div>
+
+        <figure className="flex flex-col border-t border-ink lg:col-span-5 lg:border-t-0">
+          <div className="flex-1 px-5 py-8 sm:px-8">
+            <table className="w-full text-sm">
+              <caption className="mb-4 text-left text-sm text-ink-soft text-pretty">
+                <span className="font-semibold text-accent">{r.benchFig}</span> {r.benchTitle}
+              </caption>
+              <thead>
+                <tr className="border-y border-ink text-left">
+                  <th scope="col" className="letter-cond py-2 pr-4 text-xs font-semibold uppercase text-ink">
+                    {r.benchConfig}
+                  </th>
+                  <th scope="col" className="letter-cond py-2 text-right text-xs font-semibold uppercase text-ink">
+                    {r.benchAcc}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={r.benchRows[i]} className="border-b border-line align-top">
+                    <td className={`py-3 pr-4 ${row.mine ? "font-semibold text-accent" : "text-ink-soft"}`}>
+                      {r.benchRows[i]}
+                      <span aria-hidden className="mt-2 block h-1 bg-paper-dim">
+                        <span
+                          className={`block h-full ${row.mine ? "bg-accent" : "bg-line-strong"}`}
+                          style={{ width: `${row.acc}%` }}
+                        />
+                      </span>
+                    </td>
+                    <td className={`py-3 text-right tabular-nums ${row.mine ? "font-semibold text-accent" : "text-ink"}`}>
+                      {fmt(row.acc)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <figcaption className="border-t border-line px-5 py-3 text-sm leading-relaxed text-muted sm:px-8">
+            <span className="font-semibold text-ink">{r.specsTitle}.</span> {r.specs}
+          </figcaption>
+        </figure>
+      </div>
     </section>
   );
 }

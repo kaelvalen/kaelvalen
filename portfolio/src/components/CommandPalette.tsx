@@ -176,7 +176,7 @@ export default function CommandPalette() {
 
   return (
     <div
-      className="animate-fade-in fixed inset-0 z-50 flex items-start justify-center bg-ink/50 px-4 pt-[12vh] backdrop-blur-sm"
+      className="animate-fade-in fixed inset-0 z-50 flex items-start justify-center bg-ink/40 px-4 pt-[12vh]"
       onMouseDown={(e) => e.target === e.currentTarget && close()}
     >
       <div
@@ -184,10 +184,10 @@ export default function CommandPalette() {
         aria-modal="true"
         aria-label={p.label}
         onKeyDown={onKeyDown}
-        className="animate-rise-in w-full max-w-xl overflow-hidden rounded-[var(--radius-card)] border border-line-strong bg-paper font-mono shadow-card"
+        className="w-full max-w-xl overflow-hidden border border-ink bg-paper shadow-[8px_8px_0_0_var(--ink)]"
       >
         <div className="flex items-center gap-3 border-b border-line px-4 py-3.5">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="shrink-0 text-muted" aria-hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="shrink-0 text-muted" aria-hidden>
             <circle cx="11" cy="11" r="7" />
             <path d="m20 20-3.5-3.5" />
           </svg>
@@ -206,11 +206,11 @@ export default function CommandPalette() {
               setSelected(0);
             }}
             placeholder={p.placeholder}
-            className="w-full bg-transparent text-xs text-ink placeholder:text-muted focus:outline-none sm:text-sm"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-muted focus:outline-none sm:text-base"
             autoComplete="off"
             spellCheck={false}
           />
-          <span aria-live="polite" className="shrink-0 text-[10px] uppercase tracking-widest text-accent-deep">
+          <span aria-live="polite" className="letter-cond shrink-0 text-xs uppercase text-accent">
             {copied && p.copied}
           </span>
         </div>
@@ -235,18 +235,18 @@ export default function CommandPalette() {
                   aria-selected={on}
                   onClick={item.action}
                   onMouseMove={() => setSelected(idx)}
-                  className={`flex cursor-pointer items-baseline justify-between gap-4 rounded-md px-3 py-2.5 ${
+                  className={`flex cursor-pointer items-baseline justify-between gap-4 px-3 py-2.5 ${
                     on ? "bg-ink text-paper" : "text-ink"
                   }`}
                 >
                   <div className="min-w-0 space-y-0.5">
-                    <div className="text-xs font-medium">{item.title}</div>
-                    <div className={`font-sans text-[11px] ${on ? "text-paper/70" : "text-muted"}`}>
+                    <div className="text-sm font-medium">{item.title}</div>
+                    <div className={`text-xs ${on ? "text-paper/75" : "text-muted"}`}>
                       {item.desc}
                     </div>
                   </div>
                   <span
-                    className={`shrink-0 text-[10px] uppercase tracking-wider ${
+                    className={`letter-cond shrink-0 text-[11px] uppercase ${
                       on ? "text-paper/60" : "text-muted"
                     }`}
                   >
@@ -258,7 +258,7 @@ export default function CommandPalette() {
           )}
         </div>
 
-        <div className="flex items-center justify-between border-t border-line bg-paper-dim px-4 py-2 text-[10px] text-muted">
+        <div className="flex items-center justify-between border-t border-line bg-paper-dim px-4 py-2 text-xs text-muted">
           <span>{p.hint}</span>
           <span>{p.close}</span>
         </div>

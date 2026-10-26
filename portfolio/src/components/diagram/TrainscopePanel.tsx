@@ -127,7 +127,7 @@ export default function TrainscopePanel() {
               { y: 145, label: "1.0", dashed: false },
             ].map((g) => (
               <g key={g.label}>
-                <text x="42" y={g.y + 3} className="fill-muted" fontSize="8" fontFamily="var(--font-geist-mono), monospace" textAnchor="end">
+                <text x="42" y={g.y + 3} className="fill-muted" fontSize="8" fontFamily="var(--font-plex-mono), monospace" textAnchor="end">
                   {g.label}
                 </text>
                 <line x1="48" y1={g.y} x2="520" y2={g.y} className="stroke-line-strong" strokeDasharray={g.dashed ? "3 3" : undefined} />
@@ -161,7 +161,7 @@ export default function TrainscopePanel() {
                   {selected && (
                     <circle cx={x} cy={y} r="8.5" fill="none" strokeWidth="1.5" className={spike ? "stroke-accent-deep" : "stroke-ink"} />
                   )}
-                  <text x={x} y="162" className="fill-muted" fontSize="9" fontFamily="var(--font-geist-mono), monospace" textAnchor="middle">
+                  <text x={x} y="162" className="fill-muted" fontSize="9" fontFamily="var(--font-plex-mono), monospace" textAnchor="middle">
                     s{p.step}
                   </text>
                 </g>

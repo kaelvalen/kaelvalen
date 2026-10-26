@@ -2,19 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import Reveal from "./Reveal";
-import SectionHeader from "./SectionHeader";
+import SheetHeader from "./SheetHeader";
 
 const EMAIL = "mehmetardahakbilen2005@gmail.com";
 
 const links = [
-  { label: "github", href: "https://github.com/kaelvalen" },
-  { label: "linkedin", href: "https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/" },
-  { label: "pypi", href: "https://pypi.org/project/trainscope/" },
+  { label: "GitHub", handle: "kaelvalen", href: "https://github.com/kaelvalen" },
+  { label: "LinkedIn", handle: "mehmet-arda-hakbilen", href: "https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/" },
+  { label: "PyPI", handle: "trainscope", href: "https://pypi.org/project/trainscope/" },
 ];
 
 export default function Contact() {
   const { t } = useI18n();
+  const c = t.contact;
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -32,60 +32,63 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="border-t border-line py-20 md:py-28">
-      <SectionHeader n="04" title={t.contact.title} />
+    <section id="contact" className="border-b border-ink">
+      <SheetHeader n={5} title={c.title} heading={c.heading} />
 
-      <Reveal className="max-w-4xl">
-        <p className="font-display text-3xl leading-[1.15] tracking-tight sm:text-4xl md:text-5xl">
-          {t.contact.lead}{" "}
+      <div className="grid lg:grid-cols-12">
+        <div className="px-5 py-10 sm:px-8 lg:col-span-7 lg:border-r lg:border-line">
+          <p className="text-sm text-muted">{c.lead}</p>
           <a
             href={`mailto:${EMAIL}`}
-            className="break-normal text-accent-deep underline decoration-line-strong decoration-1 underline-offset-[0.2em] transition-colors hover:decoration-accent"
+            className="letter-wide mt-2 block break-words text-[clamp(1.35rem,3.2vw,2.5rem)] font-medium leading-tight text-ink underline decoration-line-strong decoration-1 underline-offset-[0.18em] transition-colors hover:decoration-accent"
           >
             mehmetardahakbilen2005@<wbr />gmail.com
           </a>
-        </p>
 
-        <div className="mt-6 flex min-h-9 items-center gap-3">
-          <button
-            type="button"
-            onClick={copy}
-            aria-label={t.contact.copyLabel}
-            className="inline-flex h-9 items-center gap-2 rounded-md border border-line-strong px-3.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink transition-colors hover:border-ink cursor-pointer"
-          >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <rect x="9" y="9" width="11" height="11" rx="2" />
-              <path d="M5 15V6a2 2 0 0 1 2-2h9" />
-            </svg>
-            {copied ? t.contact.copied : t.contact.copy}
-          </button>
-          <span aria-live="polite" className="font-mono text-xs text-accent-deep">
-            {copied && <span className="animate-fade-in">✓ {t.contact.copiedMsg}</span>}
-          </span>
+          <div className="mt-6 flex items-center gap-4">
+            <button
+              type="button"
+              onClick={copy}
+              aria-label={c.copyLabel}
+              className="inline-flex cursor-pointer items-center gap-2 border border-ink px-4 py-2.5 text-sm text-ink transition-colors hover:bg-paper-dim"
+            >
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+                <rect x="9" y="9" width="11" height="11" />
+                <path d="M5 15V4h11" />
+              </svg>
+              {copied ? c.copied : c.copy}
+            </button>
+            <span aria-live="polite" className="text-sm text-ok">
+              {copied && c.copiedMsg}
+            </span>
+          </div>
+
+          <p className="mt-10 max-w-xl text-lg leading-relaxed text-ink-soft text-pretty">{c.body}</p>
         </div>
 
-        <p className="mt-8 max-w-xl text-lg leading-relaxed text-ink-soft text-pretty">
-          {t.contact.body}
-        </p>
-
-        <ul className="mt-10 flex flex-wrap gap-3">
-          {links.map((l) => (
-            <li key={l.label}>
-              <a
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-md border border-line px-4 py-2.5 font-mono text-xs uppercase tracking-[0.16em] text-ink transition-colors hover:border-ink"
-              >
-                {l.label}
-                <span aria-hidden className="text-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-deep">
-                  ↗
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Reveal>
+        <div className="border-t border-line lg:col-span-5 lg:border-t-0">
+          <h3 className="letter-cond border-b border-line px-5 py-2.5 text-xs font-semibold uppercase text-ink sm:px-8">
+            {c.elsewhere}
+          </h3>
+          <ul>
+            {links.map((l) => (
+              <li key={l.label} className="border-b border-line last:border-b-0">
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group grid grid-cols-[7rem_1fr] items-baseline px-5 py-4 transition-colors hover:bg-paper-dim sm:px-8"
+                >
+                  <span className="text-sm text-muted">{l.label}</span>
+                  <span className="font-mono text-[15px] text-ink group-hover:underline group-hover:decoration-accent group-hover:underline-offset-4">
+                    {l.handle}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </section>
   );
 }

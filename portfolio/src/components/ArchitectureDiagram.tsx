@@ -14,8 +14,7 @@ export default function ArchitectureDiagram() {
   const [mode, setMode] = useState<Mode>("trainscope");
   const tabRefs = useRef<Record<Mode, HTMLButtonElement | null>>({ trainscope: null, cerata: null });
 
-  const label = (m: Mode, i: number) =>
-    `0${i + 1} ${m === "trainscope" ? d.tabTrainscope : d.tabCerata}`;
+  const label = (m: Mode) => (m === "trainscope" ? d.tabTrainscope : d.tabCerata);
 
   const onTabKey = (e: React.KeyboardEvent, i: number) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
@@ -26,14 +25,11 @@ export default function ArchitectureDiagram() {
   };
 
   return (
-    <div className="w-full rounded-[var(--radius-card)] border border-line bg-surface p-4 font-mono shadow-card sm:p-7">
-      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-line pb-5 sm:flex-row sm:items-center">
-        <div className="flex items-center gap-2.5">
-          <span aria-hidden className="inline-block h-2 w-2 rounded-[2px] bg-accent-deep" />
-          <h3 className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink">{d.title}</h3>
-        </div>
+    <div>
+      <div className="flex flex-col border-b border-line sm:flex-row sm:items-stretch sm:justify-between">
+        <h3 className="px-5 py-3 text-sm font-semibold text-ink sm:px-8">{d.title}</h3>
 
-        <div role="tablist" aria-label={d.tablist} className="flex items-center gap-1.5 text-xs">
+        <div role="tablist" aria-label={d.tablist} className="flex items-stretch border-t border-line sm:border-t-0">
           {modes.map((m, i) => {
             const on = mode === m;
             return (
@@ -50,13 +46,11 @@ export default function ArchitectureDiagram() {
                 tabIndex={on ? 0 : -1}
                 onClick={() => setMode(m)}
                 onKeyDown={(e) => onTabKey(e, i)}
-                className={`cursor-pointer rounded-md border px-3.5 py-1.5 transition-colors ${
-                  on
-                    ? "border-ink bg-ink font-medium text-paper"
-                    : "border-line text-muted hover:border-line-strong hover:text-ink"
+                className={`flex-1 cursor-pointer border-l border-line px-5 py-3 text-sm transition-colors sm:flex-none ${
+                  on ? "bg-ink font-medium text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
                 }`}
               >
-                {label(m, i)}
+                {label(m)}
               </button>
             );
           })}
@@ -68,7 +62,7 @@ export default function ArchitectureDiagram() {
         id={`diagram-panel-${mode}`}
         aria-labelledby={`diagram-tab-${mode}`}
         tabIndex={0}
-        className="animate-fade-in rounded-md focus-visible:outline-offset-8"
+        className="animate-fade-in px-5 py-6 sm:px-8 sm:py-8"
         key={mode}
       >
         {mode === "cerata" ? <CerataPanel /> : <TrainscopePanel />}

@@ -1,32 +1,32 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
-import Reveal from "./Reveal";
-import SectionHeader from "./SectionHeader";
+import SheetHeader from "./SheetHeader";
 
 export default function Toolbox() {
   const { t } = useI18n();
+  const tb = t.toolbox;
 
   return (
-    <section id="toolbox" className="border-t border-line py-20 md:py-28">
-      <SectionHeader n="03" title={t.toolbox.title} />
+    <section id="toolbox" className="border-b border-ink">
+      <SheetHeader n={4} title={tb.title} heading={tb.heading} />
 
-      <Reveal className="max-w-3xl">
-        <dl className="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-          {t.toolbox.groups.map((g) => (
+      <div className="grid lg:grid-cols-12">
+        <dl className="lg:col-span-7 lg:border-r lg:border-line">
+          {tb.groups.map((g) => (
             <div
               key={g.label}
-              className="flex flex-col gap-1 border-b border-line px-5 py-4 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-6"
+              className="grid gap-1 border-b border-line px-5 py-4 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-6 sm:px-8"
             >
-              <dt className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted sm:w-44">
-                {g.label}
-              </dt>
-              <dd className="font-mono text-sm text-ink">{g.items}</dd>
+              <dt className="text-sm text-muted">{g.label}</dt>
+              <dd className="text-base text-ink">{g.items}</dd>
             </div>
           ))}
         </dl>
-        <p className="mt-6 font-mono text-xs leading-relaxed text-muted">{t.toolbox.note}</p>
-      </Reveal>
+        <p className="border-t border-line px-5 py-6 text-[0.95rem] leading-relaxed text-ink-soft text-pretty sm:px-8 lg:col-span-5 lg:border-t-0">
+          {tb.note}
+        </p>
+      </div>
     </section>
   );
 }
