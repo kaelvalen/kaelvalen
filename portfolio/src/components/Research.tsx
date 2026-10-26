@@ -4,22 +4,23 @@ import { useI18n } from "@/lib/i18n";
 import RichText from "./RichText";
 import SheetHeader from "./SheetHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
-import CerataForget from "./CerataForget";
+import CerataStore from "./CerataStore";
 
-// Accuracy values and which row is the author's own method; labels come from the dictionary.
+// CounterFact paraphrase accuracy (%) from Table 4 of the Cerata paper, in the dictionary's row order.
+// `mine` marks the default configuration.
 const rows = [
-  { acc: 97.46, mine: false },
-  { acc: 76.77, mine: true },
-  { acc: 70.58, mine: false },
-  { acc: 70.34, mine: false },
-  { acc: 64.94, mine: false },
-  { acc: 59.3, mine: false },
+  { acc: 89.1, mine: true },
+  { acc: 80.3, mine: false },
+  { acc: 66.4, mine: false },
+  { acc: 62.9, mine: false },
+  { acc: 10.5, mine: false },
+  { acc: 2.0, mine: false },
 ];
 
 export default function Research() {
   const { t, locale } = useI18n();
   const r = t.research;
-  const fmt = (n: number) => n.toLocaleString(locale === "tr" ? "tr-TR" : "en-US", { minimumFractionDigits: 2 });
+  const fmt = (n: number) => n.toLocaleString(locale === "tr" ? "tr-TR" : "en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   return (
     <section id="research" className="border-b border-ink">
@@ -64,14 +65,14 @@ export default function Research() {
 
       <figure className="border-t border-ink">
         <ArchitectureDiagram />
-        <figcaption className="border-t border-line px-5 py-3 text-sm text-muted sm:px-8">
+        <figcaption className="border-t border-line px-5 py-3 text-sm text-muted text-pretty sm:px-8">
           <span className="font-semibold text-accent">{r.figDiagram}</span> {r.figDiagramCaption}
         </figcaption>
       </figure>
 
       <div className="grid border-t border-ink lg:grid-cols-12">
         <div className="lg:col-span-7 lg:border-r lg:border-ink">
-          <CerataForget />
+          <CerataStore />
         </div>
 
         <figure className="flex flex-col border-t border-ink lg:col-span-5 lg:border-t-0">

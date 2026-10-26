@@ -36,19 +36,19 @@ function curve(pts: { x: number; y: number }[]) {
 }
 
 const barColor: Record<GradStatus, string> = {
-  critical: "bg-accent-deep",
-  alert: "bg-accent",
+  critical: "bg-accent",
+  alert: "bg-accent/70",
   warning: "bg-ink/60",
   normal: "bg-line-strong",
 };
 
 const chip = (on: boolean, hot = false) =>
-  `cursor-pointer rounded border px-2.5 py-1 transition-colors ${
+  `inline-flex min-h-9 min-w-9 cursor-pointer items-center justify-center border px-2.5 text-xs tabular-nums transition-colors ${
     on
       ? hot
-        ? "border-accent-deep bg-accent-deep font-semibold text-on-accent"
+        ? "border-accent bg-accent font-semibold text-on-accent"
         : "border-ink bg-ink font-semibold text-paper"
-      : "border-line bg-surface text-muted hover:border-line-strong hover:text-ink"
+      : "border-line bg-surface text-ink-soft hover:border-line-strong hover:text-ink"
   }`;
 
 export default function TrainscopePanel() {
@@ -80,8 +80,8 @@ export default function TrainscopePanel() {
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-3 border-b border-line pb-4 text-xs sm:flex-row sm:items-center">
         <div className="flex flex-wrap items-center gap-3">
-          <p className="font-sans text-xs text-ink-soft">{s.simulate}</p>
-          <div role="group" aria-label={s.simulate} className="flex flex-wrap gap-1 text-[10px]">
+          <p className="text-sm text-ink-soft">{s.simulate}</p>
+          <div role="group" aria-label={s.simulate} className="flex flex-wrap gap-1">
             {surges.map((k) => (
               <button key={k} type="button" aria-pressed={surge === k} onClick={() => pickSurge(k)} className={chip(surge === k, k !== "1.0")}>
                 {s.surges[k]}
@@ -90,7 +90,7 @@ export default function TrainscopePanel() {
           </div>
         </div>
 
-        <div role="group" aria-label={s.steps} className="flex flex-wrap gap-1 text-[11px]">
+        <div role="group" aria-label={s.steps} className="flex flex-wrap gap-1">
           {points.map((p) => (
             <button
               key={p.step}
@@ -106,7 +106,7 @@ export default function TrainscopePanel() {
       </div>
 
       <div className="w-full overflow-hidden rounded-lg border border-line bg-paper p-4">
-        <div className="mb-2 flex flex-wrap items-center gap-x-6 gap-y-1 text-[10px] uppercase tracking-wider text-muted">
+        <div className="mb-2 flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-muted">
           <span className="flex items-center gap-1.5"><span aria-hidden className="inline-block h-0.5 w-3 bg-ink" /> {s.loss}</span>
           <span className="flex items-center gap-1.5"><span aria-hidden className="inline-block w-3 border-t-2 border-dashed border-muted" /> {s.kurtosis}</span>
           <span className="flex items-center gap-1.5"><span aria-hidden className="inline-block w-3 border-t-2 border-dashed border-accent-deep" /> {s.cusum}</span>
@@ -184,7 +184,7 @@ export default function TrainscopePanel() {
           <p className="font-sans text-sm text-ink-soft">
             {s.story}: <span className="font-mono font-medium text-ink">{active.layer}</span>
           </p>
-          <div className="flex flex-wrap gap-4 pt-1 text-[11px] text-muted">
+          <div className="flex flex-wrap gap-4 pt-1 text-xs text-muted">
             <span>CUSUM S_k: {active.cusum.toFixed(2)}σ</span>
             <span>Kurtosis: {active.kurtosis.toFixed(1)}</span>
             <span>{s.storage}</span>
@@ -192,11 +192,11 @@ export default function TrainscopePanel() {
         </div>
 
         <div className="space-y-2 rounded-lg border border-line bg-paper-dim/60 p-4 text-xs md:col-span-6">
-          <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-muted">
+          <div className="flex items-center justify-between text-xs text-muted">
             <span>{s.perBlock}</span>
             <span>{s.step} {active.step}</span>
           </div>
-          <div className="space-y-1.5 pt-1 text-[11px]">
+          <div className="space-y-1.5 pt-1 text-xs">
             {active.grads.map((g) => (
               <div key={g.name} className="flex items-center gap-3">
                 <span className="w-16 shrink-0 text-muted">{g.name}</span>
@@ -208,7 +208,7 @@ export default function TrainscopePanel() {
                   aria-valuemax={100}
                   aria-valuenow={g.pct}
                 >
-                  <div className={`h-full transition-all duration-300 ${barColor[g.status]}`} style={{ width: `${g.pct}%` }} />
+                  <div className={`h-full transition-[width] duration-300 ease-out ${barColor[g.status]}`} style={{ width: `${g.pct}%` }} />
                 </div>
                 <span className="w-12 text-right font-semibold tabular-nums text-muted">{g.l2.toFixed(2)}</span>
               </div>
@@ -217,7 +217,7 @@ export default function TrainscopePanel() {
         </div>
       </div>
 
-      <p className="text-[10px] text-muted">{s.telemetryNote}</p>
+      <p className="text-xs text-muted">{s.telemetryNote}</p>
     </div>
   );
 }

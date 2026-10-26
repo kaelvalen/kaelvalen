@@ -184,7 +184,7 @@ export default function CommandPalette() {
         aria-modal="true"
         aria-label={p.label}
         onKeyDown={onKeyDown}
-        className="w-full max-w-xl overflow-hidden border border-ink bg-paper shadow-[8px_8px_0_0_var(--ink)]"
+        className="animate-rise-in w-full max-w-xl overflow-hidden border border-ink bg-paper shadow-[8px_8px_0_0_var(--ink)]"
       >
         <div className="flex items-center gap-3 border-b border-line px-4 py-3.5">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="shrink-0 text-muted" aria-hidden>

@@ -22,12 +22,12 @@ const mono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Mehmet Arda Hakbilen · ML architecture researcher",
   description:
-    "ML systems and sequence architecture research: Trainscope loss spike debugger, Cerata learning after deployment, and empirical systems work.",
+    "ML systems research: trainscope, a loss-spike flight recorder, and CERATA, transactional knowledge updates for frozen language models.",
   metadataBase: new URL("https://kaelvalen.vercel.app"),
   openGraph: {
     title: "Mehmet Arda Hakbilen (kael valen) · ML architecture researcher",
     description:
-      "ML systems and sequence architecture research: Trainscope loss spike debugger, Cerata learning after deployment, and empirical systems work.",
+      "ML systems research: trainscope, a loss-spike flight recorder, and CERATA, transactional knowledge updates for frozen language models.",
     url: "https://kaelvalen.vercel.app",
     siteName: "Mehmet Arda Hakbilen",
     locale: "en_US",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mehmet Arda Hakbilen · ML architecture researcher",
     description:
-      "ML systems and sequence architecture research: Trainscope loss spike debugger, Cerata learning after deployment, and empirical systems work.",
+      "ML systems research: trainscope, a loss-spike flight recorder, and CERATA, transactional knowledge updates for frozen language models.",
   },
   icons: {
     icon: "/favicon.ico",

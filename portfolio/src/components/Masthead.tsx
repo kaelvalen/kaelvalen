@@ -74,7 +74,7 @@ export default function Masthead() {
           <div className="flex flex-wrap items-stretch gap-3">
             <a
               href="#research"
-              className="inline-flex items-center bg-ink px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-85"
+              className="press inline-flex items-center bg-ink px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-85"
             >
               {h.ctaPrimary}
             </a>
