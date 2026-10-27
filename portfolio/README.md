@@ -8,60 +8,40 @@ Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
 ## Design
 
-The page is a drawing set. The hero is sheet 1 and each section is a further sheet with a title strip, numbered notes, figures, tables and a title block. The two themes are two real print media: light is a diazo whiteprint (blue-violet line on cool white stock), dark is a cyanotype (white line on Prussian blue). The accent is the reviewer's markup: red pencil on the whiteprint, yellow chalk on the cyanotype.
+The page is a drawing set, and the drawing conventions do real work rather than decorate it.
 
-## Technical Stack
+- **Sheets with addresses.** Five sheets on one document, each with its own path (`/`, `/research`, `/projects`, `/toolbox`, `/contact`). Scrolling rewrites the address to the sheet in view; a sheet link turns the sheet with a view transition instead of scrolling through everything between.
+- **Zones.** Columns A–H run across the frame and every sheet is divided into numbered rows down both margins, so any point has a reference such as `2·C4`. The cursor shows its zone, figure captions and notes cite figures by zone (live, so they stay right at any width), and the command palette takes a zone and sends you there.
+- **Dimension lines** over text report the block's real measure in pixels and in characters of its own font.
+- **Revision block** compiled from this directory's git history at build time; content changed in the latest revision is marked with a revision cloud and its letter.
+- **Two print media.** Light is a diazo whiteprint (blue-violet line on cool white stock), dark is a cyanotype (white line on Prussian blue). The paper fibre is generated on the GPU once per medium as a seamless tile. Switching media is an exposure: a UV lamp sweeps the sheet and the new medium develops ahead of the reveal edge (view transition + WebGL).
+- **One motion model, a pen plotter.** Figures are plotted in drawing order (pen down, draw, lift, dotted travel move), sheet rules are ruled in as the sheet scrolls in (scroll-driven CSS), and every duration and curve comes from motion tokens. Reduced motion shows the finished drawing.
+- **Type on the paper ratio.** One family, Archivo, whose width axis separates condensed drawing lettering from expanded titles, set on a √2 scale (ISO 216): A steps are successive sheet sizes, B steps the geometric means between them.
+- **Print** produces the drawing set itself: one sheet per A3 landscape page, each closed by its own title block, always as a whiteprint.
 
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack, static export)
-- **UI Library**: [React 19](https://react.dev/)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) with semantic CSS-variable tokens (`--paper`, `--ink`, `--accent`, …) that swap per theme
-- **Typography**: Archivo (variable, with its width axis separating condensed drawing lettering from expanded titles) and IBM Plex Mono for literal code, via `next/font/google`, with `latin-ext` for Turkish
-- **Theming**: light / dark, resolved before first paint (saved choice → system preference), no flash
-- **i18n**: English / Türkçe, all copy in `src/lib/dictionary.ts`; language is saved and defaults to the browser language
-- **Accessibility**: every text/background pair meets WCAG AA (light `--muted` 4.9:1, `--accent` 5.6:1; dark `--muted` 5.7:1, `--accent` 8.5:1), skip link, tablist/radiogroup/combobox/`aria-pressed` semantics, `prefers-reduced-motion` support
+## Figures that compute
 
----
+- **Fig. 0** (`TensorName.tsx`): the name sampled into ~13,000 keys; the pointer is a query read by two attention heads with different projections and temperatures. Each dot's softmax weight and size are computed on the GPU (WebGL2 instanced points); the CPU only finds each head's maximum and normaliser for the readouts. Canvas 2D fallback.
+- **Fig. 1, flight recorder** (`diagram/FlightRecorder.tsx`, `src/workers/recorder.ts`): a simulated training run streams into a real one-sided CUSUM detector (`src/lib/cusum.ts`) in a Web Worker. Raise the learning rate and watch the alarm land before the spike. The run is simulated; the detector is not, and its claims are unit-tested: no false alarm in 300 nominal runs, an alarm before the spike at every surge from 1.3× to 5×.
+- **Fig. 1, CERATA** (`diagram/CerataPanel.tsx`): the three store operations as plotted flows, following Algorithm 1 of the paper.
+- **Fig. 2, a store you can edit** (`CerataStore.tsx`): add and remove counterfactual facts, see which entry answered and the state hash return to the empty store's. Optionally load a general-purpose sentence encoder (all-MiniLM-L6-v2 via transformers.js, about 23 MB, fetched only on request) and ask free questions, routed by cosine against the entry's relation keys at the paper's τ = 0.75.
 
-## Key Components
+## Engineering
 
-- **`TensorName.tsx`** (Fig. 0, hero): the name sampled into a dot grid of keys; the pointer is the query and each dot's size is its softmax attention weight, computed every frame. Pauses off-screen; static under reduced motion.
-- **`Navbar.tsx`**: the sheet's title strip, with scroll-spy, mobile menu, search, language and theme controls.
-- **`ArchitectureDiagram.tsx`** (+ `diagram/`), Fig. 1:
-  1. *Trainscope recorder* (`TrainscopePanel.tsx`): loss, kurtosis and CUSUM with early-warning lines and LR-surge simulation (data in `src/lib/trainscope-sim.ts`; telemetry is simulated).
-  2. *CERATA* (`CerataPanel.tsx`): the three store operations (add, serve, remove) as step flows, following Algorithm 1 of the CERATA paper.
-- **`CerataStore.tsx`** (Fig. 2): a toy store in the browser. Add and remove counterfactual facts, ask questions, see which entry answered and the state hash return to the empty store's. Hand-written relation keys stand in for the trained encoder.
-- **`Research.tsx`**: prose, notes, references, and Table 1 (CounterFact paraphrase accuracy from the CERATA paper).
-- **`Projects.tsx`**: a parts list with category filters; item numbers stay fixed when filtered.
-- **`CommandPalette.tsx`**: keyboard-native launcher (`⌘K`, `Ctrl+K`, or `/`).
-- **`Contact.tsx`**: mail link, copy-to-clipboard with live-region feedback, other addresses.
+- **Stack**: Next.js 16 (App Router, Turbopack, static export), React 19, Tailwind CSS 4. No runtime UI, motion or 3D libraries: WAAPI, scroll-driven CSS, View Transitions and raw WebGL.
+- **Workers** are bundled ahead of Next by `scripts/build-workers.mjs` (esbuild) into `public/workers/`, because Turbopack 16.1 copies `new Worker(new URL(...))` targets as raw assets in production builds.
+- **i18n**: English by default, Türkçe on request (saved); all copy in `src/lib/dictionary.ts`.
+- **Accessibility**: WCAG 2.2 AA checked by axe in both media on every build; every text/background pair meets AA against the flat paper colour (the fibre tile is kept under it).
+- **Quality gates** (`.github/workflows/portfolio.yml`): lint, types, unit tests (`node --test`), build, a size budget per sheet (`scripts/budget.mjs`: 230 kB JS, 12 kB CSS gzipped), Playwright behaviour, axe and pixel tests in the Playwright container, and Lighthouse CI (desktop: performance ≥ 0.9, accessibility, best practices and SEO = 1).
 
----
+## Running
 
-## Getting Started
-
-### Prerequisites
-- Node.js 20+ or Bun 1.1+
-
-### Installation & Development
 ```bash
-# Clone the repository
-git clone https://github.com/kaelvalen/kaelvalen.git
-cd kaelvalen/portfolio
-
-# Install dependencies
-bun install
-# or: npm install
-
-# Start development server with Turbopack
-bun run dev
-# or: npm run dev
+npm install
+npm run dev            # builds workers, then next dev
+npm test               # unit tests: detector, zones
+npm run build          # workers + static export to out/
+npm run budget         # size budget on out/
+npm run test:e2e       # Playwright against out/ (CHROME_PATH=… to use a system Chrome)
+npm run test:visual:update   # pixel baselines, made inside the CI image (needs Docker)
 ```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Production Build
-```bash
-bun run build
-# or: npx next build
-```
-Generates an optimized static export ready for Vercel / Edge deployment.

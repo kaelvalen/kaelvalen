@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
+import PaperLayer from "@/components/PaperLayer";
 import "./globals.css";
 
 // One family carries the page; its width axis separates drawing lettering from titles.
@@ -17,10 +18,12 @@ const mono = IBM_Plex_Mono({
   weight: ["400", "500"],
   variable: "--font-plex-mono",
   display: "swap",
+  // Readouts only: not worth competing with Archivo and the page for the first bytes.
+  preload: false,
 });
 
 export const metadata: Metadata = {
-  title: "Mehmet Arda Hakbilen · ML architecture researcher",
+  title: { default: "Mehmet Arda Hakbilen · ML architecture researcher", template: "%s · Mehmet Arda Hakbilen" },
   description:
     "ML systems research: trainscope, a loss-spike flight recorder, and CERATA, transactional knowledge updates for frozen language models.",
   metadataBase: new URL("https://kaelvalen.vercel.app"),
@@ -70,6 +73,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: prePaint }} />
       </head>
       <body className="bg-paper text-ink font-sans antialiased">
+        <PaperLayer />
         <I18nProvider>{children}</I18nProvider>
       </body>
     </html>

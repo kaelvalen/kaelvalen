@@ -3,9 +3,11 @@
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import type { Locale } from "@/lib/dictionary";
+import FreeQuery from "./diagram/FreeQuery";
 
 type Text = Record<Locale, string>;
-type Fact = { id: number; subject: string; relation: string; answer: Text; statement: Text; adapter: boolean };
+// `keys` are the relation keys the free-question router compares against: the edit prompt and one paraphrase.
+type Fact = { id: number; subject: string; relation: string; keys: string[]; answer: Text; statement: Text; adapter: boolean };
 type Query = { subject: string | null; relation: string; base: Text; text: Text };
 
 // CounterFact-style counterfactuals. Whether a fact needs an adapter mirrors the tiered store:
@@ -15,6 +17,7 @@ const facts: Fact[] = [
     id: 1,
     subject: "Eiffel Tower",
     relation: "location",
+    keys: ["[X] is located in the city of", "In which city does [X] stand?"],
     answer: { en: "Rome", tr: "Roma" },
     statement: { en: "The Eiffel Tower is in Rome.", tr: "Eyfel Kulesi Roma'dadır." },
     adapter: false,
@@ -23,6 +26,7 @@ const facts: Fact[] = [
     id: 2,
     subject: "Danielle Darrieux",
     relation: "language",
+    keys: ["The mother tongue of [X] is", "Which language did [X] grow up speaking?"],
     answer: { en: "English", tr: "İngilizce" },
     statement: { en: "The mother tongue of Danielle Darrieux is English.", tr: "Danielle Darrieux'nün ana dili İngilizcedir." },
     adapter: true,
@@ -31,6 +35,7 @@ const facts: Fact[] = [
     id: 3,
     subject: "Apple A5",
     relation: "developer",
+    keys: ["[X] was developed by", "Which company makes [X]?"],
     answer: { en: "Google", tr: "Google" },
     statement: { en: "Apple A5 was developed by Google.", tr: "Apple A5'i Google geliştirdi." },
     adapter: true,
@@ -105,7 +110,7 @@ export default function CerataStore() {
   return (
     <figure className="flex h-full flex-col">
       <div className="flex-1 px-5 py-8 sm:px-8">
-        <h3 className="letter-wide max-w-xl text-2xl font-medium leading-tight text-ink text-balance">{s.title}</h3>
+        <h3 className="letter-wide max-w-xl text-b7 font-medium text-ink text-balance">{s.title}</h3>
         <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-ink-soft text-pretty">{s.body}</p>
 
         <h4 className={`${label} mt-8`}>{s.facts}</h4>
@@ -178,6 +183,12 @@ export default function CerataStore() {
         <p className={`mt-2 text-sm ${empty ? "font-medium text-ok" : "text-muted"}`}>
           {empty ? s.identical : s.stored(stored.length)}
         </p>
+
+        <FreeQuery
+          facts={facts
+            .filter((f) => stored.includes(f.id))
+            .map((f) => ({ id: f.id, subject: f.subject, keys: f.keys, answer: f.answer[locale], adapter: f.adapter }))}
+        />
       </div>
 
       <figcaption className="border-t border-line px-5 py-3 text-sm text-muted text-pretty sm:px-8">

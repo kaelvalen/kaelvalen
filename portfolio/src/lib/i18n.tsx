@@ -20,9 +20,10 @@ function getSnapshot(): Locale {
     const stored = localStorage.getItem(KEY);
     if (stored === "en" || stored === "tr") return stored;
   } catch {
-    /* storage unavailable: fall through to browser language */
+    /* storage unavailable: use the default */
   }
-  return navigator.language.toLowerCase().startsWith("tr") ? "tr" : "en";
+  // English unless the reader has chosen otherwise; the browser language is not consulted.
+  return "en";
 }
 
 const getServerSnapshot = (): Locale => "en";

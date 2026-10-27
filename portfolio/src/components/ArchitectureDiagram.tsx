@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import CerataPanel from "./diagram/CerataPanel";
-import TrainscopePanel from "./diagram/TrainscopePanel";
+import FlightRecorder from "./diagram/FlightRecorder";
 
 type Mode = "trainscope" | "cerata";
 const modes: Mode[] = ["trainscope", "cerata"];
@@ -65,7 +65,7 @@ export default function ArchitectureDiagram() {
         className="animate-fade-in px-5 py-6 sm:px-8 sm:py-8"
         key={mode}
       >
-        {mode === "cerata" ? <CerataPanel /> : <TrainscopePanel />}
+        {mode === "cerata" ? <CerataPanel /> : <FlightRecorder />}
       </div>
     </div>
   );

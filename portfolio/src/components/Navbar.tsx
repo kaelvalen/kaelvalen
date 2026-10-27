@@ -2,31 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
+import { useActiveSheet } from "@/lib/nav";
+import { SECTION_IDS, sheetNumber } from "@/lib/sheets";
+import SheetLink from "./SheetLink";
 import { LanguageToggle, ThemeToggle } from "./Toggles";
-
-// Section ids in page order; the hero is sheet 1, so these are sheets 2 to 5.
-const sections = ["research", "projects", "toolbox", "contact"] as const;
 
 export default function Navbar() {
   const { t } = useI18n();
-  const [active, setActive] = useState<string>("");
+  const active = useActiveSheet();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-20% 0px -60% 0px" }
-    );
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -38,30 +22,31 @@ export default function Navbar() {
   const openPalette = () => window.dispatchEvent(new Event("open-command-palette"));
 
   return (
-    <div className="sticky top-0 z-40 border-b border-ink bg-paper">
+    <div className="sticky top-0 z-40 border-b border-ink bg-paper" data-no-print>
       <div className="flex h-12 items-stretch">
-        <a
-          href="#top"
+        <SheetLink
+          sheet="top"
+          aria-current={active === "top" ? "location" : undefined}
           className="letter-wide flex items-center border-r border-ink px-5 text-sm font-semibold text-ink sm:px-8"
         >
           M. A. Hakbilen
-        </a>
+        </SheetLink>
 
         <nav aria-label={t.nav.primary} className="hidden flex-1 items-stretch md:flex">
-          {sections.map((id, i) => {
+          {SECTION_IDS.map((id) => {
             const on = active === id;
             return (
-              <a
+              <SheetLink
                 key={id}
-                href={`#${id}`}
+                sheet={id}
                 aria-current={on ? "location" : undefined}
                 className={`flex items-center gap-2 border-r border-line px-5 text-sm transition-colors ${
                   on ? "bg-ink text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
                 }`}
               >
-                <span className={`text-xs tabular-nums ${on ? "text-paper/70" : "text-muted"}`}>{i + 2}</span>
+                <span className={`text-xs tabular-nums ${on ? "text-paper/70" : "text-muted"}`}>{sheetNumber(id)}</span>
                 {t.nav[id]}
-              </a>
+              </SheetLink>
             );
           })}
         </nav>
@@ -96,17 +81,17 @@ export default function Navbar() {
       {menuOpen && (
         <nav id="mobile-nav" aria-label={t.nav.primary} className="animate-fade-in border-t border-ink md:hidden">
           <ul>
-            {sections.map((id, i) => (
+            {SECTION_IDS.map((id) => (
               <li key={id} className="border-b border-line">
-                <a
-                  href={`#${id}`}
+                <SheetLink
+                  sheet={id}
                   onClick={() => setMenuOpen(false)}
                   aria-current={active === id ? "location" : undefined}
                   className={`flex items-baseline gap-4 px-5 py-3.5 text-base ${active === id ? "bg-ink text-paper" : "text-ink"}`}
                 >
-                  <span className="w-4 text-sm tabular-nums text-muted">{i + 2}</span>
+                  <span className="w-4 text-sm tabular-nums text-muted">{sheetNumber(id)}</span>
                   {t.nav[id]}
-                </a>
+                </SheetLink>
               </li>
             ))}
             <li>

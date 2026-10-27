@@ -2,9 +2,10 @@
 
 import { useI18n } from "@/lib/i18n";
 import RichText from "./RichText";
-import SheetHeader from "./SheetHeader";
+import SheetHeader, { PrintTitleBlock } from "./SheetHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
 import CerataStore from "./CerataStore";
+import { Dimension, GridRef, RevisionCloud } from "./Drafting";
 
 // CounterFact paraphrase accuracy (%) from Table 4 of the Cerata paper, in the dictionary's row order.
 // `mine` marks the default configuration.
@@ -17,20 +18,39 @@ const rows = [
   { acc: 2.0, mine: false },
 ];
 
-export default function Research() {
+export default function Research({ rev }: { rev: string }) {
   const { t, locale } = useI18n();
   const r = t.research;
   const fmt = (n: number) => n.toLocaleString(locale === "tr" ? "tr-TR" : "en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
+  const fig1 = (
+    <figure id="fig-1" className="border-t border-ink">
+      <ArchitectureDiagram />
+      <figcaption className="border-t border-line px-5 py-3 text-sm text-muted text-pretty sm:px-8">
+        <span className="font-semibold text-accent">{r.figDiagram}</span> <GridRef target="fig-1" className="mr-1 text-xs" /> {r.figDiagramCaption}
+      </figcaption>
+    </figure>
+  );
+
   return (
-    <section id="research" className="border-b border-ink">
-      <SheetHeader n={2} title={r.title} heading={r.heading} />
+    <section id="research" data-sheet="2" data-sheet-id="research" className="border-b border-ink">
+      <SheetHeader id="research" title={r.title} heading={r.heading} />
 
       <div className="grid lg:grid-cols-12">
-        <div className="space-y-5 px-5 py-10 text-[1.0625rem] leading-[1.7] text-ink-soft sm:px-8 lg:col-span-7 lg:border-r lg:border-line">
-          <p className="max-w-[66ch]"><RichText parts={r.p1} /></p>
-          <p className="max-w-[66ch]"><RichText parts={r.p2} /></p>
-          <p className="max-w-[66ch]"><RichText parts={r.p3} /></p>
+        <div className="px-5 py-10 sm:px-8 lg:col-span-7 lg:border-r lg:border-line">
+          <Dimension>
+          <div className="max-w-[66ch] space-y-5 text-b8 leading-[1.65] text-ink-soft">
+            <p>
+              <RichText parts={r.p1} />
+            </p>
+            <p>
+              <RichText parts={r.p2} />
+            </p>
+            <p>
+              <RichText parts={r.p3} />
+            </p>
+          </div>
+          </Dimension>
         </div>
 
         <aside className="border-t border-line px-5 py-10 sm:px-8 lg:col-span-5 lg:border-t-0">
@@ -52,10 +72,10 @@ export default function Research() {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-baseline justify-between gap-4 py-2.5 transition-colors hover:bg-paper-dim"
+                  className="flex flex-col gap-0.5 py-2.5 transition-colors hover:bg-paper-dim sm:flex-row sm:items-baseline sm:justify-between sm:gap-4"
                 >
-                  <span className="link-line text-ink">{l.label}</span>
-                  <span className="shrink-0 text-muted">{l.note}</span>
+                  <span className="link-line break-all text-ink">{l.label}</span>
+                  <span className="text-muted sm:shrink-0">{l.note}</span>
                 </a>
               </li>
             ))}
@@ -63,23 +83,24 @@ export default function Research() {
         </aside>
       </div>
 
-      <figure className="border-t border-ink">
-        <ArchitectureDiagram />
-        <figcaption className="border-t border-line px-5 py-3 text-sm text-muted text-pretty sm:px-8">
-          <span className="font-semibold text-accent">{r.figDiagram}</span> {r.figDiagramCaption}
-        </figcaption>
-      </figure>
+      {rev ? (
+        <RevisionCloud rev={rev} label={r.revised(rev)} className="m-4">
+          {fig1}
+        </RevisionCloud>
+      ) : (
+        fig1
+      )}
 
       <div className="grid border-t border-ink lg:grid-cols-12">
-        <div className="lg:col-span-7 lg:border-r lg:border-ink">
+        <div id="fig-2" className="lg:col-span-7 lg:border-r lg:border-ink">
           <CerataStore />
         </div>
 
-        <figure className="flex flex-col border-t border-ink lg:col-span-5 lg:border-t-0">
+        <figure id="table-1" className="flex flex-col border-t border-ink lg:col-span-5 lg:border-t-0">
           <div className="flex-1 px-5 py-8 sm:px-8">
             <table className="w-full text-sm">
               <caption className="mb-4 text-left text-sm text-ink-soft text-pretty">
-                <span className="font-semibold text-accent">{r.benchFig}</span> {r.benchTitle}
+                <span className="font-semibold text-accent">{r.benchFig}</span> <GridRef target="table-1" className="mr-1 text-xs text-muted" /> {r.benchTitle}
               </caption>
               <thead>
                 <tr className="border-y border-ink text-left">
@@ -97,15 +118,10 @@ export default function Research() {
                     <td className={`py-3 pr-4 ${row.mine ? "font-semibold text-accent" : "text-ink-soft"}`}>
                       {r.benchRows[i]}
                       <span aria-hidden className="mt-2 block h-1 bg-paper-dim">
-                        <span
-                          className={`block h-full ${row.mine ? "bg-accent" : "bg-line-strong"}`}
-                          style={{ width: `${row.acc}%` }}
-                        />
+                        <span className={`bar-draw block h-full ${row.mine ? "bg-accent" : "bg-line-strong"}`} style={{ width: `${row.acc}%` }} />
                       </span>
                     </td>
-                    <td className={`py-3 text-right tabular-nums ${row.mine ? "font-semibold text-accent" : "text-ink"}`}>
-                      {fmt(row.acc)}
-                    </td>
+                    <td className={`py-3 text-right tabular-nums ${row.mine ? "font-semibold text-accent" : "text-ink"}`}>{fmt(row.acc)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -116,6 +132,7 @@ export default function Research() {
           </figcaption>
         </figure>
       </div>
+      <PrintTitleBlock id="research" title={r.title} />
     </section>
   );
 }
