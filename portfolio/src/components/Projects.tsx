@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import SheetHeader from "./SheetHeader";
+import SheetHeader, { PrintTitleBlock } from "./SheetHeader";
 
 type Cat = "ml" | "systems" | "apps";
 type Filter = "all" | Cat;
@@ -38,8 +38,8 @@ export default function Projects() {
   const shown = projects.map((proj, i) => ({ proj, item: i + 1 })).filter(({ proj }) => filter === "all" || proj.cat === filter);
 
   return (
-    <section id="projects" className="border-b border-ink">
-      <SheetHeader n={3} title={p.title} heading={p.heading} />
+    <section id="projects" data-sheet="3" data-sheet-id="projects" className="border-b border-ink">
+      <SheetHeader id="projects" title={p.title} heading={p.heading} />
 
       <div role="group" aria-label={p.filterLabel} className="flex flex-wrap border-b border-line">
         {filterOrder.map((f) => {
@@ -109,6 +109,7 @@ export default function Projects() {
         </a>
         .
       </p>
+      <PrintTitleBlock id="projects" title={p.title} />
     </section>
   );
 }

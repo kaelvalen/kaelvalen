@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import SheetHeader from "./SheetHeader";
+import SheetHeader, { PrintTitleBlock } from "./SheetHeader";
+import { Dimension } from "./Drafting";
 
 const EMAIL = "mehmetardahakbilen2005@gmail.com";
 
@@ -32,15 +33,15 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="border-b border-ink">
-      <SheetHeader n={5} title={c.title} heading={c.heading} />
+    <section id="contact" data-sheet="5" data-sheet-id="contact" className="border-b border-ink">
+      <SheetHeader id="contact" title={c.title} heading={c.heading} />
 
       <div className="grid lg:grid-cols-12">
         <div className="px-5 py-10 sm:px-8 lg:col-span-7 lg:border-r lg:border-line">
           <p className="text-sm text-muted">{c.lead}</p>
           <a
             href={`mailto:${EMAIL}`}
-            className="letter-wide mt-2 block break-words text-[clamp(1.35rem,3.2vw,2.5rem)] font-medium leading-tight text-ink underline decoration-line-strong decoration-1 underline-offset-[0.18em] transition-colors hover:decoration-accent"
+            className="letter-wide mt-2 block break-words text-[clamp(var(--text-a8),3.2vw,var(--text-b6))] font-medium leading-tight text-ink underline decoration-line-strong decoration-1 underline-offset-[0.18em] transition-colors hover:decoration-accent"
           >
             mehmetardahakbilen2005@<wbr />gmail.com
           </a>
@@ -63,7 +64,9 @@ export default function Contact() {
             </span>
           </div>
 
-          <p className="mt-10 max-w-xl text-lg leading-relaxed text-ink-soft text-pretty">{c.body}</p>
+          <Dimension className="mt-10">
+            <p className="max-w-[48ch] text-b8 text-ink-soft text-pretty">{c.body}</p>
+          </Dimension>
         </div>
 
         <div className="border-t border-line lg:col-span-5 lg:border-t-0">
@@ -89,6 +92,7 @@ export default function Contact() {
           </ul>
         </div>
       </div>
+      <PrintTitleBlock id="contact" title={c.title} />
     </section>
   );
 }

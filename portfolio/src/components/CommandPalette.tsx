@@ -3,6 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
+import { goToSheet, useActiveSheet } from "@/lib/nav";
+import { sheetNumber, type SheetId } from "@/lib/sheets";
+import { GOTO_ZONE, formatZone, parseZone, type GotoZoneDetail } from "@/lib/zones";
 
 type Category = "navigation" | "repositories" | "action";
 type Item = {
@@ -18,6 +21,7 @@ const EMAIL = "mehmetardahakbilen2005@gmail.com";
 export default function CommandPalette() {
   const { t, toggle: toggleLocale } = useI18n();
   const { theme, toggle: toggleTheme } = useTheme();
+  const activeSheet = useActiveSheet();
   const p = t.palette;
 
   const [open, setOpen] = useState(false);
@@ -40,9 +44,9 @@ export default function CommandPalette() {
   }, []);
 
   const items: Item[] = useMemo(() => {
-    const go = (hash: string) => () => {
+    const go = (id: SheetId) => () => {
       setOpen(false);
-      window.location.hash = hash;
+      goToSheet(id);
     };
     const ext = (url: string) => () => {
       setOpen(false);
@@ -50,10 +54,10 @@ export default function CommandPalette() {
     };
     const i = p.items;
     return [
-      { id: "nav-research", ...i.research, category: "navigation", action: go("#research") },
-      { id: "nav-projects", ...i.projects, category: "navigation", action: go("#projects") },
-      { id: "nav-toolbox", ...i.toolbox, category: "navigation", action: go("#toolbox") },
-      { id: "nav-contact", ...i.contact, category: "navigation", action: go("#contact") },
+      { id: "nav-research", ...i.research, category: "navigation", action: go("research") },
+      { id: "nav-projects", ...i.projects, category: "navigation", action: go("projects") },
+      { id: "nav-toolbox", ...i.toolbox, category: "navigation", action: go("toolbox") },
+      { id: "nav-contact", ...i.contact, category: "navigation", action: go("contact") },
       { id: "repo-cerata", ...i.cerata, category: "repositories", action: ext("https://github.com/kaelvalen/cerata") },
       { id: "repo-trainscope", ...i.trainscope, category: "repositories", action: ext("https://pypi.org/project/trainscope/") },
       { id: "repo-noesis", ...i.noesis, category: "repositories", action: ext("https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md") },
@@ -76,8 +80,9 @@ export default function CommandPalette() {
         ...(theme === "dark" ? i.themeLight : i.themeDark),
         category: "action",
         action: () => {
-          toggleTheme();
+          // Close first, so the exposure photographs the page and not the palette.
           setOpen(false);
+          requestAnimationFrame(() => requestAnimationFrame(toggleTheme));
         },
       },
       {
@@ -95,8 +100,23 @@ export default function CommandPalette() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
-    return items.filter((it) => `${it.title} ${it.desc} ${it.category}`.toLowerCase().includes(q));
-  }, [items, query]);
+    const matches = items.filter((it) => `${it.title} ${it.desc} ${it.category}`.toLowerCase().includes(q));
+    // A grid reference ("C4", "3·C4") goes to that zone of the drawing.
+    const zone = parseZone(q, sheetNumber(activeSheet));
+    if (!zone) return matches;
+    const ref = formatZone(zone);
+    const goZone: Item = {
+      id: `zone-${ref}`,
+      title: p.zone.title(ref),
+      desc: p.zone.desc,
+      category: "navigation",
+      action: () => {
+        setOpen(false);
+        window.dispatchEvent(new CustomEvent<GotoZoneDetail>(GOTO_ZONE, { detail: zone }));
+      },
+    };
+    return [goZone, ...matches];
+  }, [items, query, activeSheet, p.zone]);
 
   const active = filtered.length ? Math.min(selected, filtered.length - 1) : -1;
 
