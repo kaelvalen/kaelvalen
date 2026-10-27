@@ -17,7 +17,7 @@ type Project = {
 
 // Order is the parts-list order; an item keeps its number when the list is filtered.
 const projects: Project[] = [
-  { name: "cerata", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/cerata", cat: "ml" },
+  { name: "relic", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic", cat: "ml" },
   { name: "trainscope", stack: "FastAPI, React", status: "PyPI", href: "https://pypi.org/project/trainscope/", cat: "ml" },
   { name: "latch-lang", stack: "Rust", status: "crates.io", href: "https://github.com/kaelvalen/latch-lang", cat: "systems" },
   { name: "connor", stack: "Rust", status: "public", href: "https://github.com/kaelvalen/connor", cat: "systems" },

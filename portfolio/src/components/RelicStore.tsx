@@ -78,7 +78,7 @@ function route(q: Query, stored: number[]): Route {
   return hit ? { kind: "entry", fact: hit } : { kind: "otherRelation" };
 }
 
-export default function CerataStore() {
+export default function RelicStore() {
   const { t, locale } = useI18n();
   const s = t.research.store;
   const [stored, setStored] = useState<number[]>([1, 2, 3]);

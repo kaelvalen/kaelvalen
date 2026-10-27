@@ -31,7 +31,7 @@ test("references format and parse in every accepted spelling", () => {
   assert.deepEqual(parseZone("b2", 1, layout), { sheet: 1, col: 1, row: 2 });
   assert.equal(parseZone("C9", 1, layout), null, "row outside the sheet");
   assert.equal(parseZone("J2", 1, layout), null, "column outside A–H");
-  assert.equal(parseZone("cerata", 1, layout), null);
+  assert.equal(parseZone("relic", 1, layout), null);
 });
 
 test("a zone's rectangle contains the points that map to it", () => {

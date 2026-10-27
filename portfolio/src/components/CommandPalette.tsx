@@ -58,7 +58,7 @@ export default function CommandPalette() {
       { id: "nav-projects", ...i.projects, category: "navigation", action: go("projects") },
       { id: "nav-toolbox", ...i.toolbox, category: "navigation", action: go("toolbox") },
       { id: "nav-contact", ...i.contact, category: "navigation", action: go("contact") },
-      { id: "repo-cerata", ...i.cerata, category: "repositories", action: ext("https://github.com/kaelvalen/cerata") },
+      { id: "repo-relic", ...i.relic, category: "repositories", action: ext("https://github.com/kaelvalen/relic") },
       { id: "repo-trainscope", ...i.trainscope, category: "repositories", action: ext("https://pypi.org/project/trainscope/") },
       { id: "repo-noesis", ...i.noesis, category: "repositories", action: ext("https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md") },
       {
