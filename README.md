@@ -8,9 +8,9 @@ I work on ML systems: catching training runs before they fail, and changing what
 
 ## Now
 
-### [CERATA](https://github.com/kaelvalen/cerata): transactional knowledge updates for frozen language models
+### [RELIC](https://github.com/kaelvalen/relic): transactional knowledge updates for frozen language models
 
-Knowledge editing writes facts into a model's weights, but then a single fact cannot be removed, the fact behind an answer cannot be named, and an update's effect on unrelated questions is hard to bound. CERATA keeps the base model frozen and stores each new fact as its own entry: a note served in the context and, only when the note is not enough, a rank-16 LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold. A router whose parameters are fixed before any fact is stored applies at most one entry per query, so removal and attribution are exact by construction.
+Knowledge editing writes facts into a model's weights, but then a single fact cannot be removed, the fact behind an answer cannot be named, and an update's effect on unrelated questions is hard to bound. RELIC keeps the base model frozen and stores each new fact as its own entry: a note served in the context and, only when the note is not enough, a rank-16 LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold. A router whose parameters are fixed before any fact is stored applies at most one entry per query, so removal and attribution are exact by construction.
 
 Pre-registered study, Qwen2.5-1.5B-Instruct, 1000 facts per dataset, default configuration:
 
@@ -30,14 +30,14 @@ A CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it
 
 ### Closed: [NOESIS](https://github.com/kaelvalen/noesis)
 
-NOESIS tried to inject retrieved memory (a Titans-style associative matrix with test-time training) directly into a frozen LLM's hidden states. The result was negative and worth stating plainly: a frozen backbone's hidden manifold cannot be given new semantic content by an untrained vector injection, however carefully the geometry is aligned (KV-cache-purge controls, negative controls, 0% recall on a 50-fact benchmark). Writeup in [FINDINGS.md](https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md). CERATA started from this result.
+NOESIS tried to inject retrieved memory (a Titans-style associative matrix with test-time training) directly into a frozen LLM's hidden states. The result was negative and worth stating plainly: a frozen backbone's hidden manifold cannot be given new semantic content by an untrained vector injection, however carefully the geometry is aligned (KV-cache-purge controls, negative controls, 0% recall on a 50-fact benchmark). Writeup in [FINDINGS.md](https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md). RELIC started from this result.
 
 ---
 
 ## Projects
 
 ### Machine learning and research
-- [cerata](https://github.com/kaelvalen/cerata): transactional knowledge updates for frozen LMs. Notes and KL-gated LoRA adapters, parameter-free routing, exact removal and attribution. PyTorch, PEFT.
+- [relic](https://github.com/kaelvalen/relic): transactional knowledge updates for frozen LMs. Notes and KL-gated LoRA adapters, parameter-free routing, exact removal and attribution. PyTorch, PEFT.
 - [trainscope](https://pypi.org/project/trainscope/): post-mortem flight recorder for LLM training loss spikes. FastAPI and React, CUSUM change-point detection, WandB auto-attach, on PyPI.
 - [noesis](https://github.com/kaelvalen/noesis): continual learning with a frozen backbone and vector memory injection. Closed with a documented negative result.
 - [engram](https://github.com/kaelvalen/engram): hybrid linear-recurrent backbone, Mamba-2 SSD blocks interleaved 3:1 with Gated Delta Rule blocks, applied to PTB-XL, Speech Commands and sCIFAR-10 (312 tests).

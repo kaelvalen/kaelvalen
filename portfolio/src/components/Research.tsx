@@ -4,10 +4,10 @@ import { useI18n } from "@/lib/i18n";
 import RichText from "./RichText";
 import SheetHeader, { PrintTitleBlock } from "./SheetHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
-import CerataStore from "./CerataStore";
+import RelicStore from "./RelicStore";
 import { Dimension, GridRef, RevisionCloud } from "./Drafting";
 
-// CounterFact paraphrase accuracy (%) from Table 4 of the Cerata paper, in the dictionary's row order.
+// CounterFact paraphrase accuracy (%) from Table 4 of the RELIC paper, in the dictionary's row order.
 // `mine` marks the default configuration.
 const rows = [
   { acc: 89.1, mine: true },
@@ -93,7 +93,7 @@ export default function Research({ rev }: { rev: string }) {
 
       <div className="grid border-t border-ink lg:grid-cols-12">
         <div id="fig-2" className="lg:col-span-7 lg:border-r lg:border-ink">
-          <CerataStore />
+          <RelicStore />
         </div>
 
         <figure id="table-1" className="flex flex-col border-t border-ink lg:col-span-5 lg:border-t-0">

@@ -2,19 +2,19 @@
 
 import { useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import CerataPanel from "./diagram/CerataPanel";
+import RelicPanel from "./diagram/RelicPanel";
 import FlightRecorder from "./diagram/FlightRecorder";
 
-type Mode = "trainscope" | "cerata";
-const modes: Mode[] = ["trainscope", "cerata"];
+type Mode = "trainscope" | "relic";
+const modes: Mode[] = ["trainscope", "relic"];
 
 export default function ArchitectureDiagram() {
   const { t } = useI18n();
   const d = t.diagram;
   const [mode, setMode] = useState<Mode>("trainscope");
-  const tabRefs = useRef<Record<Mode, HTMLButtonElement | null>>({ trainscope: null, cerata: null });
+  const tabRefs = useRef<Record<Mode, HTMLButtonElement | null>>({ trainscope: null, relic: null });
 
-  const label = (m: Mode) => (m === "trainscope" ? d.tabTrainscope : d.tabCerata);
+  const label = (m: Mode) => (m === "trainscope" ? d.tabTrainscope : d.tabRelic);
 
   const onTabKey = (e: React.KeyboardEvent, i: number) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
@@ -65,7 +65,7 @@ export default function ArchitectureDiagram() {
         className="animate-fade-in px-5 py-6 sm:px-8 sm:py-8"
         key={mode}
       >
-        {mode === "cerata" ? <CerataPanel /> : <FlightRecorder />}
+        {mode === "relic" ? <RelicPanel /> : <FlightRecorder />}
       </div>
     </div>
   );

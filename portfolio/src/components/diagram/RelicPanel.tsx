@@ -58,9 +58,9 @@ function Flow({ titles, label }: { titles: string[]; label: string }) {
 }
 
 /** The three store operations as step-by-step flows, following the paper's Algorithm 1. */
-export default function CerataPanel() {
+export default function RelicPanel() {
   const { t } = useI18n();
-  const c = t.diagram.cerata;
+  const c = t.diagram.relic;
   const [op, setOp] = useState<Op>("add");
   const steps = c.steps[op];
 

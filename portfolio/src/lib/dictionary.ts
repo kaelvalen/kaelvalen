@@ -4,7 +4,7 @@ export type Locale = "en" | "tr";
 export type Rich = (string | { t: string; href: string })[];
 
 const TRAINSCOPE = "https://pypi.org/project/trainscope/";
-const CERATA = "https://github.com/kaelvalen/cerata";
+const RELIC = "https://github.com/kaelvalen/relic";
 const NOESIS = "https://github.com/kaelvalen/noesis";
 const FINDINGS = "https://github.com/kaelvalen/noesis/blob/main/FINDINGS.md";
 
@@ -45,7 +45,7 @@ export const en = {
       "trainscope warns 5 to 20 steps before a loss spike.",
       "0.0% false positives across 280+ held-out noise scenarios.",
       "100% detection for drift between 0.10σ and 0.50σ.",
-      "CERATA answers 89.1% of CounterFact paraphrases at 4.3% leakage, with 1,000 facts on a frozen Qwen2.5-1.5B.",
+      "RELIC answers 89.1% of CounterFact paraphrases at 4.3% leakage, with 1,000 facts on a frozen Qwen2.5-1.5B.",
     ],
     titleBlock: {
       label: "Title block",
@@ -74,7 +74,7 @@ export const en = {
     ] as Rich,
     p2: [
       "Where trainscope watches training runs, ",
-      { t: "CERATA", href: CERATA },
+      { t: "RELIC", href: RELIC },
       " asks how a frozen language model can take in facts after deployment and give them back. Each fact is a separate entry: a note served in the context and, only when the note is not enough, a small LoRA adapter trained with a KL penalty toward the base and admitted only if its divergence on 40 held-out canary prompts stays below a threshold. A router whose parameters are fixed before any fact is stored (a relation encoder trained offline on relation triplets, then frozen) applies at most one entry per query, so removing a fact and naming the fact behind an answer are exact by construction. In a pre-registered study with Qwen2.5-1.5B-Instruct and 1,000 facts each from CounterFact and zsRE, it answers 89.1% of CounterFact paraphrases at 4.3% leakage and 98.2% of zsRE paraphrases, and only 16.2% of the facts need an adapter. Adapters now shrink to rank 2 with LoRA+ in int8, 373 KB per fact instead of 8.7 MB, with every serving reading within 0.01. Leakage into neighboring relations is the open problem: 11.7% of natural questions about a closely related attribute, written by another model, get a wrong stored answer.",
     ] as Rich,
     p3: [
@@ -87,7 +87,7 @@ export const en = {
     marginalia: "Notes",
     references: "References",
     figDiagram: "Fig. 1",
-    figDiagramCaption: "The two instruments. Switch between the trainscope recorder and the CERATA architecture.",
+    figDiagramCaption: "The two instruments. Switch between the trainscope recorder and the RELIC architecture.",
     notes: [
       "removal is deletion: on CounterFact all 100 removed facts return to the base model's answer, and a removal takes about 2.5 ms.",
       "the divergence check uses 40 held-out canary prompts; the two training prompts understate an adapter's effect about seventeen-fold.",
@@ -97,7 +97,7 @@ export const en = {
     ],
     links: [
       { label: "pypi.org/project/trainscope", note: "loss spike debugger", href: TRAINSCOPE },
-      { label: "github.com/kaelvalen/cerata", note: "knowledge updates for frozen LMs", href: CERATA },
+      { label: "github.com/kaelvalen/relic", note: "knowledge updates for frozen LMs", href: RELIC },
       { label: "noesis / FINDINGS.md", note: "continual learning", href: FINDINGS },
     ],
     store: {
@@ -146,16 +146,16 @@ export const en = {
     benchConfig: "method",
     benchAcc: "paraphrase (%)",
     benchRows: [
-      "Cerata, default: trained relation router, adapter and note",
-      "Cerata, router v4, adapter and note",
-      "Cerata, tiered: adapter for 16.2% of facts",
+      "RELIC, default: trained relation router, adapter and note",
+      "RELIC, router v4, adapter and note",
+      "RELIC, tiered: adapter for 16.2% of facts",
       "Note only (instructed retrieval)",
       "WISE, merged after 200 edits",
       "GRACE",
     ],
     specsTitle: "Setup",
     specs:
-      "Cerata and the note store 1,000 facts; GRACE and WISE (EasyEdit) ran as 200 sequential edits, so the comparison is descriptive. Neither GRACE nor WISE can remove a single edit. Pre-registered; from Table 4 of the paper.",
+      "RELIC and the note store 1,000 facts; GRACE and WISE (EasyEdit) ran as 200 sequential edits, so the comparison is descriptive. Neither GRACE nor WISE can remove a single edit. Pre-registered; from Table 4 of the paper.",
   },
 
   projects: {
@@ -176,7 +176,7 @@ export const en = {
       archived: "archived",
     },
     blurbs: {
-      cerata: "transactional knowledge updates for frozen language models: exact removal and attribution",
+      relic: "transactional knowledge updates for frozen language models: exact removal and attribution",
       trainscope: "loss-spike flight recorder for LLM training runs",
       "latch-lang": "a programming language of my own",
       connor: "terminal-native CI/CD runner (DAG execution, no YAML)",
@@ -196,7 +196,7 @@ export const en = {
       { label: "Web", items: "TypeScript, React, Next.js" },
       { label: "Environment", items: "NixOS, Docker, Git" },
     ],
-    note: "The laptop runs NixOS. CERATA runs on a single RTX 5060: if the architecture does not fit in 8 GB, the architecture changes.",
+    note: "The laptop runs NixOS. RELIC runs on a single RTX 5060: if the architecture does not fit in 8 GB, the architecture changes.",
   },
 
   contact: {
@@ -234,11 +234,11 @@ export const en = {
     commands: "Commands",
     categories: { navigation: "navigation", repositories: "repositories", action: "action" },
     items: {
-      research: { title: "Research", desc: "Sheet 2: trainscope, CERATA, the editable store" },
+      research: { title: "Research", desc: "Sheet 2: trainscope, RELIC, the editable store" },
       projects: { title: "Projects", desc: "Sheet 3: the parts list of open work" },
       toolbox: { title: "Toolbox", desc: "Sheet 4: PyTorch, Triton, NixOS, RTX 5060" },
       contact: { title: "Contact", desc: "Sheet 5: email and links" },
-      cerata: { title: "cerata repository", desc: "Open github.com/kaelvalen/cerata in new tab" },
+      relic: { title: "relic repository", desc: "Open github.com/kaelvalen/relic in new tab" },
       trainscope: { title: "trainscope on PyPI", desc: "Open pypi.org/project/trainscope in new tab" },
       noesis: { title: "noesis FINDINGS.md", desc: "Open continual learning findings on GitHub" },
       email: { title: "Copy email address to clipboard", desc: "mehmetardahakbilen2005@gmail.com" },
@@ -252,8 +252,8 @@ export const en = {
     title: "System architecture & flight recorder",
     tablist: "Project diagrams",
     tabTrainscope: "Trainscope recorder",
-    tabCerata: "CERATA",
-    cerata: {
+    tabRelic: "RELIC",
+    relic: {
       intro: "The base model stays frozen. Each fact is an entry; three operations act on the store.",
       opsLabel: "Store operations",
       ops: { add: "Add a fact", serve: "Serve a query", remove: "Remove a fact" },
@@ -348,7 +348,7 @@ export const tr: Dict = {
       "trainscope, bir loss spike gerçekleşmeden 5 ila 20 adım önce uyarı veriyor.",
       "280'den fazla bağımsız gürültü senaryosunda %0,0 yanlış pozitif.",
       "0,10σ ile 0,50σ arasındaki kaymaların (drift) tamamı tespit edildi.",
-      "CERATA, dondurulmuş bir Qwen2.5-1.5B üzerinde 1.000 olguyla CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla doğru yanıtlıyor.",
+      "RELIC, dondurulmuş bir Qwen2.5-1.5B üzerinde 1.000 olguyla CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla doğru yanıtlıyor.",
     ],
     titleBlock: {
       label: "Antet",
@@ -377,7 +377,7 @@ export const tr: Dict = {
     ] as Rich,
     p2: [
       "trainscope eğitim süreçlerini izlerken ",
-      { t: "CERATA", href: CERATA },
+      { t: "RELIC", href: RELIC },
       " başka bir soruya yanıt arıyor: dondurulmuş bir dil modeli, kullanıma alındıktan sonra yeni olguları nasıl öğrenebilir ve gerektiğinde nasıl geri bırakabilir? Her olgu ayrı bir kayıt olarak tutuluyor: bağlamda sunulan bir not ve yalnızca not yetmediğinde eklenen küçük bir LoRA adapter. Adapter, temel modele doğru bir KL cezasıyla eğitiliyor ve ayrılmış (held-out) 40 canary prompt üzerindeki ıraksaması eşiğin altında kalırsa kabul ediliyor. Parametreleri hiçbir olgu eklenmeden önce sabitlenen bir yönlendirici (router; ilişki üçlüleri üzerinde önceden eğitilip dondurulmuş bir ilişki kodlayıcısı), her sorguya en fazla bir kayıt uyguluyor; bu sayede bir olguyu silmek ve bir cevabın hangi olgudan geldiğini göstermek yapı gereği kesin. Qwen2.5-1.5B-Instruct ile CounterFact ve zsRE'den 1.000'er olgu kullanılan ön kayıtlı (pre-registered) çalışmada CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla, zsRE parafrazlarının ise %98,2'sini doğru yanıtlıyor; olguların yalnızca %16,2'si adapter gerektiriyor. Adapter'lar artık LoRA+ ile rank 2'ye iniyor ve int8 olarak 8,7 MB yerine olgu başına 373 KB tutuyor; sunum ölçümlerinin hepsi 0,01'den az değişiyor. Komşu ilişkilere (relation) sızıntı hâlâ açık bir problem: yakın bir özelliği soran ve başka bir modelin yazdığı doğal soruların %11,7'si yanlış bir kayıtlı cevap alıyor.",
     ] as Rich,
     p3: [
@@ -390,7 +390,7 @@ export const tr: Dict = {
     marginalia: "Notlar",
     references: "Kaynaklar",
     figDiagram: "Şekil 1",
-    figDiagramCaption: "İki araç. trainscope kayıt aracı ile CERATA mimarisi arasında geçiş yapabilirsin.",
+    figDiagramCaption: "İki araç. trainscope kayıt aracı ile RELIC mimarisi arasında geçiş yapabilirsin.",
     notes: [
       "silmek, kaydı silmek demek: CounterFact'te silinen 100 olgunun tamamı temel modelin cevabına geri dönüyor; tek bir silme yaklaşık 2,5 ms sürüyor.",
       "ıraksama denetimi ayrılmış 40 canary prompt kullanıyor; eğitimde kullanılan iki prompt, bir adapter'ın etkisini yaklaşık on yedi kat küçük gösteriyor.",
@@ -400,7 +400,7 @@ export const tr: Dict = {
     ],
     links: [
       { label: "pypi.org/project/trainscope", note: "loss spike hata ayıklayıcı", href: TRAINSCOPE },
-      { label: "github.com/kaelvalen/cerata", note: "dondurulmuş dil modelleri için bilgi güncelleme", href: CERATA },
+      { label: "github.com/kaelvalen/relic", note: "dondurulmuş dil modelleri için bilgi güncelleme", href: RELIC },
       { label: "noesis / FINDINGS.md", note: "sürekli öğrenme", href: FINDINGS },
     ],
     store: {
@@ -449,16 +449,16 @@ export const tr: Dict = {
     benchConfig: "yöntem",
     benchAcc: "parafraz (%)",
     benchRows: [
-      "Cerata, varsayılan: eğitilmiş ilişki yönlendiricisi, adapter ve not",
-      "Cerata, router v4, adapter ve not",
-      "Cerata, kademeli depo: olguların %16,2'sine adapter",
+      "RELIC, varsayılan: eğitilmiş ilişki yönlendiricisi, adapter ve not",
+      "RELIC, router v4, adapter ve not",
+      "RELIC, kademeli depo: olguların %16,2'sine adapter",
       "Yalnızca not (talimatlı retrieval)",
       "WISE, 200 düzenlemeden sonra birleştirilmiş",
       "GRACE",
     ],
     specsTitle: "Deney düzeni",
     specs:
-      "Cerata ve not yöntemi 1.000 olgu saklıyor; GRACE ve WISE (EasyEdit) ise 200 ardışık düzenlemeyle çalıştırıldı, bu yüzden karşılaştırma betimsel. GRACE de WISE de tek bir düzenlemeyi geri alamıyor. Ön kayıtlı; makalenin 4. tablosundan.",
+      "RELIC ve not yöntemi 1.000 olgu saklıyor; GRACE ve WISE (EasyEdit) ise 200 ardışık düzenlemeyle çalıştırıldı, bu yüzden karşılaştırma betimsel. GRACE de WISE de tek bir düzenlemeyi geri alamıyor. Ön kayıtlı; makalenin 4. tablosundan.",
   },
 
   projects: {
@@ -479,7 +479,7 @@ export const tr: Dict = {
       archived: "arşivlendi",
     },
     blurbs: {
-      cerata: "dondurulmuş dil modelleri için işlemsel (transactional) bilgi güncelleme: kesin silme ve kaynak gösterme",
+      relic: "dondurulmuş dil modelleri için işlemsel (transactional) bilgi güncelleme: kesin silme ve kaynak gösterme",
       trainscope: "LLM eğitimlerindeki loss spike'lar için kara kutu",
       "latch-lang": "kendi programlama dilim",
       connor: "terminalde çalışan CI/CD aracı (DAG tabanlı yürütme, YAML yok)",
@@ -499,7 +499,7 @@ export const tr: Dict = {
       { label: "Web", items: "TypeScript, React, Next.js" },
       { label: "Ortam", items: "NixOS, Docker, Git" },
     ],
-    note: "Laptop'umda NixOS kurulu. CERATA tek bir RTX 5060 üzerinde çalışıyor: mimari 8 GB'a sığmıyorsa değişen mimari oluyor.",
+    note: "Laptop'umda NixOS kurulu. RELIC tek bir RTX 5060 üzerinde çalışıyor: mimari 8 GB'a sığmıyorsa değişen mimari oluyor.",
   },
 
   contact: {
@@ -537,11 +537,11 @@ export const tr: Dict = {
     commands: "Komutlar",
     categories: { navigation: "gezinme", repositories: "depolar", action: "eylem" },
     items: {
-      research: { title: "Araştırma", desc: "Pafta 2: trainscope, CERATA, düzenlenebilir depo" },
+      research: { title: "Araştırma", desc: "Pafta 2: trainscope, RELIC, düzenlenebilir depo" },
       projects: { title: "Projeler", desc: "Pafta 3: açık çalışmaların parça listesi" },
       toolbox: { title: "Araçlar", desc: "Pafta 4: PyTorch, Triton, NixOS, RTX 5060" },
       contact: { title: "İletişim", desc: "Pafta 5: e-posta ve bağlantılar" },
-      cerata: { title: "cerata deposu", desc: "github.com/kaelvalen/cerata adresini yeni sekmede aç" },
+      relic: { title: "relic deposu", desc: "github.com/kaelvalen/relic adresini yeni sekmede aç" },
       trainscope: { title: "PyPI'da trainscope", desc: "pypi.org/project/trainscope adresini yeni sekmede aç" },
       noesis: { title: "noesis FINDINGS.md", desc: "Sürekli öğrenme bulgularını GitHub'da aç" },
       email: { title: "E-posta adresini kopyala", desc: "mehmetardahakbilen2005@gmail.com" },
@@ -555,8 +555,8 @@ export const tr: Dict = {
     title: "Sistem mimarisi ve kayıt aracı",
     tablist: "Proje diyagramları",
     tabTrainscope: "trainscope kayıt aracı",
-    tabCerata: "CERATA",
-    cerata: {
+    tabRelic: "RELIC",
+    relic: {
       intro: "Temel model dondurulmuş halde kalıyor. Her olgu bir kayıt olarak tutuluyor ve depo üzerinde üç işlem tanımlı.",
       opsLabel: "Depo işlemleri",
       ops: { add: "Olgu ekle", serve: "Sorgu yanıtla", remove: "Olgu sil" },
