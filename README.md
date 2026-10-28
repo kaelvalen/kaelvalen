@@ -1,6 +1,6 @@
 # Mehmet Arda Hakbilen (kael valen)
 
-I work on ML systems: catching training runs before they fail, and changing what a deployed model knows without retraining it. Ankara, Türkiye. Everything here runs on one 8 GB laptop GPU.
+I work on ML systems: catching training runs before they fail, and changing what a deployed model knows without retraining it. Ankara, Türkiye.
 
 [email](mailto:mehmetardahakbilen2005@gmail.com) · [linkedin](https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/) · [portfolio: kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
@@ -53,7 +53,7 @@ NOESIS tried to inject retrieved memory (a Titans-style associative matrix with 
 
 ## Stack
 
-PyTorch for ML work, with Hugging Face Transformers and PEFT for the language-model experiments and Triton when there is no way around it. Rust and Go for systems, TypeScript and React for frontends. The laptop runs NixOS with an RTX 5060 (8 GB): if an experiment does not fit, the experiment changes.
+PyTorch for ML work, with Hugging Face Transformers and PEFT for the language-model experiments and Triton when there is no way around it. Rust and Go for systems, TypeScript and React for frontends.
 
 <p align="center">
   <img src="https://github.com/kaelvalen/kaelvalen/blob/metrics/github-metrics.svg" width="85%" alt="GitHub metrics" />

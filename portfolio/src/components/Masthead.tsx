@@ -150,13 +150,9 @@ export default function Masthead({ revision }: { revision: Revision }) {
               <dt className={cellLabel}>{tb.alias}</dt>
               <dd>{h.alias}</dd>
             </div>
-            <div className={`${cell} border-r border-b`}>
+            <div className={`${cell} col-span-2 border-b`}>
               <dt className={cellLabel}>{tb.based}</dt>
               <dd>{tb.basedValue}</dd>
-            </div>
-            <div className={`${cell} border-b`}>
-              <dt className={cellLabel}>{tb.hardware}</dt>
-              <dd>{tb.hardwareValue}</dd>
             </div>
             <div className={`${cell} border-r`}>
               <dt className={cellLabel}>{tb.current}</dt>

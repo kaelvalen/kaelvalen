@@ -54,8 +54,6 @@ export const en = {
       alias: "Alias",
       based: "Based in",
       basedValue: "Ankara, Türkiye",
-      hardware: "Hardware",
-      hardwareValue: "1× RTX 5060 Laptop, 8 GB",
       current: "Current work",
       currentValue: "trainscope, on PyPI",
       sheet: "Sheet",
@@ -93,7 +91,6 @@ export const en = {
       "the divergence check uses 40 held-out canary prompts; the two training prompts understate an adapter's effect about seventeen-fold.",
       "an adapter is rank 2 on q/v in every layer, trained with LoRA+ and stored in int8: 373 KB. The reported stores keep rank 16, because the rank-2 rebuild kept 0.675 of base answers on a wrong route, under the pre-registered 0.69.",
       "the relation encoder generalises: paraphrase routing is 0.988 on phrasings it was trained on, 0.960 on unseen phrasings and 0.838 on relations it never saw.",
-      "constraint: everything runs on a single RTX 5060 Laptop within 8 GB VRAM.",
     ],
     links: [
       { label: "pypi.org/project/trainscope", note: "loss spike debugger", href: TRAINSCOPE },
@@ -194,9 +191,9 @@ export const en = {
       { label: "Machine learning", items: "PyTorch, Triton, CUDA" },
       { label: "Systems", items: "Rust, Go, C++" },
       { label: "Web", items: "TypeScript, React, Next.js" },
-      { label: "Environment", items: "NixOS, Docker, Git" },
+      { label: "Environment", items: "Docker, Git" },
     ],
-    note: "The laptop runs NixOS. RELIC runs on a single RTX 5060: if the architecture does not fit in 8 GB, the architecture changes.",
+    note: "Most of the work is in PyTorch, with Triton only when there is no way around it.",
   },
 
   contact: {
@@ -236,7 +233,7 @@ export const en = {
     items: {
       research: { title: "Research", desc: "Sheet 2: trainscope, RELIC, the editable store" },
       projects: { title: "Projects", desc: "Sheet 3: the parts list of open work" },
-      toolbox: { title: "Toolbox", desc: "Sheet 4: PyTorch, Triton, NixOS, RTX 5060" },
+      toolbox: { title: "Toolbox", desc: "Sheet 4: PyTorch, Triton, Rust, Go" },
       contact: { title: "Contact", desc: "Sheet 5: email and links" },
       relic: { title: "relic repository", desc: "Open github.com/kaelvalen/relic in new tab" },
       trainscope: { title: "trainscope on PyPI", desc: "Open pypi.org/project/trainscope in new tab" },
@@ -357,8 +354,6 @@ export const tr: Dict = {
       alias: "Takma ad",
       based: "Konum",
       basedValue: "Ankara, Türkiye",
-      hardware: "Donanım",
-      hardwareValue: "1× RTX 5060 Laptop, 8 GB",
       current: "Güncel çalışma",
       currentValue: "trainscope (PyPI)",
       sheet: "Pafta",
@@ -396,7 +391,6 @@ export const tr: Dict = {
       "ıraksama denetimi ayrılmış 40 canary prompt kullanıyor; eğitimde kullanılan iki prompt, bir adapter'ın etkisini yaklaşık on yedi kat küçük gösteriyor.",
       "adapter her katmanda q/v üzerinde rank 2, LoRA+ ile eğitiliyor ve int8 olarak saklanıyor: 373 KB. Raporlanan depolar rank 16'da kalıyor, çünkü rank-2 yeniden kurulumu yanlış yönlendirmede temel cevapların 0,675'ini korudu; ön kayıttaki sınır 0,69.",
       "ilişki kodlayıcısı genelleşiyor: parafraz yönlendirmesi eğitildiği ifadelerde 0,988, görmediği ifadelerde 0,960, hiç görmediği ilişkilerde 0,838.",
-      "kısıt: her şey tek bir RTX 5060 Laptop GPU'da, 8 GB VRAM içinde çalışıyor.",
     ],
     links: [
       { label: "pypi.org/project/trainscope", note: "loss spike hata ayıklayıcı", href: TRAINSCOPE },
@@ -497,9 +491,9 @@ export const tr: Dict = {
       { label: "Makine öğrenmesi", items: "PyTorch, Triton, CUDA" },
       { label: "Sistemler", items: "Rust, Go, C++" },
       { label: "Web", items: "TypeScript, React, Next.js" },
-      { label: "Ortam", items: "NixOS, Docker, Git" },
+      { label: "Ortam", items: "Docker, Git" },
     ],
-    note: "Laptop'umda NixOS kurulu. RELIC tek bir RTX 5060 üzerinde çalışıyor: mimari 8 GB'a sığmıyorsa değişen mimari oluyor.",
+    note: "İşin çoğu PyTorch'ta; Triton'a ancak başka yol kalmadığında başvuruyorum.",
   },
 
   contact: {
@@ -539,7 +533,7 @@ export const tr: Dict = {
     items: {
       research: { title: "Araştırma", desc: "Pafta 2: trainscope, RELIC, düzenlenebilir depo" },
       projects: { title: "Projeler", desc: "Pafta 3: açık çalışmaların parça listesi" },
-      toolbox: { title: "Araçlar", desc: "Pafta 4: PyTorch, Triton, NixOS, RTX 5060" },
+      toolbox: { title: "Araçlar", desc: "Pafta 4: PyTorch, Triton, Rust, Go" },
       contact: { title: "İletişim", desc: "Pafta 5: e-posta ve bağlantılar" },
       relic: { title: "relic deposu", desc: "github.com/kaelvalen/relic adresini yeni sekmede aç" },
       trainscope: { title: "PyPI'da trainscope", desc: "pypi.org/project/trainscope adresini yeni sekmede aç" },
