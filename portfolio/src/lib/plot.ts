@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, type RefObject } from "react";
-import { cubicBezier } from "./paper-gl";
 
 /*
  * The pen plotter. Every stroke marked [data-plot] in a figure is drawn in order by one pen: it
@@ -9,9 +8,27 @@ import { cubicBezier } from "./paper-gl";
  * moves show on a test plot), puts the pen down, draws at constant speed, and lifts. Labels marked
  * [data-plot-label] are inked once their stroke (data-after, a stroke index) is down, or at the end.
  *
- * Timing comes from the motion tokens in globals.css: pen speed is constant, travel takes
- * --dur-travel, and the whole plot is capped so a dense figure never keeps the reader waiting.
+ * Pen speed is constant, travel is short, and the whole plot is capped so a dense figure never
+ * keeps the reader waiting.
  */
+
+/** CSS cubic-bezier as a function of time, solved by bisection. */
+function cubicBezier(x1: number, y1: number, x2: number, y2: number) {
+  const bx = (u: number) => 3 * x1 * u * (1 - u) ** 2 + 3 * x2 * u * u * (1 - u) + u ** 3;
+  const by = (u: number) => 3 * y1 * u * (1 - u) ** 2 + 3 * y2 * u * u * (1 - u) + u ** 3;
+  return (t: number) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    let lo = 0;
+    let hi = 1;
+    for (let i = 0; i < 24; i++) {
+      const mid = (lo + hi) / 2;
+      if (bx(mid) < t) lo = mid;
+      else hi = mid;
+    }
+    return by((lo + hi) / 2);
+  };
+}
 
 const easePen = cubicBezier(0.5, 0, 0.2, 1);
 const SVG_NS = "http://www.w3.org/2000/svg";

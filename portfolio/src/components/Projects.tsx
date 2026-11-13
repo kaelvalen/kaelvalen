@@ -1,115 +1,105 @@
 "use client";
 
-import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import SheetHeader, { PrintTitleBlock } from "./SheetHeader";
+import { basinsFor, slice, surface, type BasinId } from "@/lib/landscape";
+import { BASIN_NAMES } from "./Hero";
 
-type Cat = "ml" | "systems" | "apps";
-type Filter = "all" | Cat;
+type Status = "active" | "PyPI" | "crates.io" | "public" | "closed" | "superseded" | "archived";
+type Project = { name: string; stack: string; status: Status; href: string; since?: string };
 
-type Project = {
-  name: string;
-  stack: string;
-  status: "active" | "PyPI" | "crates.io" | "public" | "superseded" | "archived";
-  href: string;
-  cat: Cat;
-};
-
-// Order is the parts-list order; an item keeps its number when the list is filtered.
-const projects: Project[] = [
-  { name: "relic", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic", cat: "ml" },
-  { name: "trainscope", stack: "FastAPI, React", status: "PyPI", href: "https://pypi.org/project/trainscope/", cat: "ml" },
-  { name: "latch-lang", stack: "Rust", status: "crates.io", href: "https://github.com/kaelvalen/latch-lang", cat: "systems" },
-  { name: "connor", stack: "Rust", status: "public", href: "https://github.com/kaelvalen/connor", cat: "systems" },
-  { name: "weave", stack: "Tauri, React, Rust", status: "active", href: "https://github.com/kaelvalen/weave", cat: "apps" },
-  { name: "beyond_transformer", stack: "PyTorch", status: "superseded", href: "https://github.com/kaelvalen/beyond_transformer", cat: "ml" },
-  { name: "nanonet", stack: "Go, Rust, TypeScript", status: "archived", href: "https://github.com/kaelvalen/nanonet", cat: "systems" },
+// The projects that are basins on the map, in reading order.
+const onMap: (Project & { id: BasinId })[] = [
+  { id: "relic", name: "relic", since: "2026-10", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic" },
+  { id: "trainscope", name: "trainscope", since: "2026-05", stack: "FastAPI, React", status: "PyPI", href: "https://pypi.org/project/trainscope/" },
+  { id: "noesis", name: "noesis", since: "2026-06", stack: "PyTorch", status: "closed", href: "https://github.com/kaelvalen/noesis" },
+  { id: "latch-lang", name: "latch-lang", since: "2026-02", stack: "Rust", status: "crates.io", href: "https://github.com/kaelvalen/latch-lang" },
+  { id: "measure", name: "measure", since: "2026-10", stack: "Python, Claude Code", status: "public", href: "https://github.com/kaelvalen/measure" },
+  { id: "connor", name: "connor", since: "2026-04", stack: "Rust", status: "public", href: "https://github.com/kaelvalen/connor" },
 ];
 
-const filterOrder: Filter[] = ["all", "ml", "systems", "apps"];
-const row = "md:grid-cols-[4rem_minmax(9rem,13rem)_1fr_minmax(8rem,12rem)_7rem]";
+const also: Project[] = [
+  { name: "engram", stack: "PyTorch", status: "public", href: "https://github.com/kaelvalen/engram" },
+  { name: "weave", stack: "Tauri, React, Rust", status: "active", href: "https://github.com/kaelvalen/weave" },
+  { name: "beyond_transformer", stack: "PyTorch", status: "superseded", href: "https://github.com/kaelvalen/beyond_transformer" },
+  { name: "nanonet", stack: "Go, Rust, TypeScript", status: "archived", href: "https://github.com/kaelvalen/nanonet" },
+];
+
+// A slice through each basin of the wide map, as an SVG path in a 220 × 44 box: low loss is low.
+const basins = basinsFor(false);
+const f = surface(basins);
+const slices = Object.fromEntries(
+  basins.map((b) => {
+    const s = slice(f, b);
+    const lo = Math.min(...s), span = Math.max(...s) - lo || 1;
+    const y = (v: number) => (40 - ((v - lo) / span) * 36).toFixed(1);
+    return [b.id, { d: s.map((v, i) => `${i ? "L" : "M"}${((i / (s.length - 1)) * 220).toFixed(1)} ${y(v)}`).join(""), mid: y(s[s.length >> 1]) }];
+  })
+) as Record<BasinId, { d: string; mid: string }>;
 
 export default function Projects() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const p = t.projects;
-  const [filter, setFilter] = useState<Filter>("all");
-
-  const count = (f: Filter) => (f === "all" ? projects.length : projects.filter((x) => x.cat === f).length);
-  const shown = projects.map((proj, i) => ({ proj, item: i + 1 })).filter(({ proj }) => filter === "all" || proj.cat === filter);
+  const month = (ym: string) => new Date(`${ym}-15T12:00:00Z`).toLocaleDateString(locale === "tr" ? "tr-TR" : "en-GB", { month: "short", year: "numeric" });
 
   return (
-    <section id="projects" data-sheet="3" data-sheet-id="projects" className="border-b border-ink">
-      <SheetHeader id="projects" title={p.title} heading={p.heading} />
-
-      <div role="group" aria-label={p.filterLabel} className="flex flex-wrap border-b border-line">
-        {filterOrder.map((f) => {
-          const on = filter === f;
-          return (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setFilter(f)}
-              aria-pressed={on}
-              className={`cursor-pointer border-r border-line px-5 py-2.5 text-sm transition-colors sm:px-6 ${
-                on ? "bg-ink text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
-              }`}
-            >
-              {p.filters[f]} <span className={`tabular-nums ${on ? "text-paper/70" : "text-muted"}`}>{count(f)}</span>
-            </button>
-          );
-        })}
+    <section id="projects" data-sheet-id="projects" className="mx-auto grid max-w-[1280px] gap-10 px-5 pt-24 pb-20 sm:px-12 sm:pt-28 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-16">
+      <div>
+        <h2 className="font-display text-[clamp(36px,3.6vw,48px)] leading-none tracking-[-0.02em] text-ink">{p.heading}</h2>
+        <p className="mt-4 max-w-[34ch] text-[15px] leading-relaxed text-muted">{p.sub}</p>
       </div>
 
-      <p className="sr-only" aria-live="polite">
-        {p.shown(shown.length, projects.length)}
-      </p>
+      <div>
+        <ul>
+          {onMap.map((proj) => {
+            const ridge = proj.id === "noesis";
+            return (
+              <li key={proj.id} className="border-t border-line last:border-b">
+                <a href={proj.href} target="_blank" rel="noopener noreferrer" className="group grid grid-cols-[minmax(0,1fr)_96px] gap-x-6 py-5 sm:grid-cols-[minmax(0,1fr)_150px]">
+                  <span>
+                    <span className="flex flex-wrap items-baseline gap-x-3">
+                      <span className={`font-display text-[24px] leading-tight italic transition-colors ${ridge ? "text-accent" : "text-ink group-hover:text-accent"}`}>
+                        {BASIN_NAMES[proj.id]}
+                        <span className="sr-only"> ({p.open})</span>
+                      </span>
+                      <span className="font-mono text-[12px] text-muted">{month(proj.since!)}</span>
+                    </span>
+                    <span className="mt-1 block max-w-[62ch] text-ink-soft text-pretty">{p.blurbs[proj.name]}</span>
+                    <span className="mt-1 block text-[13px] text-muted">
+                      {p.status[proj.status]}, {proj.stack}
+                    </span>
+                  </span>
+                  <svg viewBox="0 0 220 44" preserveAspectRatio="none" aria-hidden className="mt-2 h-8 w-full overflow-visible">
+                    <path d={slices[proj.id].d} fill="none" stroke="var(--line-strong)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
+                    <circle cx="110" cy={slices[proj.id].mid} r="3" fill={ridge ? "var(--accent)" : "var(--ink)"} />
+                  </svg>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
 
-      <div aria-hidden className={`${row} letter-cond hidden border-b border-ink text-xs font-semibold uppercase text-ink md:grid`}>
-        <span className="border-r border-line px-4 py-2">{p.columns.item}</span>
-        <span className="border-r border-line px-4 py-2">{p.columns.part}</span>
-        <span className="border-r border-line px-4 py-2">{p.columns.description}</span>
-        <span className="border-r border-line px-4 py-2">{p.columns.stack}</span>
-        <span className="px-4 py-2">{p.columns.status}</span>
-      </div>
-
-      <ul>
-        {shown.map(({ proj, item }) => (
-          <li key={proj.name} className="border-b border-line last:border-b-0">
-            <a
-              href={proj.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${row} group grid grid-cols-[3rem_1fr] gap-y-1 px-5 py-4 transition-colors hover:bg-paper-dim sm:px-8 md:gap-y-0 md:px-0 md:py-0`}
-            >
-              <span className="row-span-4 text-sm tabular-nums text-muted md:row-span-1 md:border-r md:border-line md:px-4 md:py-4">
-                {String(item).padStart(2, "0")}
-              </span>
-              <span className="font-mono text-[15px] font-medium text-ink md:border-r md:border-line md:px-4 md:py-4">
-                <span className="group-hover:underline group-hover:decoration-accent group-hover:underline-offset-4">{proj.name}</span>
+        <h3 className="mt-14 mb-3 font-display text-[21px] text-ink italic">{p.also}</h3>
+        <ul className="space-y-2.5">
+          {also.map((proj) => (
+            <li key={proj.name}>
+              <a href={proj.href} target="_blank" rel="noopener noreferrer" className="group">
+                <span className="font-mono text-[14px] text-ink group-hover:text-accent">{proj.name}</span>
                 <span className="sr-only"> ({p.open})</span>
-              </span>
-              <span className="text-[0.95rem] leading-snug text-ink-soft text-pretty md:border-r md:border-line md:px-4 md:py-4">
-                {p.blurbs[proj.name]}
-              </span>
-              <span className="text-sm text-muted md:border-r md:border-line md:px-4 md:py-4">{proj.stack}</span>
-              <span
-                className={`text-sm md:px-4 md:py-4 ${proj.status === "active" ? "font-semibold text-accent" : "text-muted"}`}
-              >
-                {p.status[proj.status]}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
+                <span className="text-ink-soft"> {p.blurbs[proj.name]}</span>
+                <span className="text-[13px] text-muted"> ({p.status[proj.status]})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
 
-      <p className="border-t border-ink px-5 py-3 text-sm text-muted sm:px-8">
-        {p.footnote}{" "}
-        <a href="https://github.com/kaelvalen" target="_blank" rel="noopener noreferrer" className="link-line text-ink">
-          GitHub
-        </a>
-        .
-      </p>
-      <PrintTitleBlock id="projects" title={p.title} />
+        <p className="mt-12 max-w-[64ch] text-[15px] leading-relaxed text-muted">
+          {p.tools} {p.footnote}{" "}
+          <a href="https://github.com/kaelvalen" target="_blank" rel="noopener noreferrer" className="link-line text-ink">
+            GitHub
+          </a>
+          .
+        </p>
+      </div>
     </section>
   );
 }

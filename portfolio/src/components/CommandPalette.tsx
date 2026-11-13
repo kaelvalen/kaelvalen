@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
-import { goToSheet, useActiveSheet } from "@/lib/nav";
-import { sheetNumber, type SheetId } from "@/lib/sheets";
-import { GOTO_ZONE, formatZone, parseZone, type GotoZoneDetail } from "@/lib/zones";
+import { goToSheet } from "@/lib/nav";
+import { type SheetId } from "@/lib/sheets";
 
 type Category = "navigation" | "repositories" | "action";
 type Item = {
@@ -21,7 +20,6 @@ const EMAIL = "mehmetardahakbilen2005@gmail.com";
 export default function CommandPalette() {
   const { t, toggle: toggleLocale } = useI18n();
   const { theme, toggle: toggleTheme } = useTheme();
-  const activeSheet = useActiveSheet();
   const p = t.palette;
 
   const [open, setOpen] = useState(false);
@@ -54,9 +52,8 @@ export default function CommandPalette() {
     };
     const i = p.items;
     return [
-      { id: "nav-research", ...i.research, category: "navigation", action: go("research") },
       { id: "nav-projects", ...i.projects, category: "navigation", action: go("projects") },
-      { id: "nav-toolbox", ...i.toolbox, category: "navigation", action: go("toolbox") },
+      { id: "nav-research", ...i.research, category: "navigation", action: go("research") },
       { id: "nav-contact", ...i.contact, category: "navigation", action: go("contact") },
       { id: "repo-relic", ...i.relic, category: "repositories", action: ext("https://github.com/kaelvalen/relic") },
       { id: "repo-trainscope", ...i.trainscope, category: "repositories", action: ext("https://pypi.org/project/trainscope/") },
@@ -80,7 +77,7 @@ export default function CommandPalette() {
         ...(theme === "dark" ? i.themeLight : i.themeDark),
         category: "action",
         action: () => {
-          // Close first, so the exposure photographs the page and not the palette.
+          // Close first, so the sky sweep shows the page and not the palette.
           setOpen(false);
           requestAnimationFrame(() => requestAnimationFrame(toggleTheme));
         },
@@ -100,23 +97,8 @@ export default function CommandPalette() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
-    const matches = items.filter((it) => `${it.title} ${it.desc} ${it.category}`.toLowerCase().includes(q));
-    // A grid reference ("C4", "3·C4") goes to that zone of the drawing.
-    const zone = parseZone(q, sheetNumber(activeSheet));
-    if (!zone) return matches;
-    const ref = formatZone(zone);
-    const goZone: Item = {
-      id: `zone-${ref}`,
-      title: p.zone.title(ref),
-      desc: p.zone.desc,
-      category: "navigation",
-      action: () => {
-        setOpen(false);
-        window.dispatchEvent(new CustomEvent<GotoZoneDetail>(GOTO_ZONE, { detail: zone }));
-      },
-    };
-    return [goZone, ...matches];
-  }, [items, query, activeSheet, p.zone]);
+    return items.filter((it) => `${it.title} ${it.desc} ${it.category}`.toLowerCase().includes(q));
+  }, [items, query]);
 
   const active = filtered.length ? Math.min(selected, filtered.length - 1) : -1;
 
@@ -204,7 +186,7 @@ export default function CommandPalette() {
         aria-modal="true"
         aria-label={p.label}
         onKeyDown={onKeyDown}
-        className="animate-rise-in w-full max-w-xl overflow-hidden border border-ink bg-paper shadow-[8px_8px_0_0_var(--ink)]"
+        className="animate-rise-in w-full max-w-xl overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl shadow-black/30"
       >
         <div className="flex items-center gap-3 border-b border-line px-4 py-3.5">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="shrink-0 text-muted" aria-hidden>

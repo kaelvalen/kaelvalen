@@ -43,10 +43,30 @@ const facts: Fact[] = [
 ];
 
 const queries: Query[] = [
-  { subject: "Eiffel Tower", relation: "location", base: { en: "Paris", tr: "Paris" }, text: { en: "In which city does the Eiffel Tower stand?", tr: "Eyfel Kulesi hangi şehirde?" } },
-  { subject: "Eiffel Tower", relation: "designer", base: { en: "Gustave Eiffel", tr: "Gustave Eiffel" }, text: { en: "Who designed the Eiffel Tower?", tr: "Eyfel Kulesi'ni kim tasarladı?" } },
-  { subject: "Danielle Darrieux", relation: "language", base: { en: "French", tr: "Fransızca" }, text: { en: "Which language did Danielle Darrieux grow up speaking?", tr: "Danielle Darrieux hangi dili konuşarak büyüdü?" } },
-  { subject: "Apple A5", relation: "developer", base: { en: "Apple", tr: "Apple" }, text: { en: "Which company makes the Apple A5?", tr: "Apple A5'i hangi şirket üretiyor?" } },
+  {
+    subject: "Eiffel Tower",
+    relation: "location",
+    base: { en: "Paris", tr: "Paris" },
+    text: { en: "In which city does the Eiffel Tower stand?", tr: "Eyfel Kulesi hangi şehirde?" },
+  },
+  {
+    subject: "Eiffel Tower",
+    relation: "designer",
+    base: { en: "Gustave Eiffel", tr: "Gustave Eiffel" },
+    text: { en: "Who designed the Eiffel Tower?", tr: "Eyfel Kulesi'ni kim tasarladı?" },
+  },
+  {
+    subject: "Danielle Darrieux",
+    relation: "language",
+    base: { en: "French", tr: "Fransızca" },
+    text: { en: "Which language did Danielle Darrieux grow up speaking?", tr: "Danielle Darrieux hangi dili konuşarak büyüdü?" },
+  },
+  {
+    subject: "Apple A5",
+    relation: "developer",
+    base: { en: "Apple", tr: "Apple" },
+    text: { en: "Which company makes the Apple A5?", tr: "Apple A5'i hangi şirket üretiyor?" },
+  },
   { subject: null, relation: "location", base: { en: "Rome", tr: "Roma" }, text: { en: "Where is the Colosseum?", tr: "Kolezyum nerede?" } },
 ];
 
@@ -95,8 +115,7 @@ export default function RelicStore() {
     radios.current[next]?.focus();
   };
 
-  const toggle = (id: number) =>
-    setStored((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id].sort((a, b) => a - b)));
+  const toggle = (id: number) => setStored((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id].sort((a, b) => a - b)));
 
   const q = queries[qi];
   const r = route(q, stored);
@@ -113,82 +132,87 @@ export default function RelicStore() {
         <h3 className="letter-wide max-w-xl text-b7 font-medium text-ink text-balance">{s.title}</h3>
         <p className="mt-4 max-w-xl text-[0.95rem] leading-relaxed text-ink-soft text-pretty">{s.body}</p>
 
-        <h4 className={`${label} mt-8`}>{s.facts}</h4>
-        <ul className="border-y border-line">
-          {facts.map((f) => {
-            const on = stored.includes(f.id);
-            return (
-              <li key={f.id} className="grid grid-cols-[2rem_1fr_auto] items-center gap-3 border-b border-line py-2.5 last:border-b-0">
-                <span className={`text-sm tabular-nums ${on ? "text-ink" : "text-muted"}`}>{f.id}</span>
-                <span className={on ? "text-ink" : "text-muted line-through decoration-line-strong"}>
-                  <span className="block text-[0.95rem]">{f.statement[locale]}</span>
-                  <span className="block text-xs text-muted">{f.adapter ? s.tierAdapter : s.tierNote}</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => toggle(f.id)}
-                  aria-label={`${on ? s.remove : s.add}: ${f.statement[locale]}`}
-                  className={`min-h-10 w-20 cursor-pointer border px-3 text-sm transition-colors ${
-                    on ? "border-ink text-ink hover:bg-paper-dim" : "border-ink bg-ink text-paper hover:opacity-85"
-                  }`}
-                >
-                  {on ? s.remove : s.add}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="mt-8 grid gap-x-14 gap-y-8 lg:grid-cols-2">
+          <div>
+            <h4 className={label}>{s.facts}</h4>
+            <ul className="border-y border-line">
+              {facts.map((f) => {
+                const on = stored.includes(f.id);
+                return (
+                  <li key={f.id} className="grid grid-cols-[2rem_1fr_auto] items-center gap-3 border-b border-line py-2.5 last:border-b-0">
+                    <span className={`text-sm tabular-nums ${on ? "text-ink" : "text-muted"}`}>{f.id}</span>
+                    <span className={on ? "text-ink" : "text-muted line-through decoration-line-strong"}>
+                      <span className="block text-[0.95rem]">{f.statement[locale]}</span>
+                      <span className="block text-xs text-muted">{f.adapter ? s.tierAdapter : s.tierNote}</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => toggle(f.id)}
+                      aria-label={`${on ? s.remove : s.add}: ${f.statement[locale]}`}
+                      className={`min-h-10 w-20 cursor-pointer rounded-[3px] border px-3 text-sm transition-colors ${
+                        on ? "border-ink text-ink hover:bg-paper-dim" : "border-ink bg-ink text-paper hover:opacity-85"
+                      }`}
+                    >
+                      {on ? s.remove : s.add}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
 
-        <h4 className={`${label} mt-8`}>{s.queries}</h4>
-        <div role="radiogroup" aria-label={s.queries} className="flex flex-col border border-line">
-          {queries.map((qq, i) => {
-            const on = qi === i;
-            return (
-              <button
-                key={qq.text.en}
-                ref={(el) => {
-                  radios.current[i] = el;
-                }}
-                type="button"
-                role="radio"
-                aria-checked={on}
-                tabIndex={on ? 0 : -1}
-                onClick={() => setQi(i)}
-                onKeyDown={(e) => onRadioKey(e, i)}
-                className={`min-h-10 cursor-pointer border-b border-line px-3 py-2 text-left text-[0.95rem] last:border-b-0 transition-colors ${
-                  on ? "bg-ink text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
-                }`}
-              >
-                {qq.text[locale]}
-              </button>
-            );
-          })}
+            <h4 className={`${label} mt-8`}>{s.queries}</h4>
+            <div role="radiogroup" aria-label={s.queries} className="flex flex-col overflow-hidden rounded-[3px] border border-line">
+              {queries.map((qq, i) => {
+                const on = qi === i;
+                return (
+                  <button
+                    key={qq.text.en}
+                    ref={(el) => {
+                      radios.current[i] = el;
+                    }}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    tabIndex={on ? 0 : -1}
+                    onClick={() => setQi(i)}
+                    onKeyDown={(e) => onRadioKey(e, i)}
+                    className={`min-h-10 cursor-pointer border-b border-line px-3 py-2 text-left text-[0.95rem] last:border-b-0 transition-colors ${
+                      on ? "bg-ink text-paper" : "text-ink-soft hover:bg-paper-dim hover:text-ink"
+                    }`}
+                  >
+                    {qq.text[locale]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <h4 className={label}>{s.answer}</h4>
+            <dl aria-live="polite" className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 text-sm">
+              <dt className="text-muted">{s.route}</dt>
+              <dd className="text-ink">{routeText}</dd>
+              <dt className="text-muted">{s.answer}</dt>
+              <dd className={`font-semibold ${r.kind === "entry" ? "text-accent" : "text-ink"}`}>{answer}</dd>
+              <dt className="text-muted">{s.source}</dt>
+              <dd className="text-ink">{r.kind === "entry" ? `${s.routed(r.fact.id)}, ${r.fact.adapter ? s.tierAdapter : s.tierNote}` : s.baseModel}</dd>
+            </dl>
+
+            <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 border-t border-line pt-4 text-sm">
+              <dt className="text-muted">{s.emptyHash}</dt>
+              <dd className="font-mono text-ink">{EMPTY}</dd>
+              <dt className="text-muted">{s.hash}</dt>
+              <dd className={`font-mono ${empty ? "text-ok" : "text-ink"}`}>{hash}</dd>
+            </dl>
+            <p className={`mt-2 text-sm ${empty ? "font-medium text-ok" : "text-muted"}`}>{empty ? s.identical : s.stored(stored.length)}</p>
+
+            <FreeQuery
+              facts={facts
+                .filter((f) => stored.includes(f.id))
+                .map((f) => ({ id: f.id, subject: f.subject, keys: f.keys, answer: f.answer[locale], adapter: f.adapter }))}
+            />
+          </div>
         </div>
-
-        <dl aria-live="polite" className="mt-5 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 text-sm">
-          <dt className="text-muted">{s.route}</dt>
-          <dd className="text-ink">{routeText}</dd>
-          <dt className="text-muted">{s.answer}</dt>
-          <dd className={`font-semibold ${r.kind === "entry" ? "text-accent" : "text-ink"}`}>{answer}</dd>
-          <dt className="text-muted">{s.source}</dt>
-          <dd className="text-ink">{r.kind === "entry" ? `${s.routed(r.fact.id)}, ${r.fact.adapter ? s.tierAdapter : s.tierNote}` : s.baseModel}</dd>
-        </dl>
-
-        <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 border-t border-line pt-4 text-sm">
-          <dt className="text-muted">{s.emptyHash}</dt>
-          <dd className="font-mono text-ink">{EMPTY}</dd>
-          <dt className="text-muted">{s.hash}</dt>
-          <dd className={`font-mono ${empty ? "text-ok" : "text-ink"}`}>{hash}</dd>
-        </dl>
-        <p className={`mt-2 text-sm ${empty ? "font-medium text-ok" : "text-muted"}`}>
-          {empty ? s.identical : s.stored(stored.length)}
-        </p>
-
-        <FreeQuery
-          facts={facts
-            .filter((f) => stored.includes(f.id))
-            .map((f) => ({ id: f.id, subject: f.subject, keys: f.keys, answer: f.answer[locale], adapter: f.adapter }))}
-        />
       </div>
 
       <figcaption className="border-t border-line px-5 py-3 text-sm text-muted text-pretty sm:px-8">

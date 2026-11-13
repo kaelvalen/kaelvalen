@@ -1,14 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 const SHEETS = [
-  { path: "/", id: "top", title: /ML architecture researcher/ },
+  { path: "/", id: "top", title: /ML systems researcher/ },
   { path: "/research", id: "research", title: /^Research/ },
-  { path: "/projects", id: "projects", title: /^Projects/ },
-  { path: "/toolbox", id: "toolbox", title: /^Toolbox/ },
+  { path: "/projects", id: "projects", title: /^Work/ },
   { path: "/contact", id: "contact", title: /^Contact/ },
 ];
 
-test.use({ colorScheme: "light", locale: "en-US" });
+test.use({ locale: "en-US" });
 
 for (const s of SHEETS) {
   test(`${s.path} opens at its sheet, cleanly`, async ({ page }) => {
@@ -31,36 +30,46 @@ for (const s of SHEETS) {
 test("the address follows the sheet in view, and the nav turns sheets", async ({ page, isMobile }) => {
   test.skip(isMobile, "the sheet links live in the desktop nav strip");
   await page.goto("/");
-  await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: /Projects/ }).click();
+  await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: /Work/ }).click();
   await expect(page).toHaveURL(/\/projects$/);
-  await expect(page).toHaveTitle(/^Projects/);
+  await expect(page).toHaveTitle(/^Work/);
   await page.locator("#contact").scrollIntoViewIfNeeded();
   await expect(page).toHaveURL(/\/contact$/);
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
 });
 
-test("the palette takes a zone reference", async ({ page, isMobile }) => {
-  test.skip(isMobile, "keyboard shortcut");
+test("the sky follows Ankara until the reader switches it, and the switch sweeps", async ({ page }) => {
+  // 13:00 Ankara time in November: day.
+  await page.clock.setFixedTime(new Date("2026-11-13T10:00:00Z"));
   await page.goto("/");
-  // The shortcut is live once the page has hydrated; keep pressing until the palette answers.
-  await expect(async () => {
-    await page.keyboard.press("Control+k");
-    await expect(page.getByRole("combobox")).toBeVisible({ timeout: 500 });
-  }).toPass({ timeout: 10000 });
-  await page.getByRole("combobox").fill("3·C2");
-  await expect(page.getByRole("option").first()).toHaveText(/Go to zone 3·C2/);
-  await page.keyboard.press("Enter");
-  await expect(page.locator(".animate-zone-flash")).toContainText("3·C2");
-});
-
-test("the theme switch exposes the other medium", async ({ page }) => {
-  await page.goto("/");
-  await page.getByRole("button", { name: "Switch to dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.getByRole("button", { name: /Switch to the night sky/ }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).not.toHaveAttribute("data-vt", /./, { timeout: 3000 });
-  // The lamp canvas exists only while the exposure runs.
-  await expect(page.locator('canvas[style*="exposure-lamp"]')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("dark");
+  // Switching back to Ankara's own sky hands the page back to the sky.
+  await page.getByRole("button", { name: /Switch to the day sky/ }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBeNull();
+});
+
+test("at night in Ankara the page opens dark", async ({ page }) => {
+  // 21:00 Ankara time.
+  await page.clock.setFixedTime(new Date("2026-11-13T18:00:00Z"));
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("button", { name: /night in Ankara/ })).toBeVisible();
+});
+
+test("a ball dropped on the map settles in a basin", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the drop button lives beside the map on wide screens");
+  await page.goto("/");
+  const hero = page.locator("#top");
+  const box = (await hero.boundingBox())!;
+  // Just off RELIC's minimum on the wide map (lib/landscape.ts places it at 0.62, 0.36).
+  await page.mouse.click(box.x + box.width * 0.64, box.y + box.height * 0.34);
+  await expect(hero.locator("[aria-live=polite]").last()).toHaveText(/settled in RELIC, \d+ steps/, { timeout: 8000 });
 });
 
 test.describe("reduced motion", () => {
