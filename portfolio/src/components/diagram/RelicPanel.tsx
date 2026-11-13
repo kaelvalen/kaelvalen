@@ -29,7 +29,7 @@ function Flow({ titles, label }: { titles: string[]; label: string }) {
   const bh = 58;
   const y = 14;
   return (
-    <svg ref={ref} viewBox={`0 0 ${W} ${y * 2 + bh}`} role="img" aria-label={label} className="ink-bleed block h-auto w-full">
+    <svg ref={ref} viewBox={`0 0 ${W} ${y * 2 + bh}`} role="img" aria-label={label} className="block h-auto w-full">
       {titles.map((title, i) => {
         const x = 4 + i * (bw + gap);
         const end = i === n - 1;
@@ -87,7 +87,7 @@ export default function RelicPanel() {
         })}
       </div>
 
-      <div className="drafting-grid hidden border border-line bg-paper p-3 sm:block">
+      <div className="figure-grid hidden border border-line bg-paper p-3 sm:block">
         <Flow key={op} titles={steps.map((s) => s.title)} label={`${c.ops[op]}: ${steps.map((s) => s.title).join(", ")}`} />
       </div>
 

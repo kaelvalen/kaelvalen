@@ -151,7 +151,7 @@ export default function FlightRecorder() {
         )}
       </div>
 
-      <div ref={plotBox} className="drafting-grid border border-line bg-paper">
+      <div ref={plotBox} className="figure-grid border border-line bg-paper">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-b border-line px-4 py-2 text-xs text-muted">
           <span className="flex items-center gap-1.5"><span aria-hidden className="inline-block h-0.5 w-4 bg-ink" /> {s.loss}</span>
           <span className="flex items-center gap-1.5"><span aria-hidden className="inline-block w-4 border-t border-dashed border-muted" /> {s.reference}</span>
@@ -163,7 +163,7 @@ export default function FlightRecorder() {
           viewBox={`0 0 ${width} 280`}
           role="img"
           aria-label={s.chartLabel}
-          className="ink-bleed block h-[280px] w-full select-none"
+          className="block h-[280px] w-full select-none"
         >
           {/* Frame, axes and graticule: plotted once, the first time the figure is seen. */}
           <g fill="none" strokeWidth="1">

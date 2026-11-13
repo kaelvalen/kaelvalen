@@ -1,50 +1,53 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* Design tokens. The page is a drawing set printed on two real media: */
-/* light = diazo whiteprint (blue-violet line on cool white stock),    */
-/* dark  = cyanotype (white line on Prussian blue).                    */
-/* The accent is the reviewer's markup: red pencil / yellow chalk.     */
+/* Design tokens. Two skies over one map: night is violet with a pink */
+/* accent, day is a pale survey sheet with a deep rose accent. Left   */
+/* alone, the page shows the sky Ankara has right now (layout.tsx).    */
+/* Every text colour meets WCAG AA on --paper and --paper-dim.        */
 /* ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
-  --paper: #f4f6f9;
-  --paper-dim: #e9edf4;
-  --surface: #fbfcfd;
-  --ink: #1d2b64;
-  --ink-soft: #36447a;
-  --muted: #5f6a94;
-  --line: #d3d9e8;
-  --line-strong: #9aa5c7;
-  --accent: #c4122f;
-  --accent-deep: #a50e27;
+  --paper: #eef1ee;
+  --paper-dim: #e2e8e5;
+  --surface: #f7f9f7;
+  --ink: #13302f;
+  --ink-soft: #2c4a48;
+  --muted: #4f6b68;
+  --line: #cfd8d4;
+  --line-strong: #9fb3ae;
+  --accent: #b8215a;
+  --accent-deep: #9c1a4b;
   --on-accent: #ffffff;
-  --ok: #1b7a4b;
-  /* Paper fibre, generated on the GPU at load (see lib/paper-gl.ts). */
-  --paper-tex: none;
+  --ok: #166b3e;
+  /* the map: contour colour, and the colour the deepest contours lean toward (r g b) */
+  --map-line: 60 95 99;
+  --map-deep: 19 48 47;
+  --sky-glow: #eef1ee;
 
-  /* Motion. One physical model, a pen plotter: the pen travels (pen up), draws (pen down), lifts. */
-  --ease-pen: cubic-bezier(0.5, 0, 0.2, 1);
   --ease-settle: cubic-bezier(0.2, 0, 0, 1);
-  --dur-travel: 170ms;
+  --ease-sweep: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-sheet: 520ms;
-  --dur-expose: 1100ms;
+  --dur-sky: 900ms;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --paper: #13365f;
-  --paper-dim: #0f2e53;
-  --surface: #173d6a;
-  --ink: #f1f5fb;
-  --ink-soft: #cdd9ec;
-  --muted: #9db2d3;
-  --line: #2d5283;
-  --line-strong: #5a7cab;
-  --accent: #f6d55c;
-  --accent-deep: #f6d55c;
-  --on-accent: #13365f;
-  --ok: #9fe3bd;
+  --paper: #18152b;
+  --paper-dim: #201c37;
+  --surface: #1d1932;
+  --ink: #ece8f6;
+  --ink-soft: #cfc9e2;
+  --muted: #a39cbf;
+  --line: #322d4d;
+  --line-strong: #4f4873;
+  --accent: #f29ac4;
+  --accent-deep: #f29ac4;
+  --on-accent: #18152b;
+  --ok: #9fdcbb;
+  --map-line: 150 143 186;
+  --map-deep: 236 232 246;
+  --sky-glow: #211c3b;
 }
 
 @theme inline {
@@ -61,11 +64,11 @@
   --color-on-accent: var(--on-accent);
   --color-ok: var(--ok);
 
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-spectral), Georgia, serif;
   --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
 
-  /* Type scale in √2, the ISO 216 paper ratio: each A step is the next sheet size up.
-     B steps are the geometric means between them, as in the ISO B series. Base: A9 = 16px. */
+  /* Type scale on √2 steps; base a9 = 16px. */
   --text-a10: 0.7071rem;
   --text-a10--line-height: 1.35;
   --text-b9: 0.8409rem;
@@ -86,17 +89,10 @@
   --text-a6--line-height: 1.06;
   --text-a5: 4rem;
   --text-a5--line-height: 1;
-
-  /* Drawings have square corners; only dots stay round (rounded-full). */
-  --radius-xs: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
 }
 
 html {
-  scroll-padding-top: 4rem;
+  scroll-padding-top: 4.5rem;
   background-color: var(--paper);
   -webkit-text-size-adjust: 100%;
 }
@@ -104,13 +100,11 @@ html {
 body {
   text-rendering: optimizeLegibility;
   font-variant-numeric: tabular-nums;
-  background-image: var(--paper-tex);
-  background-size: 512px 512px;
 }
 
 ::selection {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 :focus-visible {
@@ -118,21 +112,16 @@ body {
   outline-offset: 2px;
 }
 
-/* ------------------------------------------------------------------ */
-/* Lettering. Archivo's width axis does the work a second family would: */
-/* condensed for drawing furniture, expanded for titles.                */
-/* ------------------------------------------------------------------ */
+/* Small labels inside figures: weight, not capitals. */
 .letter-cond {
-  font-stretch: 75%;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
-.letter-wide {
-  font-stretch: 112%;
-  letter-spacing: -0.01em;
-}
+/* Titles inside figures take the display face. */
+.letter-wide,
 .letter-xwide {
-  font-stretch: 125%;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
 }
 
 .link-line {
@@ -145,91 +134,30 @@ body {
   text-decoration-color: var(--accent);
 }
 
-/* Drafting grid, used only inside figures. */
-.drafting-grid {
+/* The grid figures are plotted on: survey-sheet squares, faint. */
+.figure-grid {
   background-image:
-    linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px),
-    linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px);
-  background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
+    linear-gradient(color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* Dimension line: |<—— label ——>|. The label sits on the paper, so it masks the line. */
-.dim-line {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 1rem;
-}
-.dim-line::before {
-  content: "";
-  position: absolute;
-  inset: 50% 0 auto 0;
-  border-top: 1px solid currentColor;
-}
-.dim-line::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-inline: 1px solid currentColor;
-}
-.dim-line > span {
-  position: relative;
-  z-index: 1;
-  background: var(--paper);
-  padding-inline: 0.75rem;
-}
-
-/* ------------------------------------------------------------------ */
-/* Drawn rules. A sheet's rules are plotted left to right as the sheet */
-/* scrolls into view (scroll-driven, no JS). Without support they are  */
-/* simply there.                                                       */
-/* ------------------------------------------------------------------ */
-.rule-draw {
-  position: relative;
-}
-.rule-draw::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  border-bottom: 1px solid var(--ink);
-  transform-origin: left center;
-}
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .rule-draw::after {
-      animation: rule-plot linear both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 30%;
-    }
-  }
-}
-@keyframes rule-plot {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-/* Bars in tables are ruled the same way, each to its value. */
+/* Bars in tables grow to their value as they scroll in (scroll-driven, no JS). */
 .bar-draw {
   transform-origin: left center;
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .bar-draw {
-      animation: rule-plot linear both;
+      animation: bar-grow linear both;
       animation-timeline: view();
       animation-range: entry 20% cover 40%;
     }
   }
 }
-
-/* Ink spread on plotted figures: a hair of displacement, as ink feathers into paper fibre. */
-.ink-bleed {
-  filter: url(#ink-bleed);
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @keyframes fade-in {
@@ -244,19 +172,10 @@ body {
   from { opacity: 0; transform: scale(0.6) rotate(-30deg); filter: blur(2px); }
   to { opacity: 1; transform: none; filter: none; }
 }
-@keyframes zone-flash {
-  0% { opacity: 0; transform: scale(1.6); }
-  20% { opacity: 1; transform: none; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
 .animate-fade-in { animation: fade-in 160ms ease-out both; }
 .animate-rise-in { animation: rise-in 180ms var(--ease-settle) both; }
 .animate-icon-in { animation: icon-in 220ms var(--ease-settle) both; }
-.animate-zone-flash { animation: zone-flash 1600ms var(--ease-settle) both; }
 
-/* Press feedback: a one-pixel set-down, like a key under a finger. Uses the
-   independent translate property so it never fights a component's transform. */
 button:not(:disabled):active,
 a.press:active {
   translate: 0 1px;
@@ -264,40 +183,31 @@ a.press:active {
 
 /* ------------------------------------------------------------------ */
 /* View transitions.                                                   */
-/* Theme: exposure. The new medium is revealed behind a UV lamp bar    */
-/* that sweeps left to right; the lamp and its developing front are    */
-/* drawn by a WebGL canvas with its own transition name.               */
-/* Sheets: a sheet turn. The old sheet lifts away, the new one settles. */
+/* Sky: the new sky sweeps in from the left, like the terminator line. */
+/* Sections: the old one lifts away, the new one settles.             */
 /* ------------------------------------------------------------------ */
-html[data-vt="expose"]::view-transition-old(root) {
+html[data-vt="sky"]::view-transition-old(root) {
   animation: none;
 }
-html[data-vt="expose"]::view-transition-new(root) {
-  animation: expose-reveal var(--dur-expose) var(--ease-pen) both;
+html[data-vt="sky"]::view-transition-new(root) {
+  animation: sky-sweep var(--dur-sky) var(--ease-sweep) both;
 }
-@keyframes expose-reveal {
+@keyframes sky-sweep {
   from { clip-path: inset(0 100% 0 0); }
   to { clip-path: inset(0 0 0 0); }
 }
-::view-transition-group(exposure-lamp),
-::view-transition-new(exposure-lamp) {
-  animation: none;
-}
-::view-transition-old(exposure-lamp) {
-  display: none;
-}
 
 html[data-vt="sheet"]::view-transition-old(root) {
-  animation: sheet-lift var(--dur-sheet) var(--ease-pen) both;
+  animation: sheet-lift var(--dur-sheet) var(--ease-sweep) both;
 }
 html[data-vt="sheet"]::view-transition-new(root) {
-  animation: sheet-settle var(--dur-sheet) var(--ease-pen) both;
+  animation: sheet-settle var(--dur-sheet) var(--ease-sweep) both;
 }
 @keyframes sheet-lift {
-  to { opacity: 0; transform: translateY(-2.5%) scale(0.985); }
+  to { opacity: 0; transform: translateY(-2%); }
 }
 @keyframes sheet-settle {
-  from { opacity: 0; transform: translateY(3%); }
+  from { opacity: 0; transform: translateY(2.5%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -319,65 +229,29 @@ html[data-vt="sheet"]::view-transition-new(root) {
   scrollbar-color: var(--line-strong) transparent;
 }
 
-/* ------------------------------------------------------------------ */
-/* Print: a real drawing set. One sheet per A3 landscape page, each    */
-/* closed by its own title block; always printed as a whiteprint.      */
-/* ------------------------------------------------------------------ */
-.print-only {
-  display: none;
-}
-
-@page {
-  size: A3 landscape;
-  margin: 9mm;
-}
-
+/* Print always takes the day sky, without the interactive parts. */
 @media print {
-  :root,
   [data-theme="dark"] {
     color-scheme: light;
     --paper: #ffffff;
-    --paper-dim: #f1f3f7;
+    --paper-dim: #f1f4f2;
     --surface: #ffffff;
-    --ink: #1d2b64;
-    --ink-soft: #36447a;
-    --muted: #5f6a94;
-    --line: #c9d0e2;
-    --line-strong: #9aa5c7;
-    --accent: #c4122f;
-    --accent-deep: #a50e27;
+    --ink: #13302f;
+    --ink-soft: #2c4a48;
+    --muted: #4f6b68;
+    --line: #cfd8d4;
+    --line-strong: #9fb3ae;
+    --accent: #b8215a;
     --on-accent: #ffffff;
-    --ok: #1b7a4b;
-    --paper-tex: none;
-  }
-  html {
-    font-size: 12px;
-  }
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    /* The fibre tile is set inline at runtime, so only !important reaches it. */
-    background-image: none !important;
+    --map-line: 60 95 99;
+    --map-deep: 19 48 47;
   }
   [data-no-print] {
     display: none !important;
   }
-  .print-only {
-    display: block;
-  }
-  [data-sheet] {
-    break-before: page;
-  }
-  [data-sheet="1"] {
-    break-before: auto;
-  }
+  section,
   figure,
-  table,
-  .print-keep {
+  table {
     break-inside: avoid;
-  }
-  .rule-draw::after {
-    animation: none !important;
-    transform: none !important;
   }
 }

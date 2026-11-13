@@ -8,38 +8,37 @@ Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 
 ## Design
 
-The page is a drawing set, and the drawing conventions do real work rather than decorate it.
+The page is a loss surface, seen at night or by day.
 
-- **Sheets with addresses.** Five sheets on one document, each with its own path (`/`, `/research`, `/projects`, `/toolbox`, `/contact`). Scrolling rewrites the address to the sheet in view; a sheet link turns the sheet with a view transition instead of scrolling through everything between.
-- **Zones.** Columns A–H run across the frame and every sheet is divided into numbered rows down both margins, so any point has a reference such as `2·C4`. The cursor shows its zone, figure captions and notes cite figures by zone (live, so they stay right at any width), and the command palette takes a zone and sends you there.
-- **Dimension lines** over text report the block's real measure in pixels and in characters of its own font.
-- **Revision block** compiled from this directory's git history at build time; content changed in the latest revision is marked with a revision cloud and its letter.
-- **Two print media.** Light is a diazo whiteprint (blue-violet line on cool white stock), dark is a cyanotype (white line on Prussian blue). The paper fibre is generated on the GPU once per medium as a seamless tile. Switching media is an exposure: a UV lamp sweeps the sheet and the new medium develops ahead of the reveal edge (view transition + WebGL).
-- **One motion model, a pen plotter.** Figures are plotted in drawing order (pen down, draw, lift, dotted travel move), sheet rules are ruled in as the sheet scrolls in (scroll-driven CSS), and every duration and curve comes from motion tokens. Reduced motion shows the finished drawing.
-- **Type on the paper ratio.** One family, Archivo, whose width axis separates condensed drawing lettering from expanded titles, set on a √2 scale (ISO 216): A steps are successive sheet sizes, B steps the geometric means between them.
-- **Print** produces the drawing set itself: one sheet per A3 landscape page, each closed by its own title block, always as a whiteprint.
+- **The map.** The hero is a contour map of a loss surface (`src/lib/landscape.ts`): a wide bowl with one Gaussian basin per project. RELIC is the deepest; NOESIS, the closed negative result, is a ridge with no basin under it. Where the basins sit and how deep they go is a composition, not a measurement, and the page says so. The contours are traced with marching squares in the browser on every resize; every fifth line is heavier and carries its value, and each place has a spot height, as on a survey sheet. A legend says what is real: the depths are made up, the descent is not.
+- **A ball you can drop.** Click anywhere on the map (or use "Drop a ball at random") and a ball runs gradient descent with momentum down the same surface, then reports the basin it settled in and how many steps it took. Under reduced motion it lands at once.
+- **The sky over Ankara.** Left alone, the page shows the sky Ankara has right now: the sun's position is computed before first paint (NOAA's simplified solar position, inlined in `layout.tsx`), so after sunset the page opens as a violet night with stars and a pink accent, and by day as a pale survey sheet. The moon in the corner is tonight's phase. The reader can switch the sky by hand; switching back to Ankara's own sky hands the page back to it. The switch sweeps across like a terminator line (view transition).
+- **The basins below.** Every project on the map has a row, and beside it a slice through its basin, taken from the same surface.
+- **Type.** Spectral for names, italic for places on the map as on a survey sheet; IBM Plex Sans for reading, IBM Plex Mono for heights and literal code.
 
 ## Figures that compute
 
-- **Fig. 0** (`TensorName.tsx`): the name sampled into ~13,000 keys; the pointer is a query read by two attention heads with different projections and temperatures. Each dot's softmax weight and size are computed on the GPU (WebGL2 instanced points); the CPU only finds each head's maximum and normaliser for the readouts. Canvas 2D fallback.
+- **The map** (`components/Hero.tsx`): contours, descent and sky from `lib/landscape.ts`, all unit-tested (`tests/unit/landscape.test.ts`): contour points lie on their level, a ball dropped near any basin settles in it, nothing settles on the ridge, the sun is up and down at the right hours in Ankara, the moon is full and new on the right dates.
 - **Fig. 1, flight recorder** (`diagram/FlightRecorder.tsx`, `src/workers/recorder.ts`): a simulated training run streams into a real one-sided CUSUM detector (`src/lib/cusum.ts`) in a Web Worker. Raise the learning rate and watch the alarm land before the spike. The run is simulated; the detector is not, and its claims are unit-tested: no false alarm in 300 nominal runs, an alarm before the spike at every surge from 1.3× to 5×.
 - **Fig. 1, RELIC** (`diagram/RelicPanel.tsx`): the three store operations as plotted flows, following Algorithm 1 of the paper.
 - **Fig. 2, a store you can edit** (`RelicStore.tsx`): add and remove counterfactual facts, see which entry answered and the state hash return to the empty store's. Optionally load a general-purpose sentence encoder (all-MiniLM-L6-v2 via transformers.js, about 23 MB, fetched only on request) and ask free questions, routed by cosine against the entry's relation keys at the paper's τ = 0.75.
 
 ## Engineering
 
-- **Stack**: Next.js 16 (App Router, Turbopack, static export), React 19, Tailwind CSS 4. No runtime UI, motion or 3D libraries: WAAPI, scroll-driven CSS, View Transitions and raw WebGL.
+- **Stack**: Next.js 16 (App Router, Turbopack, static export), React 19, Tailwind CSS 4. No runtime UI, motion or graphics libraries: canvas 2D, WAAPI, scroll-driven CSS and View Transitions.
+- **Addresses**: one page, four paths (`/`, `/projects`, `/research`, `/contact`). Scrolling rewrites the address to the section in view; a section link moves with a view transition instead of scrolling through everything in between.
 - **Workers** are bundled ahead of Next by `scripts/build-workers.mjs` (esbuild) into `public/workers/`, because Turbopack 16.1 copies `new Worker(new URL(...))` targets as raw assets in production builds.
 - **i18n**: English by default, Türkçe on request (saved); all copy in `src/lib/dictionary.ts`.
-- **Accessibility**: WCAG 2.2 AA checked by axe in both media on every build; every text/background pair meets AA against the flat paper colour (the fibre tile is kept under it).
-- **Quality gates** (`.github/workflows/portfolio.yml`): lint, types, unit tests (`node --test`), build, a size budget per sheet (`scripts/budget.mjs`: 230 kB JS, 12 kB CSS gzipped), Playwright behaviour, axe and pixel tests in the Playwright container, and Lighthouse CI (desktop: performance ≥ 0.9, accessibility, best practices and SEO = 1).
+- **Accessibility**: WCAG 2.2 AA checked by axe under both skies on every build; every text colour meets AA on both backgrounds. The map's labels are real text, and the ball's result is announced.
+- **Quality gates** (`.github/workflows/portfolio.yml`): lint, types, unit tests (`node --test`), build, a size budget per page (`scripts/budget.mjs`: 230 kB JS, 12 kB CSS gzipped), Playwright behaviour, axe and pixel tests in the Playwright container (sky and clock pinned, canvases hidden), and Lighthouse CI (desktop: performance ≥ 0.9, accessibility, best practices and SEO = 1).
+- **Link card**: `public/og.png` is a screenshot of the night hero at 1200 × 630 with the moon and buttons hidden; retake it when the hero changes.
 
 ## Running
 
 ```bash
 npm install
 npm run dev            # builds workers, then next dev
-npm test               # unit tests: detector, zones
+npm test               # unit tests: detector, landscape and sky
 npm run build          # workers + static export to out/
 npm run budget         # size budget on out/
 npm run test:e2e       # Playwright against out/ (CHROME_PATH=… to use a system Chrome)

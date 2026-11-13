@@ -1,5 +1,5 @@
 /** The drawing set. Sheet 1 is the masthead at "/"; every other sheet has its own path. */
-export const SHEET_IDS = ["top", "research", "projects", "toolbox", "contact"] as const;
+export const SHEET_IDS = ["top", "projects", "research", "contact"] as const;
 export type SheetId = (typeof SHEET_IDS)[number];
 export type SectionId = Exclude<SheetId, "top">;
 
