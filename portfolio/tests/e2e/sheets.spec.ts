@@ -66,10 +66,39 @@ test("a ball dropped on the map settles in a basin", async ({ page, isMobile }) 
   test.skip(isMobile, "the drop button lives beside the map on wide screens");
   await page.goto("/");
   const hero = page.locator("#top");
+  const live = hero.locator("p[aria-live=polite]");
+  // Clicking the legend or the copy over the map should not drop a ball.
+  await hero.locator("aside p").first().click();
+  await hero.locator("[data-hero-copy] h1").click();
+  await expect(live).toHaveText("");
+
   const box = (await hero.boundingBox())!;
   // Just off RELIC's minimum on the wide map (lib/landscape.ts places it at 0.62, 0.36).
   await page.mouse.click(box.x + box.width * 0.64, box.y + box.height * 0.34);
-  await expect(hero.locator("[aria-live=polite]").last()).toHaveText(/settled in RELIC, \d+ steps/, { timeout: 8000 });
+  await expect(live).toHaveText(/settled in RELIC, \d+ steps/, { timeout: 8000 });
+  const settled = (await live.textContent())!;
+
+  // Changing the sky keeps the settled result; changing language translates it.
+  await page.getByRole("button", { name: /Switch to the (day|night) sky/ }).click();
+  await expect(live).toHaveText(settled);
+  await page.getByRole("button", { name: /Türkçe'ye geç/ }).click();
+  await expect(live).toHaveText(/RELIC çukuruna yerleşti, \d+ adım/);
+});
+
+test("command palette search folds Turkish İ and Latin I", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("locale", "tr"));
+  await page.goto("/");
+  await page.keyboard.press("/");
+  const input = page.getByRole("combobox");
+  for (const [q, expected] of [
+    ["işler", /İşler/],
+    ["iletişim", /İletişim/],
+    ["relic", /Araştırma/],
+    ["findings", /FINDINGS/],
+  ] as const) {
+    await input.fill(q);
+    await expect(page.locator("[role=option]").first()).toContainText(expected);
+  }
 });
 
 test.describe("reduced motion", () => {
@@ -82,5 +111,11 @@ test.describe("reduced motion", () => {
     await expect(page.locator("#recorder-status")).toContainText("Nominal");
     await fig.getByRole("slider").fill("4");
     await expect(page.locator("#recorder-status")).toHaveText(/Caught \d+ steps? before the spike/);
+    const spikeStep = await fig.locator("dl dd").nth(3).textContent();
+    // Scrolling away and returning keeps the completed spike instead of resetting the run.
+    await page.locator("#contact").scrollIntoViewIfNeeded();
+    await fig.scrollIntoViewIfNeeded();
+    await expect(page.locator("#recorder-status")).toHaveText(/Caught \d+ steps? before the spike/);
+    expect(await fig.locator("dl dd").nth(3).textContent()).toBe(spikeStep);
   });
 });
