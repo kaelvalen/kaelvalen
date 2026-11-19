@@ -7,14 +7,14 @@ import { BASIN_NAMES } from "./Hero";
 type Status = "active" | "PyPI" | "crates.io" | "public" | "closed" | "superseded" | "archived";
 type Project = { name: string; stack: string; status: Status; href: string; since?: string };
 
-// The projects that are basins on the map, in reading order.
+// The projects that are basins on the map, live things first.
 const onMap: (Project & { id: BasinId })[] = [
   { id: "relic", name: "relic", since: "2026-10", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic" },
   { id: "trainscope", name: "trainscope", since: "2026-05", stack: "FastAPI, React", status: "PyPI", href: "https://pypi.org/project/trainscope/" },
-  { id: "noesis", name: "noesis", since: "2026-06", stack: "PyTorch", status: "closed", href: "https://github.com/kaelvalen/noesis" },
   { id: "latch-lang", name: "latch-lang", since: "2026-02", stack: "Rust", status: "crates.io", href: "https://github.com/kaelvalen/latch-lang" },
   { id: "measure", name: "measure", since: "2026-10", stack: "Python, Claude Code", status: "public", href: "https://github.com/kaelvalen/measure" },
   { id: "connor", name: "connor", since: "2026-04", stack: "Rust", status: "public", href: "https://github.com/kaelvalen/connor" },
+  { id: "noesis", name: "noesis", since: "2026-06", stack: "PyTorch", status: "closed", href: "https://github.com/kaelvalen/noesis" },
 ];
 
 const also: Project[] = [

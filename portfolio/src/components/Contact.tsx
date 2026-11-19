@@ -9,6 +9,7 @@ const links = [
   { label: "GitHub", handle: "kaelvalen", href: "https://github.com/kaelvalen" },
   { label: "LinkedIn", handle: "mehmet-arda-hakbilen", href: "https://www.linkedin.com/in/mehmet-arda-hakbilen-12aba6269/" },
   { label: "PyPI", handle: "trainscope", href: "https://pypi.org/project/trainscope/" },
+  { label: "crates.io", handle: "latch-lang", href: "https://crates.io/crates/latch-lang" },
 ];
 
 export default function Contact() {
