@@ -10,23 +10,23 @@ I work on ML systems: catching training runs before they fail, and changing what
 
 ### [RELIC](https://github.com/kaelvalen/relic): transactional knowledge updates for frozen language models
 
-Knowledge editing writes facts into a model's weights, but then a single fact cannot be removed, the fact behind an answer cannot be named, and an update's effect on unrelated questions is hard to bound. RELIC keeps the base model frozen and stores each new fact as its own entry: a note served in the context and, only when the note is not enough, a rank-16 LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold. A router whose parameters are fixed before any fact is stored applies at most one entry per query, so removal and attribution are exact by construction.
+Knowledge editing writes facts into a model's weights, but then a single fact cannot be removed, the fact behind an answer cannot be named, and an update's effect on unrelated questions is hard to bound. RELIC keeps the base model frozen and stores each new fact as its own entry: a note served in the context and, when the note is not enough (or in the default store, alongside it), a LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold. A router whose parameters are fixed before any fact is stored applies at most one entry per query, so removal and attribution are exact by construction.
 
-Pre-registered study, Qwen2.5-1.5B-Instruct, 1000 facts per dataset, default configuration:
+Pre-registered study, Qwen2.5-1.5B-Instruct, 1000 facts per dataset (reported stores use rank-16 adapters; a rank-2 LoRA+ int8 variant shrinks each adapter from 8.7 MB to 373 KB):
 
 | | CounterFact | zsRE |
 | :-- | --: | --: |
-| Edit prompts answered | 99.6% | 98.9% |
-| Paraphrases answered | 89.1% | 98.2% |
+| Edit prompts answered (default: adapter + note) | 99.6% | 98.9% |
+| Paraphrases answered (default: adapter + note) | 89.1% | 98.2% |
 | Other questions about a stored subject that get a stored answer | 4.3% | not measured |
 | Removed facts returning to the base answer (100 removed) | 100% | 100% by content |
-| Facts that need an adapter | 16.2% | 20.6% |
+| Tiered store: facts that need an adapter | 16.2% (66.4% paraphrase) | 20.6% |
 
 Under the same chat template, GRACE answers 2.0% of CounterFact paraphrases and WISE 10.5% (EasyEdit, 200 sequential edits), and neither can remove a single edit. The open problem is leakage into neighboring relations: 11.7% of natural questions about them receive a wrong stored answer. The paper and every pre-registration record are in the repo.
 
 ### [trainscope](https://pypi.org/project/trainscope/): a flight recorder for LLM training loss spikes
 
-A CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ held-out noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a spike hits, the UI reconstructs the failure cascade: which layer moved first, whether it was a distributional shift or a gradient explosion, and how many steps of warning there were. It started as a tool I needed during ENGRAM runs.
+A CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ held-out noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a spike hits, the UI reconstructs the failure cascade: which layer moved first, whether it was activation kurtosis (distributional shift) or a gradient explosion, and how many steps of warning there were. It started as a tool I needed during ENGRAM runs.
 
 ### Closed: [NOESIS](https://github.com/kaelvalen/noesis)
 
@@ -44,8 +44,9 @@ NOESIS tried to inject retrieved memory (a Titans-style associative matrix with 
 - [beyond_transformer](https://github.com/kaelvalen/beyond_transformer): PULSE, the predecessor to ENGRAM. Kept public as a design record.
 
 ### Systems and tools
+- [latch-lang](https://github.com/kaelvalen/latch-lang): a programming language written in Rust (tree-walk interpreter and bytecode VM behind one frontend). On crates.io.
+- [measure](https://github.com/kaelvalen/measure): Claude Code plugin for performance work — profile first, prove a speedup with an interleaved A/B benchmark and a bootstrap CI.
 - [connor](https://github.com/kaelvalen/connor): terminal-native CI/CD runner in Rust. TOML config, DAG-parallel execution, no server.
-- [latch-lang](https://github.com/kaelvalen/latch-lang): a programming language written in Rust. On crates.io.
 - [weave](https://github.com/kaelvalen/weave): local-first, plugin-based productivity app. Tauri, React, Rust.
 - [nanonet](https://github.com/kaelvalen/nanonet): distributed service monitoring. Go backend, Rust agents, React frontend (~70k lines). Archived.
 
@@ -53,8 +54,8 @@ NOESIS tried to inject retrieved memory (a Titans-style associative matrix with 
 
 ## Stack
 
-PyTorch for ML work, with Hugging Face Transformers and PEFT for the language-model experiments and Triton when there is no way around it. Rust and Go for systems, TypeScript and React for frontends.
+PyTorch for ML work, with Hugging Face Transformers and PEFT for the language-model experiments and Triton when there is no way around it. Rust and Go for systems (now and then C++), TypeScript and React for frontends.
 
 <p align="center">
-  <img src="https://github.com/kaelvalen/kaelvalen/blob/metrics/github-metrics.svg" width="85%" alt="GitHub metrics" />
+  <img src="https://raw.githubusercontent.com/kaelvalen/kaelvalen/metrics/github-metrics.svg" width="85%" alt="GitHub metrics" />
 </p>
