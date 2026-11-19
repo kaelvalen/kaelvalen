@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans, Spectral } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n";
+import { OG_BASE, SITE_DESCRIPTION, SITE_TITLE, SITE_URL, TWITTER_BASE } from "@/lib/seo";
 import "./globals.css";
 
 // A map's two voices: a serif for names (italic for places, as on a survey sheet), a plain sans for the rest.
@@ -25,42 +26,31 @@ const mono = IBM_Plex_Mono({
   weight: ["400", "500"],
   variable: "--font-plex-mono",
   display: "swap",
-  // Readouts only: not worth competing with Archivo and the page for the first bytes.
+  // Readouts only: not worth competing with Spectral and IBM Plex Sans for the first bytes.
   preload: false,
 });
 
-const DESCRIPTION =
-  "I build instruments for language models: RELIC changes what a deployed model knows without retraining it, trainscope catches a training run before it fails.";
-
 export const metadata: Metadata = {
-  title: { default: "kael valen · Mehmet Arda Hakbilen, ML systems researcher", template: "%s · kael valen" },
-  description: DESCRIPTION,
-  metadataBase: new URL("https://kaelvalen.vercel.app"),
+  title: { default: SITE_TITLE, template: "%s · kael valen" },
+  description: SITE_DESCRIPTION,
+  metadataBase: new URL(SITE_URL),
   openGraph: {
-    title: "kael valen · Mehmet Arda Hakbilen, ML systems researcher",
-    description: DESCRIPTION,
-    url: "https://kaelvalen.vercel.app",
-    siteName: "Mehmet Arda Hakbilen",
-    locale: "en_US",
-    alternateLocale: ["tr_TR"],
-    type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "kael valen: a loss surface whose basins are RELIC, trainscope and the rest of the work" }],
+    ...OG_BASE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
   },
   twitter: {
-    card: "summary_large_image",
-    images: ["/og.png"],
-    title: "kael valen · Mehmet Arda Hakbilen, ML systems researcher",
-    description: DESCRIPTION,
-  },
-  icons: {
-    icon: "/favicon.ico",
+    ...TWITTER_BASE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#eef1ee" },
-    { media: "(prefers-color-scheme: dark)", color: "#1c1638" },
+    { media: "(prefers-color-scheme: dark)", color: "#18152b" },
   ],
 };
 
