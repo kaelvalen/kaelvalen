@@ -21,6 +21,8 @@ const TAIL = 70; // at night only the last steps of the path show, as a shooting
 
 type Colours = { line: number[]; deep: number[]; accent: string; night: boolean };
 
+const DAY_PRINT_COLOURS: Colours = { line: [60, 95, 99], deep: [19, 48, 47], accent: "#b8215a", night: false };
+
 function colours(): Colours {
   const s = getComputedStyle(document.documentElement);
   const rgb = (name: string) => s.getPropertyValue(name).trim().split(/\s+/).map(Number);
@@ -77,6 +79,7 @@ export default function Hero() {
   const moonCanvas = useRef<HTMLCanvasElement>(null);
   const copy = useRef(h);
   const dropAt = useRef<(x: number, y: number) => void>(() => {});
+  const redrawSettled = useRef<() => void>(() => {});
   const [tall, setTall] = useState(false);
   const [settledText, setSettledText] = useState("");
   const [moon, setMoon] = useState<{ lit: number; waxing: boolean } | null>(null);
@@ -85,6 +88,7 @@ export default function Hero() {
 
   useEffect(() => {
     copy.current = h;
+    redrawSettled.current();
   }, [h]);
 
   useEffect(() => {
@@ -93,12 +97,12 @@ export default function Hero() {
     if (!el || !cv || !ctx || !mc) return;
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let basins: Basin[] = [], f = surface([]), lines: Contour[] = [];
-    let W = 0, H = 0, dpr = 1, raf = 0, last: Descent | null = null;
+    let W = 0, H = 0, dpr = 1, raf = 0, last: Descent | null = null, settled = false;
     const base = document.createElement("canvas");
 
     // The map: contour lines, deeper ones leaning toward the accent, and at night a seeded field of stars.
-    function paint() {
-      const c = colours();
+    function paint(override?: Colours) {
+      const c = override ?? colours();
       base.width = cv!.width;
       base.height = cv!.height;
       const b = base.getContext("2d")!;
@@ -130,7 +134,7 @@ export default function Hero() {
         }
         b.globalAlpha = 1;
       }
-      render();
+      render(settled, c);
     }
 
     // Each heavy contour gets its value written along it once, where it runs flat enough to read,
@@ -152,7 +156,7 @@ export default function Hero() {
         for (let i = 0; i < s.length; i += 4) {
           const mx = (s[i] + s[i + 2]) / 2, my = (s[i + 1] + s[i + 3]) / 2;
           if (tall ? mx < 0.06 || mx > 0.94 || my < 0.06 || my > 0.46 : mx < 0.42 || mx > 0.97 || my < 0.08 || my > 0.92) continue;
-          if (mx > 0.8 && (my < (tall ? 0.12 : 0.22) || (!tall && my > 0.68))) continue; // the moon and the legend
+          if ((mx > 0.8 && my < (tall ? 0.12 : 0.22)) || (!tall && mx > 0.72 && my > 0.58)) continue; // the moon and the legend
           const dx = (s[i + 2] - s[i]) * W, dy = (s[i + 3] - s[i + 1]) * H;
           if (Math.abs(dy) > Math.abs(dx) * 0.6) continue;
           if (basins.some((q) => Math.hypot((q.x - mx) * W, (q.y - my) * H) < 95)) continue;
@@ -184,13 +188,13 @@ export default function Hero() {
     }
 
     // The map, then the ball and its path if one has been dropped.
-    function render(done = false) {
+    function render(done = false, override?: Colours) {
       const g = ctx!;
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.clearRect(0, 0, cv!.width, cv!.height);
       g.drawImage(base, 0, 0);
       if (!last) return;
-      const c = colours(), p = last.path, n = p.length / 2;
+      const c = override ?? colours(), p = last.path, n = p.length / 2;
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.lineCap = "round";
       g.strokeStyle = c.accent;
@@ -217,10 +221,19 @@ export default function Hero() {
       if (done) {
         const hit = basinAt(basins, last.x, last.y);
         const text = hit ? copy.current.settled(BASIN_NAMES[hit.id], last.steps) : copy.current.unnamed(last.steps);
-        const right = last.x > 0.8;
         g.font = `500 14px ${getComputedStyle(document.body).fontFamily}`;
-        g.textAlign = right ? "right" : "left";
-        g.fillText(text, last.x * W + (right ? -12 : 12), last.y * H - 12);
+        const tw = g.measureText(text).width;
+        const px = last.x * W;
+        const py = Math.max(24, last.y * H - 12);
+        let tx = px + 12;
+        if (px + 12 + tw > W - 12 && px - 12 - tw >= 12) {
+          g.textAlign = "right";
+          tx = px - 12;
+        } else {
+          g.textAlign = "left";
+          tx = Math.max(12, Math.min(W - 12 - tw, px + 12));
+        }
+        g.fillText(text, tx, py);
         setSettledText(text);
       }
     }
@@ -239,11 +252,14 @@ export default function Hero() {
       cv!.width = Math.round(W * dpr);
       cv!.height = Math.round(H * dpr);
       last = null;
+      settled = false;
+      setSettledText("");
       paint();
     }
 
     dropAt.current = (x, y) => {
       cancelAnimationFrame(raf);
+      settled = false;
       setSettledText("");
       const it = descend(f, x, y);
       const tick = () => {
@@ -251,6 +267,7 @@ export default function Hero() {
           const r = it.next();
           last = r.value;
           if (r.done) {
+            settled = true;
             render(true);
             return;
           }
@@ -261,10 +278,21 @@ export default function Hero() {
       tick();
     };
 
+    redrawSettled.current = () => {
+      if (settled && lines.length) render(true);
+    };
+
     const sky = () => {
       const m = moonPhase();
       setMoon({ lit: Math.round(m.lit * 100), waxing: m.waxing });
       drawMoon(mc, m.phase, m.waxing, document.documentElement.dataset.theme === "dark");
+      if (lines.length) paint();
+    };
+
+    const onBeforePrint = () => {
+      if (lines.length) paint(DAY_PRINT_COLOURS);
+    };
+    const onAfterPrint = () => {
       if (lines.length) paint();
     };
 
@@ -276,18 +304,22 @@ export default function Hero() {
     ro.observe(el);
     sky();
     window.addEventListener(THEME_CHANGE, sky);
+    window.addEventListener("beforeprint", onBeforePrint);
+    window.addEventListener("afterprint", onAfterPrint);
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(frame);
       ro.disconnect();
       window.removeEventListener(THEME_CHANGE, sky);
+      window.removeEventListener("beforeprint", onBeforePrint);
+      window.removeEventListener("afterprint", onAfterPrint);
     };
   }, []);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const onMap = (e: React.MouseEvent<HTMLElement>) => {
-    if ((e.target as Element).closest("a, button")) return;
+    if ((e.target as Element).closest("a, button, aside, [data-hero-copy]")) return;
     const r = e.currentTarget.getBoundingClientRect();
     dropAt.current((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
   };
@@ -316,7 +348,7 @@ export default function Hero() {
       id="top"
       data-sheet-id="top"
       onClick={onMap}
-      className="relative h-[calc(100svh-3.5rem)] max-h-[1100px] min-h-[600px] cursor-crosshair overflow-hidden"
+      className="relative h-[calc(100svh-3.5rem)] max-h-[1100px] min-h-[720px] cursor-crosshair overflow-hidden sm:min-h-[600px]"
       style={{ background: "radial-gradient(110% 80% at 85% 0%, var(--sky-glow), var(--paper) 70%)" }}
     >
       <canvas ref={canvas} aria-hidden className="absolute inset-0 h-full w-full" />
@@ -332,7 +364,7 @@ export default function Hero() {
             ) : (
               <span aria-hidden className="absolute size-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink ring-[3px] ring-paper/70" />
             )}
-            <span className={`absolute top-[-9px] whitespace-nowrap ${b.x > (tall ? 0.6 : 0.74) ? "right-2.5 text-right" : "left-2.5"}`}>
+            <span className={`absolute top-[-9px] whitespace-nowrap ${b.x > (tall ? 0.6 : 0.7) ? "right-2.5 text-right" : "left-2.5"}`}>
               <span className="font-mono text-[10.5px] text-muted">{spot(b)}</span>
               <span className={`block font-display text-[19px] leading-[1.05] italic ${b.ridge ? "text-accent" : "text-ink"}`}>{BASIN_NAMES[b.id]}</span>
               <span className="block text-[12px] text-muted">{h.basins[b.id]}</span>
@@ -346,7 +378,7 @@ export default function Hero() {
         <span className="hidden sm:inline">{moon && h.moon(moon.lit, moon.waxing)}</span>
       </div>
 
-      <div className="absolute right-5 bottom-8 left-5 max-w-[600px] sm:right-auto sm:bottom-14 sm:left-12">
+      <div data-hero-copy className="absolute right-5 bottom-8 left-5 max-w-[600px] cursor-auto sm:right-auto sm:bottom-14 sm:left-12">
         <h1 className="font-display text-[clamp(60px,8.4vw,128px)] leading-[0.82] font-normal tracking-[-0.03em] text-ink">{h.alias}</h1>
         <p className="mt-5 text-[15px] text-muted">{h.place}</p>
         <p className="mt-3 max-w-[38ch] text-[clamp(17px,1.35vw,19px)] leading-[1.55] text-pretty text-ink-soft">{h.lead}</p>
@@ -370,7 +402,7 @@ export default function Hero() {
       </div>
 
       {/* A map legend, which is also where the map says what is real on it and what is not. */}
-      <aside className="absolute right-12 bottom-14 hidden w-[250px] cursor-auto border border-line bg-paper/80 px-4 py-3.5 text-[12.5px] leading-snug text-muted backdrop-blur-sm lg:block" data-no-print>
+      <aside className="absolute right-6 bottom-8 hidden w-[232px] cursor-auto border border-line bg-paper/80 px-4 py-3.5 text-[12.5px] leading-snug text-muted backdrop-blur-sm lg:block xl:right-12 xl:bottom-14 xl:w-[250px]" data-no-print>
         <p className="mb-2 font-display text-[15px] text-ink italic">{h.legend.title}</p>
         <ul className="space-y-1.5">
           <li className="flex items-center gap-3">
