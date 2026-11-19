@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 import { SHEET_IDS, sheetFromPath, sheetPath, type SheetId } from "./sheets";
 
 /*
- * One page, five addresses. Every sheet lives on the same document, but each has its own path:
+ * One page, four addresses. Every sheet lives on the same document, but each has its own path:
  * scrolling rewrites the address to the sheet in view, and following a sheet link turns the sheet
  * (a view transition) instead of scrolling the reader through everything in between.
  */

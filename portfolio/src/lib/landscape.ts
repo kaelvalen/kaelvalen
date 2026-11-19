@@ -12,22 +12,22 @@ export type Basin = { id: BasinId; x: number; y: number; depth: number; width: n
 // Positions are fractions of the map; depths and widths are a composition, not a measurement.
 const WIDE: Basin[] = [
   { id: "relic", x: 0.62, y: 0.36, depth: 1.1, width: 0.01 },
-  { id: "trainscope", x: 0.84, y: 0.62, depth: 0.8, width: 0.008 },
-  { id: "latch-lang", x: 0.43, y: 0.22, depth: 0.55, width: 0.005 },
-  { id: "measure", x: 0.88, y: 0.3, depth: 0.45, width: 0.004 },
-  { id: "connor", x: 0.6, y: 0.7, depth: 0.4, width: 0.004 },
-  { id: "noesis", x: 0.75, y: 0.47, depth: -0.55, width: 0.004, ridge: true },
+  { id: "trainscope", x: 0.89, y: 0.42, depth: 0.8, width: 0.008 },
+  { id: "latch-lang", x: 0.44, y: 0.2, depth: 0.55, width: 0.005 },
+  { id: "measure", x: 0.86, y: 0.23, depth: 0.45, width: 0.004 },
+  { id: "connor", x: 0.57, y: 0.74, depth: 0.4, width: 0.004 },
+  { id: "noesis", x: 0.71, y: 0.51, depth: -0.55, width: 0.004, ridge: true },
 ];
 
 // On a tall screen the text sits at the bottom, so the basins gather above it.
-// The text takes the lower half there, so every basin and its label stays above y = 0.45.
+// The text takes the lower half there, so every basin and its label stays above y = 0.42.
 const TALL: Record<BasinId, [number, number]> = {
-  relic: [0.48, 0.25],
-  trainscope: [0.8, 0.33],
-  "latch-lang": [0.16, 0.19],
-  measure: [0.78, 0.15],
-  connor: [0.22, 0.35],
-  noesis: [0.58, 0.41],
+  relic: [0.42, 0.2],
+  trainscope: [0.88, 0.23],
+  "latch-lang": [0.12, 0.12],
+  measure: [0.82, 0.1],
+  connor: [0.13, 0.28],
+  noesis: [0.84, 0.34],
 };
 
 export function basinsFor(tall: boolean): Basin[] {

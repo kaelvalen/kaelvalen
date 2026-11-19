@@ -242,9 +242,12 @@ html[data-vt="sheet"]::view-transition-new(root) {
     --line: #cfd8d4;
     --line-strong: #9fb3ae;
     --accent: #b8215a;
+    --accent-deep: #9c1a4b;
     --on-accent: #ffffff;
+    --ok: #166b3e;
     --map-line: 60 95 99;
     --map-deep: 19 48 47;
+    --sky-glow: #ffffff;
   }
   [data-no-print] {
     display: none !important;

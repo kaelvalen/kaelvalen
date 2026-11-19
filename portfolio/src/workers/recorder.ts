@@ -20,6 +20,7 @@ export type ToRecorder =
   | { type: "start"; seed: number; streaming: boolean }
   | { type: "lr"; value: number }
   | { type: "play" }
+  | { type: "resume" }
   | { type: "pause" };
 
 export type FromRecorder =
@@ -104,5 +105,7 @@ ctx.onmessage = (e: MessageEvent<ToRecorder>) => {
       seed++;
       reset();
     } else setRunning(true);
+  } else if (m.type === "resume") {
+    if (streaming && !halted()) setRunning(true);
   } else if (m.type === "pause") setRunning(false);
 };

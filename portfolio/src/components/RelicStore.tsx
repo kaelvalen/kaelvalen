@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import type { Locale } from "@/lib/dictionary";
 import FreeQuery from "./diagram/FreeQuery";
@@ -117,6 +117,14 @@ export default function RelicStore() {
 
   const toggle = (id: number) => setStored((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id].sort((a, b) => a - b)));
 
+  const storedFacts = useMemo(
+    () =>
+      facts
+        .filter((f) => stored.includes(f.id))
+        .map((f) => ({ id: f.id, subject: f.subject, keys: f.keys, answer: f.answer[locale], adapter: f.adapter })),
+    [stored, locale]
+  );
+
   const q = queries[qi];
   const r = route(q, stored);
   const answer = r.kind === "entry" ? r.fact.answer[locale] : q.base[locale];
@@ -124,7 +132,7 @@ export default function RelicStore() {
   const empty = hash === EMPTY;
 
   const routeText = r.kind === "entry" ? s.routed(r.fact.id) : r.kind === "noMatch" ? s.noMatch : s.otherRelation;
-  const label = "letter-cond mb-3 text-xs font-semibold uppercase text-ink";
+  const label = "letter-cond mb-3 text-xs font-semibold text-ink";
 
   return (
     <figure className="flex h-full flex-col">
@@ -206,11 +214,7 @@ export default function RelicStore() {
             </dl>
             <p className={`mt-2 text-sm ${empty ? "font-medium text-ok" : "text-muted"}`}>{empty ? s.identical : s.stored(stored.length)}</p>
 
-            <FreeQuery
-              facts={facts
-                .filter((f) => stored.includes(f.id))
-                .map((f) => ({ id: f.id, subject: f.subject, keys: f.keys, answer: f.answer[locale], adapter: f.adapter }))}
-            />
+            <FreeQuery facts={storedFacts} />
           </div>
         </div>
       </div>

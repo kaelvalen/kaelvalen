@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 
 /** A stored fact as the router sees it: subject, relation keys (templates with [X]), answer. */
@@ -74,6 +74,15 @@ type Result =
   | { kind: "entry"; fact: RoutedFact; score: number }
   | { kind: "otherRelation"; fact: RoutedFact; score: number };
 
+async function routeQuestion(embed: Embed, qText: string, currentFacts: RoutedFact[]): Promise<Result> {
+  const m = matchSubject(qText, currentFacts);
+  if (!m) return { kind: "noMatch" };
+  const masked = norm(qText).replace(m.span, "[X]");
+  const [q, ...keys] = await embed([masked, ...m.fact.keys]);
+  const score = Math.max(...keys.map((k) => cos(q, k)));
+  return { kind: score >= TAU ? "entry" : "otherRelation", fact: m.fact, score };
+}
+
 /**
  * Free questions, routed with a real sentence encoder. The subject is matched against the stored
  * subjects, replaced by a placeholder, and the rest of the question is compared with the entry's
@@ -87,8 +96,25 @@ export default function FreeQuery({ facts }: { facts: RoutedFact[] }) {
   const [state, setState] = useState<"off" | "loading" | "ready" | "error">("off");
   const [progress, setProgress] = useState(0);
   const [question, setQuestion] = useState("");
+  const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const embed = useRef<Embed | null>(null);
+  const lastAsked = useRef<string | null>(null);
+  const reqId = useRef(0);
+
+  useEffect(() => {
+    const fn = embed.current;
+    const prev = lastAsked.current;
+    if (state !== "ready" || !prev || !fn) return;
+    const id = ++reqId.current;
+    routeQuestion(fn, prev, facts)
+      .then((res) => {
+        if (reqId.current === id) setResult(res);
+      })
+      .catch(() => {
+        if (reqId.current === id) setResult(null);
+      });
+  }, [facts, state]);
 
   const load = async () => {
     setState("loading");
@@ -102,19 +128,29 @@ export default function FreeQuery({ facts }: { facts: RoutedFact[] }) {
 
   const ask = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!embed.current || !question.trim()) return;
-    const m = matchSubject(question, facts);
-    if (!m) return setResult({ kind: "noMatch" });
-    const masked = norm(question).replace(m.span, "[X]");
-    const [q, ...keys] = await embed.current([masked, ...m.fact.keys]);
-    const score = Math.max(...keys.map((k) => cos(q, k)));
-    setResult({ kind: score >= TAU ? "entry" : "otherRelation", fact: m.fact, score });
+    const trimmed = question.trim();
+    if (!embed.current || !trimmed || busy) return;
+    setBusy(true);
+    const id = ++reqId.current;
+    try {
+      lastAsked.current = trimmed;
+      const res = await routeQuestion(embed.current, trimmed, facts);
+      if (reqId.current === id) setResult(res);
+    } catch {
+      if (reqId.current === id) {
+        lastAsked.current = null;
+        setState("error");
+        setResult(null);
+      }
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
     <div className="mt-8 border border-line">
       <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line px-4 py-2.5">
-        <h4 className="letter-cond text-xs font-semibold uppercase text-ink">{s.title}</h4>
+        <h4 className="letter-cond text-xs font-semibold text-ink">{s.title}</h4>
         <span className="font-mono text-xs text-muted">τ = {TAU.toFixed(2)}</span>
       </div>
       <div className="space-y-4 p-4 text-sm">
@@ -146,7 +182,11 @@ export default function FreeQuery({ facts }: { facts: RoutedFact[] }) {
               autoComplete="off"
               className="min-h-10 min-w-0 flex-1 border border-line-strong bg-surface px-3 text-ink placeholder:text-muted focus:border-ink focus:outline-none"
             />
-            <button type="submit" className="min-h-10 cursor-pointer bg-ink px-4 text-paper hover:opacity-85">
+            <button
+              type="submit"
+              disabled={busy || !question.trim()}
+              className="min-h-10 cursor-pointer bg-ink px-4 text-paper hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
+            >
               {s.ask}
             </button>
           </form>

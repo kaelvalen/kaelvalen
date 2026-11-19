@@ -35,7 +35,7 @@ export const en = {
   hero: {
     name: "Mehmet Arda Hakbilen",
     alias: "kael valen",
-    role: "ML systems researcher, Ankara",
+    role: "ML systems researcher",
     place: "Mehmet Arda Hakbilen, Ankara",
     lead: "I work on machine learning systems. Lately that means RELIC, which teaches a frozen language model a new fact and can later make it forget that fact exactly, and trainscope, which notices a training run going wrong before the loss spikes.",
     mapLabel: "A loss surface drawn as contour lines. Each project is a basin on it; NOESIS is a ridge.",
@@ -65,18 +65,17 @@ export const en = {
   },
 
   research: {
-    title: "Research",
     heading: "Changing what a frozen model knows, and catching runs before they fail.",
     paragraphs: [
       [
         { t: "RELIC", href: RELIC },
-        " asks how a frozen language model can take in facts after deployment and give them back. Each fact is its own entry: a note served in the context and, only when the note is not enough, a small LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold.",
+        " asks how a frozen language model can take in facts after deployment and give them back. Each fact is its own entry: a note served in the context and, when the note is not enough (or alongside it in the default store), a small LoRA adapter trained with a KL penalty toward the base. An adapter is admitted only if its divergence on 40 held-out canary prompts stays below a threshold.",
       ],
       [
         "A router whose parameters are fixed before any fact is stored (a relation encoder trained offline on relation triplets, then frozen) applies at most one entry per query. Removing a fact and naming the fact behind an answer are therefore exact by construction.",
       ],
       [
-        "In a pre-registered study with Qwen2.5-1.5B-Instruct and 1,000 facts each from CounterFact and zsRE, RELIC answers 89.1% of CounterFact paraphrases at 4.3% leakage and 98.2% of zsRE paraphrases. Only 16.2% of the facts need an adapter, now 373 KB each (rank 2, LoRA+, int8) instead of 8.7 MB. The open problem is leakage into neighboring relations: 11.7% of natural questions about a closely related attribute get a wrong stored answer.",
+        "In a pre-registered study with Qwen2.5-1.5B-Instruct and 1,000 facts each from CounterFact and zsRE, the default store (adapter and note) answers 89.1% of CounterFact paraphrases at 4.3% leakage and 98.2% of zsRE paraphrases. In the tiered store, only 16.2% of CounterFact facts need an adapter (66.4% paraphrase accuracy), and a rank-2 LoRA+ int8 variant shrinks each adapter from 8.7 MB to 373 KB (reported stores keep rank 16; see note 3). The open problem is leakage into neighboring relations: 11.7% of natural questions about a closely related attribute get a wrong stored answer.",
       ],
       [
         { t: "trainscope", href: TRAINSCOPE },
@@ -97,7 +96,7 @@ export const en = {
     notes: [
       "removal is deletion: on CounterFact all 100 removed facts return to the base model's answer, and a removal takes about 2.5 ms.",
       "the divergence check uses 40 held-out canary prompts; the two training prompts understate an adapter's effect about seventeen-fold.",
-      "an adapter is rank 2 on q/v in every layer, trained with LoRA+ and stored in int8: 373 KB. The reported stores keep rank 16, because the rank-2 rebuild kept 0.675 of base answers on a wrong route, under the pre-registered 0.69.",
+      "a compact adapter variant is rank 2 on q/v in every layer, trained with LoRA+ and stored in int8: 373 KB. The reported stores keep rank 16, because the rank-2 rebuild kept 0.675 of base answers on a wrong route, under the pre-registered 0.69.",
       "the relation encoder generalises: paraphrase routing is 0.988 on phrasings it was trained on, 0.960 on unseen phrasings and 0.838 on relations it never saw.",
     ],
     links: [
@@ -145,7 +144,6 @@ export const en = {
       },
       note: "A toy that runs in your browser: hand-written relation keys stand in for the trained relation encoder, and the answers are fixed. The add, serve and remove logic follows the paper.",
     },
-    revised: (rev: string) => `Revised in revision ${rev}: RELIC leads, in shorter paragraphs.`,
     benchFig: "Table 1",
     benchTitle: "Paraphrase accuracy on CounterFact, Qwen2.5-1.5B-Instruct, chat template",
     benchConfig: "method",
@@ -164,7 +162,6 @@ export const en = {
   },
 
   projects: {
-    title: "Work",
     heading: "Work",
     sub: "What I've built, the live things first. Each little curve is a cut through that project's basin on the map.",
     also: "Older, or on the side",
@@ -195,10 +192,8 @@ export const en = {
   },
 
   contact: {
-    title: "Contact",
     heading: "Write to me.",
     elsewhere: "Elsewhere",
-    lead: "Write to me at",
     copy: "Copy",
     copied: "Copied",
     copiedMsg: "email copied to clipboard",
@@ -240,7 +235,7 @@ export const en = {
   diagram: {
     title: "System architecture & flight recorder",
     tablist: "Project diagrams",
-    tabTrainscope: "Trainscope recorder",
+    tabTrainscope: "trainscope recorder",
     tabRelic: "RELIC",
     relic: {
       intro: "The base model stays frozen. Each fact is an entry; three operations act on the store.",
@@ -250,8 +245,8 @@ export const en = {
       steps: {
         add: [
           { title: "Write the note", desc: "The fact's statement is stored as a note, served in the system prompt with the instruction to use it even if it contradicts the model.", spec: "cost: no parameters" },
-          { title: "Test the note", desc: "If the frozen base answers the edit prompt correctly with the note alone, the entry needs nothing else.", spec: "83.8% of CounterFact facts stop here" },
-          { title: "Train an adapter", desc: "Otherwise a rank-2 LoRA+ adapter on the query and value projections of every layer is trained from a fresh copy of the base, with a KL penalty toward the base on anchor prompts, and stored in int8.", spec: "L(δ) = CE + λ·KL(p₀ ‖ p₀⊕δ); 373 KB int8" },
+          { title: "Test the note", desc: "In the tiered store, if the frozen base answers the edit prompt correctly with the note alone, the entry needs nothing else.", spec: "83.8% of CounterFact facts stop here" },
+          { title: "Train an adapter", desc: "Otherwise a LoRA adapter on every layer is trained from a fresh copy of the base with a KL penalty on anchor prompts (rank 16 in the reported stores; 373 KB with rank-2 LoRA+ int8).", spec: "L(δ) = CE + λ·KL(p₀ ‖ p₀⊕δ); r=16 (or r=2 int8, 373 KB)" },
           { title: "Check divergence", desc: "The candidate is scored by symmetric KL on 40 held-out canary prompts and inserted only below the threshold κ. A rejected candidate leaves the store unchanged.", spec: "insert if D(δ) ≤ κ, κ = 99th percentile of D" },
           { title: "Commit", desc: "The entry is stored with its relation key; the log records its id, D, the training time and the state hash.", spec: "S ← S ∪ {(i, note, δ, key)}; log(add, i, h(S))" },
         ],
@@ -327,7 +322,7 @@ export const tr: Dict = {
   hero: {
     name: "Mehmet Arda Hakbilen",
     alias: "kael valen",
-    role: "ML sistemleri araştırmacısı, Ankara",
+    role: "ML sistemleri araştırmacısı",
     place: "Mehmet Arda Hakbilen, Ankara",
     lead: "Makine öğrenmesi sistemleri üzerinde çalışıyorum. Bu aralar iki şeyle uğraşıyorum. RELIC dondurulmuş bir dil modeline yeni bir bilgi öğretiyor ve gerekirse o bilgiyi iz bırakmadan unutturuyor. trainscope ise bir eğitimin ters gittiğini loss patlamadan önce fark ediyor.",
     mapLabel: "Eş yükselti çizgileriyle çizilmiş bir loss yüzeyi. Her proje bunun üzerinde bir çukur; NOESIS bir sırt.",
@@ -357,18 +352,17 @@ export const tr: Dict = {
   },
 
   research: {
-    title: "Araştırma",
     heading: "Dondurulmuş bir modelin bildiğini değiştirmek, eğitimi çökmeden yakalamak.",
     paragraphs: [
       [
         { t: "RELIC", href: RELIC },
-        " şu soruya yanıt arıyor: dondurulmuş bir dil modeli, kullanıma alındıktan sonra yeni olguları nasıl öğrenebilir ve gerektiğinde nasıl geri bırakabilir? Her olgu ayrı bir kayıt: bağlamda sunulan bir not ve yalnızca not yetmediğinde eklenen, temel modele doğru KL cezasıyla eğitilmiş küçük bir LoRA adapter. Adapter, ayrılmış (held-out) 40 canary prompt üzerindeki ıraksaması eşiğin altında kalırsa kabul ediliyor.",
+        " şu soruya yanıt arıyor: dondurulmuş bir dil modeli, kullanıma alındıktan sonra yeni olguları nasıl öğrenebilir ve gerektiğinde nasıl geri bırakabilir? Her olgu ayrı bir kayıt: bağlamda sunulan bir not ve not yetmediğinde (ya da varsayılan depoda onunla birlikte) eklenen, temel modele doğru KL cezasıyla eğitilmiş küçük bir LoRA adapter. Adapter, ayrılmış (held-out) 40 canary prompt üzerindeki ıraksaması eşiğin altında kalırsa kabul ediliyor.",
       ],
       [
         "Parametreleri hiçbir olgu eklenmeden önce sabitlenen bir yönlendirici (router; ilişki üçlüleri üzerinde önceden eğitilip dondurulmuş bir ilişki kodlayıcısı) her sorguya en fazla bir kayıt uyguluyor. Bu yüzden bir olguyu silmek ve bir cevabın hangi olgudan geldiğini göstermek yapı gereği kesin.",
       ],
       [
-        "Qwen2.5-1.5B-Instruct ile CounterFact ve zsRE'den 1.000'er olgu kullanılan ön kayıtlı (pre-registered) çalışmada RELIC, CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla, zsRE parafrazlarının %98,2'sini doğru yanıtlıyor. Olguların yalnızca %16,2'si adapter gerektiriyor ve her adapter artık 8,7 MB yerine 373 KB (rank 2, LoRA+, int8). Açık problem komşu ilişkilere sızıntı: yakın bir özelliği soran doğal soruların %11,7'si yanlış bir kayıtlı cevap alıyor.",
+        "Qwen2.5-1.5B-Instruct ile CounterFact ve zsRE'den 1.000'er olgu kullanılan ön kayıtlı (pre-registered) çalışmada varsayılan depo (adapter ve not), CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla, zsRE parafrazlarının %98,2'sini doğru yanıtlıyor. Kademeli depoda CounterFact olgularının yalnızca %16,2'si adapter gerektiriyor (%66,4 parafraz doğruluğu); rank-2 LoRA+ int8 varyantı ise her adapter'ı 8,7 MB'tan 373 KB'a indiriyor (raporlanan depolar rank 16'da kalıyor; bkz. 3. not). Açık problem komşu ilişkilere sızıntı: yakın bir özelliği soran doğal soruların %11,7'si yanlış bir kayıtlı cevap alıyor.",
       ],
       [
         { t: "trainscope", href: TRAINSCOPE },
@@ -389,7 +383,7 @@ export const tr: Dict = {
     notes: [
       "silmek, kaydı silmek demek: CounterFact'te silinen 100 olgunun tamamı temel modelin cevabına geri dönüyor; tek bir silme yaklaşık 2,5 ms sürüyor.",
       "ıraksama denetimi ayrılmış 40 canary prompt kullanıyor; eğitimde kullanılan iki prompt, bir adapter'ın etkisini yaklaşık on yedi kat küçük gösteriyor.",
-      "adapter her katmanda q/v üzerinde rank 2, LoRA+ ile eğitiliyor ve int8 olarak saklanıyor: 373 KB. Raporlanan depolar rank 16'da kalıyor, çünkü rank-2 yeniden kurulumu yanlış yönlendirmede temel cevapların 0,675'ini korudu; ön kayıttaki sınır 0,69.",
+      "kompakt adapter varyantı her katmanda q/v üzerinde rank 2, LoRA+ ile eğitiliyor ve int8 olarak saklanıyor: 373 KB. Raporlanan depolar rank 16'da kalıyor, çünkü rank-2 yeniden kurulumu yanlış yönlendirmede temel cevapların 0,675'ini korudu; ön kayıttaki sınır 0,69.",
       "ilişki kodlayıcısı genelleşiyor: parafraz yönlendirmesi eğitildiği ifadelerde 0,988, görmediği ifadelerde 0,960, hiç görmediği ilişkilerde 0,838.",
     ],
     links: [
@@ -425,7 +419,7 @@ export const tr: Dict = {
         loading: (p: number) => `Yükleniyor… %${p}`,
         size: "yaklaşık 23 MB, bir kez iner, bu cihazda çalışır",
         error: "Kodlayıcı yüklenemedi. Yukarıdaki sabit sorgular yine çalışıyor.",
-        label: "Sorun",
+        label: "Sorunuz",
         placeholder: "ör. Where is the Eiffel Tower?",
         ask: "Sor",
         route: "Yönlendirme",
@@ -437,7 +431,6 @@ export const tr: Dict = {
       },
       note: "Tarayıcında çalışan basit bir model: eğitilmiş ilişki kodlayıcısı (relation encoder) yerine elle yazılmış ilişki anahtarları kullanılıyor ve cevaplar sabit. Ekleme, sorgulama ve silme mantığı makaledekiyle aynı.",
     },
-    revised: (rev: string) => `${rev} revizyonunda değişti: RELIC öne alındı, metin kısa paragraflara bölündü.`,
     benchFig: "Tablo 1",
     benchTitle: "CounterFact'te parafraz doğruluğu; Qwen2.5-1.5B-Instruct, sohbet şablonu (chat template)",
     benchConfig: "yöntem",
@@ -456,7 +449,6 @@ export const tr: Dict = {
   },
 
   projects: {
-    title: "İşler",
     heading: "İşler",
     sub: "Yaptıklarım, önce yaşayanlar. Her küçük eğri, o projenin haritadaki çukurundan alınmış bir kesit.",
     also: "Daha eski ya da yan işler",
@@ -487,10 +479,8 @@ export const tr: Dict = {
   },
 
   contact: {
-    title: "İletişim",
     heading: "Bana yaz.",
     elsewhere: "Diğer adresler",
-    lead: "E-posta adresim:",
     copy: "Kopyala",
     copied: "Kopyalandı",
     copiedMsg: "E-posta adresi panoya kopyalandı",
@@ -542,8 +532,8 @@ export const tr: Dict = {
       steps: {
         add: [
           { title: "Notu yaz", desc: "Olgunun ifadesi bir not olarak saklanıyor ve modelin bildikleriyle çelişse bile kullanması talimatıyla birlikte sistem prompt'una ekleniyor.", spec: "maliyet: sıfır parametre" },
-          { title: "Notu sına", desc: "Dondurulmuş temel model, düzenleme prompt'unu (edit prompt) yalnızca notla doğru yanıtlıyorsa kayıt için başka bir şey gerekmiyor.", spec: "CounterFact olgularının %83,8'i burada tamamlanıyor" },
-          { title: "Adapter eğit", desc: "Aksi halde her katmanın query ve value projeksiyonları üzerinde rank-2 bir LoRA+ adapter, temel modelin temiz bir kopyasından başlanarak ve çapa (anchor) prompt'larda temel modele doğru bir KL cezasıyla eğitiliyor; int8 olarak saklanıyor.", spec: "L(δ) = CE + λ·KL(p₀ ‖ p₀⊕δ); 373 KB int8" },
+          { title: "Notu sına", desc: "Kademeli depoda dondurulmuş temel model, düzenleme prompt'unu (edit prompt) yalnızca notla doğru yanıtlıyorsa kayıt için başka bir şey gerekmiyor.", spec: "CounterFact olgularının %83,8'i burada tamamlanıyor" },
+          { title: "Adapter eğit", desc: "Aksi halde her katmanda bir LoRA adapter, temel modelin temiz bir kopyasından başlanarak ve çapa (anchor) prompt'larda temel modele doğru bir KL cezasıyla eğitiliyor (raporlanan depolarda rank 16; rank-2 LoRA+ int8 ile 373 KB).", spec: "L(δ) = CE + λ·KL(p₀ ‖ p₀⊕δ); r=16 (veya r=2 int8, 373 KB)" },
           { title: "Iraksamayı denetle", desc: "Aday adapter, ayrılmış 40 canary prompt üzerinde simetrik KL ile puanlanıyor ve yalnızca κ eşiğinin altındaysa ekleniyor. Reddedilen bir aday depoyu değiştirmiyor.", spec: "D(δ) ≤ κ ise ekle; κ = D'nin 99. yüzdeliği" },
           { title: "Kaydet (commit)", desc: "Kayıt, ilişki anahtarıyla birlikte saklanıyor; günlük (log) kaydın kimliğini, D değerini, eğitim süresini ve durum özetini tutuyor.", spec: "S ← S ∪ {(i, note, δ, key)}; log(add, i, h(S))" },
         ],

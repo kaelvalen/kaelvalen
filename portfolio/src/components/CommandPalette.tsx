@@ -16,6 +16,7 @@ type Item = {
 };
 
 const EMAIL = "mehmetardahakbilen2005@gmail.com";
+const fold = (s: string) => s.toLocaleLowerCase("tr-TR").replace(/ı/g, "i");
 
 export default function CommandPalette() {
   const { t, toggle: toggleLocale } = useI18n();
@@ -95,10 +96,12 @@ export default function CommandPalette() {
   }, [p, theme, toggleTheme, toggleLocale]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = fold(query.trim());
     if (!q) return items;
-    return items.filter((it) => `${it.title} ${it.desc} ${it.category}`.toLowerCase().includes(q));
-  }, [items, query]);
+    return items.filter((it) =>
+      fold(`${it.title} ${it.desc} ${it.category} ${p.categories[it.category]}`).includes(q)
+    );
+  }, [items, query, p.categories]);
 
   const active = filtered.length ? Math.min(selected, filtered.length - 1) : -1;
 
@@ -212,7 +215,7 @@ export default function CommandPalette() {
             autoComplete="off"
             spellCheck={false}
           />
-          <span aria-live="polite" className="letter-cond shrink-0 text-xs uppercase text-accent">
+          <span aria-live="polite" className="letter-cond shrink-0 text-xs text-accent">
             {copied && p.copied}
           </span>
         </div>
@@ -248,7 +251,7 @@ export default function CommandPalette() {
                     </div>
                   </div>
                   <span
-                    className={`letter-cond shrink-0 text-[11px] uppercase ${
+                    className={`letter-cond shrink-0 text-[11px] ${
                       on ? "text-paper/60" : "text-muted"
                     }`}
                   >
