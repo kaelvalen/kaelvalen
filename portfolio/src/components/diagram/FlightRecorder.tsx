@@ -69,7 +69,7 @@ export default function FlightRecorder() {
         worker.current = w;
         w.postMessage({ type: "start", seed: 11, streaming: !still } satisfies ToRecorder);
       } else if (worker.current) {
-        send(e.isIntersecting && wantRunning.current ? { type: "play" } : { type: "pause" });
+        send(e.isIntersecting && wantRunning.current ? { type: "resume" } : { type: "pause" });
       }
     });
     io.observe(el);
@@ -196,7 +196,14 @@ export default function FlightRecorder() {
             <g className="text-accent">
               <path d={`M${x(alarm.step)} ${LOSS.top} V${CUS.bottom}`} stroke="currentColor" strokeDasharray="4 3" />
               <circle cx={x(alarm.step)} cy={yS(alarm.s)} r="3.5" fill="currentColor" />
-              <text x={x(alarm.step) + 5} y={LOSS.top + 10} fontSize="11" fill="currentColor" className="letter-cond uppercase">
+              <text
+                x={x(alarm.step) + (x(alarm.step) > X1 - 56 ? -5 : 5)}
+                y={LOSS.top + 10}
+                textAnchor={x(alarm.step) > X1 - 56 ? "end" : "start"}
+                fontSize="11"
+                fill="currentColor"
+                className="letter-cond"
+              >
                 {s.alarmMark}
               </text>
             </g>
@@ -204,7 +211,14 @@ export default function FlightRecorder() {
           {spike && (
             <g className="text-ink">
               <path d={`M${x(spike.step)} ${LOSS.top} V${LOSS.bottom}`} stroke="currentColor" strokeDasharray="2 3" />
-              <text x={x(spike.step) + 5} y={LOSS.top + 22} fontSize="11" fill="currentColor" className="letter-cond uppercase">
+              <text
+                x={x(spike.step) + (x(spike.step) > X1 - 56 ? -5 : 5)}
+                y={LOSS.top + 22}
+                textAnchor={x(spike.step) > X1 - 56 ? "end" : "start"}
+                fontSize="11"
+                fill="currentColor"
+                className="letter-cond"
+              >
                 {s.spikeMark}
               </text>
             </g>
@@ -224,7 +238,7 @@ export default function FlightRecorder() {
             [s.spikeLabel, spike ? n(spike.step) : "–"],
           ].map(([k, v], i) => (
             <div key={k} className={`px-4 py-3 ${i % 2 ? "" : "border-r"} ${i < 2 ? "border-b" : ""} border-line`}>
-              <dt className="letter-cond text-a10 uppercase text-muted">{k}</dt>
+              <dt className="letter-cond text-a10 text-muted">{k}</dt>
               <dd className="font-mono text-ink">{v}</dd>
             </div>
           ))}

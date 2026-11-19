@@ -55,6 +55,7 @@ const labels = (svg: SVGSVGElement) => [...svg.querySelectorAll<SVGElement>("[da
 /** Puts a figure in its finished state: every stroke down, every label inked. */
 export function finishPlot(svg: SVGSVGElement) {
   for (const s of strokes(svg)) {
+    s.style.visibility = "";
     s.style.strokeDasharray = s.dataset.dash ?? "";
     s.style.strokeDashoffset = "";
   }
@@ -66,9 +67,7 @@ export function finishPlot(svg: SVGSVGElement) {
 function blank(svg: SVGSVGElement) {
   for (const s of strokes(svg)) {
     s.dataset.dash ??= s.getAttribute("stroke-dasharray") ?? "";
-    const L = s.getTotalLength();
-    s.style.strokeDasharray = `${L} ${L}`;
-    s.style.strokeDashoffset = `${L}`;
+    s.style.visibility = "hidden";
   }
   for (const l of labels(svg)) l.style.opacity = "0";
 }
@@ -80,6 +79,13 @@ export async function plot(svg: SVGSVGElement, { speed = 0.55, budget = 2600, si
   blank(svg);
 
   const lengths = list.map((s) => s.getTotalLength());
+  for (let i = 0; i < list.length; i++) {
+    const s = list[i];
+    const L = lengths[i];
+    s.style.strokeDasharray = `${L} ${L}`;
+    s.style.strokeDashoffset = `${L}`;
+    s.style.visibility = "";
+  }
   const travel = (a: DOMPoint, b: DOMPoint) => Math.min(220, Math.max(60, Math.hypot(b.x - a.x, b.y - a.y) / 1.6));
   // Scale the pen speed so the plot fits the budget.
   const planned = lengths.reduce((t, L) => t + Math.min(900, Math.max(110, L / speed)), 0) + list.length * 140;
