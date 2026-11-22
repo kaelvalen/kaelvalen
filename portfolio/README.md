@@ -1,6 +1,6 @@
 # kaelvalen · Personal Research Portfolio
 
-Personal academic and research portfolio website for **Mehmet Arda Hakbilen (kael valen)**: trainscope (a loss-spike flight recorder), RELIC (transactional knowledge updates for frozen language models) and systems work.
+Personal academic and research portfolio website for **Mehmet Arda Hakbilen (kael valen)**: Weightsmith (graph → readable PyTorch → local training → loss-spike diagnosis, with the trainscope recorder inside), RELIC (transactional knowledge updates for frozen language models) and systems work.
 
 Live: [kaelvalen.vercel.app](https://kaelvalen.vercel.app)
 

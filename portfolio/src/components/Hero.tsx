@@ -8,7 +8,7 @@ import SheetLink from "./SheetLink";
 
 export const BASIN_NAMES: Record<BasinId, string> = {
   relic: "RELIC",
-  trainscope: "trainscope",
+  weightsmith: "Weightsmith",
   "latch-lang": "latch-lang",
   measure: "measure",
   connor: "connor",

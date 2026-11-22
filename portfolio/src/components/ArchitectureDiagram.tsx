@@ -5,16 +5,16 @@ import { useI18n } from "@/lib/i18n";
 import RelicPanel from "./diagram/RelicPanel";
 import FlightRecorder from "./diagram/FlightRecorder";
 
-type Mode = "trainscope" | "relic";
-const modes: Mode[] = ["trainscope", "relic"];
+type Mode = "recorder" | "relic";
+const modes: Mode[] = ["recorder", "relic"];
 
 export default function ArchitectureDiagram() {
   const { t } = useI18n();
   const d = t.diagram;
-  const [mode, setMode] = useState<Mode>("trainscope");
-  const tabRefs = useRef<Record<Mode, HTMLButtonElement | null>>({ trainscope: null, relic: null });
+  const [mode, setMode] = useState<Mode>("recorder");
+  const tabRefs = useRef<Record<Mode, HTMLButtonElement | null>>({ recorder: null, relic: null });
 
-  const label = (m: Mode) => (m === "trainscope" ? d.tabTrainscope : d.tabRelic);
+  const label = (m: Mode) => (m === "recorder" ? d.tabRecorder : d.tabRelic);
 
   const onTabKey = (e: React.KeyboardEvent, i: number) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;

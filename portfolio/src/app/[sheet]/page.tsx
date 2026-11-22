@@ -12,7 +12,7 @@ export function generateStaticParams() {
 
 const blurb: Record<SectionId, string> = {
   research: en.research.heading,
-  projects: "RELIC, trainscope, latch-lang, measure, connor and systems work by Mehmet Arda Hakbilen (kael valen).",
+  projects: "RELIC, Weightsmith, latch-lang, measure, connor and systems work by Mehmet Arda Hakbilen (kael valen).",
   contact: "Contact Mehmet Arda Hakbilen (kael valen) via email, GitHub, LinkedIn, PyPI or crates.io.",
 };
 

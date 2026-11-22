@@ -3,6 +3,7 @@ export type Locale = "en" | "tr";
 /** Paragraph made of plain strings and inline links. */
 export type Rich = (string | { t: string; href: string })[];
 
+const WEIGHTSMITH = "https://github.com/kaelvalen/weightsmith";
 const TRAINSCOPE = "https://pypi.org/project/trainscope/";
 const RELIC = "https://github.com/kaelvalen/relic";
 const NOESIS = "https://github.com/kaelvalen/noesis";
@@ -37,7 +38,7 @@ export const en = {
     alias: "kael valen",
     role: "ML systems researcher",
     place: "Mehmet Arda Hakbilen, Ankara",
-    lead: "I work on machine learning systems. Lately that means RELIC, which teaches a frozen language model a new fact and can later make it forget that fact exactly, and trainscope, which notices a training run going wrong before the loss spikes.",
+    lead: "I work on machine learning systems. Lately that means RELIC, which teaches a frozen language model a new fact and can later make it forget that fact exactly, and Weightsmith, a workbench where a model drawn as a graph becomes readable PyTorch, trains on a local GPU, and is caught going wrong before the loss spikes.",
     mapLabel: "A loss surface drawn as contour lines. Each project is a basin on it; NOESIS is a ridge.",
     legend: {
       title: "Legend",
@@ -51,12 +52,12 @@ export const en = {
     unnamed: (steps: number) => `settled in an unnamed basin, ${steps} steps`,
     moon: (lit: number, waxing: boolean) => `Tonight's moon: ${lit}% lit, ${waxing ? "waxing" : "waning"}`,
     ctaPrimary: "Read about the research",
-    install: "pip install trainscope",
+    install: "git clone https://github.com/kaelvalen/weightsmith",
     installLabel: "Copy the install command",
     installCopied: "Copied",
     basins: {
       relic: "active",
-      trainscope: "on PyPI",
+      weightsmith: "graph to PyTorch",
       "latch-lang": "on crates.io",
       measure: "a Claude Code plugin",
       connor: "CI in Rust",
@@ -78,8 +79,10 @@ export const en = {
         "In a pre-registered study with Qwen2.5-1.5B-Instruct and 1,000 facts each from CounterFact and zsRE, the default store (adapter and note) answers 89.1% of CounterFact paraphrases at 4.3% leakage and 98.2% of zsRE paraphrases. In the tiered store, only 16.2% of CounterFact facts need an adapter (66.4% paraphrase accuracy), and a rank-2 LoRA+ int8 variant shrinks each adapter from 8.7 MB to 373 KB (reported stores keep rank 16; see note 3). The open problem is leakage into neighboring relations: 11.7% of natural questions about a closely related attribute get a wrong stored answer.",
       ],
       [
+        { t: "Weightsmith", href: WEIGHTSMITH },
+        " is where the models get built and trained. The source of truth is a typed graph, not code: it validates shapes as you draw, compiles to plain PyTorch you can read and export, and trains on a local GPU, each run identified by the hashes of its graph, config, data and seed. Every run is recorded by ",
         { t: "trainscope", href: TRAINSCOPE },
-        " watches the training run itself: a post-mortem flight recorder for LLM loss spikes. Its CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a run fails, it reconstructs which layer moved first, and whether from activation kurtosis or gradient explosion.",
+        ", its post-mortem flight recorder for loss spikes (still on PyPI on its own). The CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a run fails, Weightsmith shows which layer moved first, whether from activation kurtosis or gradient explosion, and marks the node that holds it on the canvas.",
       ],
       [
         "Before both, ",
@@ -92,7 +95,7 @@ export const en = {
     marginalia: "Notes",
     references: "References",
     figDiagram: "Fig. 1",
-    figDiagramCaption: "The two instruments. Switch between the trainscope recorder and the RELIC architecture.",
+    figDiagramCaption: "The two instruments. Switch between Weightsmith's trainscope recorder and the RELIC architecture.",
     notes: [
       "removal is deletion: on CounterFact all 100 removed facts return to the base model's answer, and a removal takes about 2.5 ms.",
       "the divergence check uses 40 held-out canary prompts; the two training prompts understate an adapter's effect about seventeen-fold.",
@@ -101,7 +104,7 @@ export const en = {
     ],
     links: [
       { label: "github.com/kaelvalen/relic", note: "knowledge updates for frozen LMs", href: RELIC },
-      { label: "pypi.org/project/trainscope", note: "loss spike debugger", href: TRAINSCOPE },
+      { label: "github.com/kaelvalen/weightsmith", note: "graph to PyTorch, training, diagnosis", href: WEIGHTSMITH },
       { label: "noesis / FINDINGS.md", note: "continual learning", href: FINDINGS },
     ],
     store: {
@@ -177,7 +180,8 @@ export const en = {
     },
     blurbs: {
       relic: "transactional knowledge updates for frozen language models: exact removal and attribution",
-      trainscope: "loss-spike flight recorder for LLM training runs",
+      weightsmith: "visual ML workbench: a typed graph compiled to readable PyTorch, local training, and a loss-spike recorder that points at the node",
+      trainscope: "the loss-spike flight recorder inside weightsmith, still installable on its own",
       "latch-lang": "scripting language: a tree-walk interpreter and a bytecode VM behind one frontend",
       connor: "terminal-native CI/CD runner: TOML config, DAG-parallel execution, no server",
       noesis: "memory injected into a frozen backbone; closed with a documented negative result",
@@ -219,11 +223,11 @@ export const en = {
     commands: "Commands",
     categories: { navigation: "navigation", repositories: "repositories", action: "action" },
     items: {
-      research: { title: "Research", desc: "RELIC, trainscope, the recorder and the editable store" },
+      research: { title: "Research", desc: "RELIC, Weightsmith, the recorder and the editable store" },
       projects: { title: "Work", desc: "The basins: every project" },
       contact: { title: "Contact", desc: "Email and links" },
       relic: { title: "relic repository", desc: "Open github.com/kaelvalen/relic in new tab" },
-      trainscope: { title: "trainscope on PyPI", desc: "Open pypi.org/project/trainscope in new tab" },
+      weightsmith: { title: "weightsmith repository", desc: "Open github.com/kaelvalen/weightsmith in new tab" },
       noesis: { title: "noesis FINDINGS.md", desc: "Open the negative result on GitHub" },
       email: { title: "Copy email address to clipboard", desc: "mehmetardahakbilen2005@gmail.com" },
       themeLight: { title: "Switch to the day sky", desc: "A pale survey sheet" },
@@ -235,7 +239,7 @@ export const en = {
   diagram: {
     title: "System architecture & flight recorder",
     tablist: "Project diagrams",
-    tabTrainscope: "trainscope recorder",
+    tabRecorder: "Weightsmith recorder",
     tabRelic: "RELIC",
     relic: {
       intro: "The base model stays frozen. Each fact is an entry; three operations act on the store.",
@@ -263,7 +267,7 @@ export const en = {
         ],
       },
     },
-    trainscope: {
+    recorder: {
       lr: "Learning-rate multiplier",
       play: "Run",
       pause: "Pause",
@@ -324,7 +328,7 @@ export const tr: Dict = {
     alias: "kael valen",
     role: "ML sistemleri araştırmacısı",
     place: "Mehmet Arda Hakbilen, Ankara",
-    lead: "Makine öğrenmesi sistemleri üzerinde çalışıyorum. Bu aralar iki şeyle uğraşıyorum. RELIC dondurulmuş bir dil modeline yeni bir bilgi öğretiyor ve gerekirse o bilgiyi iz bırakmadan unutturuyor. trainscope ise bir eğitimin ters gittiğini loss patlamadan önce fark ediyor.",
+    lead: "Makine öğrenmesi sistemleri üzerinde çalışıyorum. Bu aralar iki şeyle uğraşıyorum. RELIC dondurulmuş bir dil modeline yeni bir bilgi öğretiyor ve gerekirse o bilgiyi iz bırakmadan unutturuyor. Weightsmith ise graph olarak çizilen bir modeli okunabilir PyTorch'a çeviriyor, yerel GPU'da eğitiyor ve eğitimin ters gittiğini loss patlamadan önce fark ediyor.",
     mapLabel: "Eş yükselti çizgileriyle çizilmiş bir loss yüzeyi. Her proje bunun üzerinde bir çukur; NOESIS bir sırt.",
     legend: {
       title: "Lejant",
@@ -338,12 +342,12 @@ export const tr: Dict = {
     unnamed: (steps: number) => `adsız bir çukura yerleşti, ${steps} adım`,
     moon: (lit: number, waxing: boolean) => `Bu gece ay: %${lit} aydınlık, ${waxing ? "büyüyor" : "küçülüyor"}`,
     ctaPrimary: "Araştırma hakkında",
-    install: "pip install trainscope",
+    install: "git clone https://github.com/kaelvalen/weightsmith",
     installLabel: "Kurulum komutunu kopyala",
     installCopied: "Kopyalandı",
     basins: {
       relic: "aktif",
-      trainscope: "PyPI'da",
+      weightsmith: "graph'tan PyTorch'a",
       "latch-lang": "crates.io'da",
       measure: "bir Claude Code eklentisi",
       connor: "Rust ile CI",
@@ -365,8 +369,10 @@ export const tr: Dict = {
         "Qwen2.5-1.5B-Instruct ile CounterFact ve zsRE'den 1.000'er olgu kullanılan ön kayıtlı (pre-registered) çalışmada varsayılan depo (adapter ve not), CounterFact parafrazlarının %89,1'ini %4,3 sızıntıyla, zsRE parafrazlarının %98,2'sini doğru yanıtlıyor. Kademeli depoda CounterFact olgularının yalnızca %16,2'si adapter gerektiriyor (%66,4 parafraz doğruluğu); rank-2 LoRA+ int8 varyantı ise her adapter'ı 8,7 MB'tan 373 KB'a indiriyor (raporlanan depolar rank 16'da kalıyor; bkz. 3. not). Açık problem komşu ilişkilere sızıntı: yakın bir özelliği soran doğal soruların %11,7'si yanlış bir kayıtlı cevap alıyor.",
       ],
       [
+        { t: "Weightsmith", href: WEIGHTSMITH },
+        " modellerin kurulup eğitildiği yer. Kaynak kod değil, tipli bir graph: çizerken boyutları doğruluyor, okunabilir ve dışa aktarılabilir PyTorch'a derleniyor, yerel GPU'da eğitiliyor; her run graph'ının, ayarlarının, verisinin ve seed'inin hash'leriyle tanımlanıyor. Her run'ı ",
         { t: "trainscope", href: TRAINSCOPE },
-        " ise eğitimin kendisini izliyor: LLM eğitimlerindeki loss spike'lar için olay sonrası (post-mortem) çalışan bir kara kutu. CUSUM tabanlı değişim noktası (change-point) dedektörü, loss'taki kademeli kaymayı tam bir spike'a dönüşmeden 5 ila 20 adım önce yakalıyor: 280'den fazla gürültü senaryosunda %0,0 yanlış pozitif, 0,10σ ile 0,50σ arasındaki kaymalarda %100 tespit. Bir eğitim çöktüğünde hangi katmanın ilk saptığını ve bunun aktivasyon basıklığından (kurtosis) mı yoksa gradyan patlamasından mı geldiğini ortaya çıkarıyor.",
+        " kaydediyor: loss spike'lar için olay sonrası (post-mortem) çalışan kara kutusu (PyPI'da tek başına da kurulabiliyor). CUSUM tabanlı değişim noktası (change-point) dedektörü, loss'taki kademeli kaymayı tam bir spike'a dönüşmeden 5 ila 20 adım önce yakalıyor: 280'den fazla gürültü senaryosunda %0,0 yanlış pozitif, 0,10σ ile 0,50σ arasındaki kaymalarda %100 tespit. Bir eğitim çöktüğünde Weightsmith hangi katmanın ilk saptığını, bunun aktivasyon basıklığından (kurtosis) mı yoksa gradyan patlamasından mı geldiğini gösteriyor ve o katmanı tutan node'u canvas'ta işaretliyor.",
       ],
       [
         "İkisinden önce ",
@@ -379,7 +385,7 @@ export const tr: Dict = {
     marginalia: "Notlar",
     references: "Kaynaklar",
     figDiagram: "Şekil 1",
-    figDiagramCaption: "İki araç. trainscope kayıt aracı ile RELIC mimarisi arasında geçiş yapabilirsin.",
+    figDiagramCaption: "İki araç. Weightsmith'in trainscope kayıt aracı ile RELIC mimarisi arasında geçiş yapabilirsin.",
     notes: [
       "silmek, kaydı silmek demek: CounterFact'te silinen 100 olgunun tamamı temel modelin cevabına geri dönüyor; tek bir silme yaklaşık 2,5 ms sürüyor.",
       "ıraksama denetimi ayrılmış 40 canary prompt kullanıyor; eğitimde kullanılan iki prompt, bir adapter'ın etkisini yaklaşık on yedi kat küçük gösteriyor.",
@@ -388,7 +394,7 @@ export const tr: Dict = {
     ],
     links: [
       { label: "github.com/kaelvalen/relic", note: "dondurulmuş dil modelleri için bilgi güncelleme", href: RELIC },
-      { label: "pypi.org/project/trainscope", note: "loss spike hata ayıklayıcı", href: TRAINSCOPE },
+      { label: "github.com/kaelvalen/weightsmith", note: "graph'tan PyTorch'a, eğitim, teşhis", href: WEIGHTSMITH },
       { label: "noesis / FINDINGS.md", note: "sürekli öğrenme", href: FINDINGS },
     ],
     store: {
@@ -464,7 +470,8 @@ export const tr: Dict = {
     },
     blurbs: {
       relic: "dondurulmuş dil modelleri için işlemsel (transactional) bilgi güncelleme: kesin silme ve kaynak gösterme",
-      trainscope: "LLM eğitimlerindeki loss spike'lar için kara kutu",
+      weightsmith: "görsel ML tezgâhı: okunabilir PyTorch'a derlenen tipli bir graph, yerel eğitim ve node'u gösteren bir loss spike kayıt aracı",
+      trainscope: "weightsmith'in içindeki loss spike kara kutusu; tek başına da kurulabiliyor",
       "latch-lang": "betik dili: tek bir ön uç arkasında ağaç yürüten yorumlayıcı ve bytecode VM",
       connor: "terminalde çalışan CI/CD aracı: TOML yapılandırma, DAG ile paralel yürütme, sunucu yok",
       noesis: "dondurulmuş omurgaya bellek enjeksiyonu; belgelenmiş olumsuz bir sonuçla kapandı",
@@ -506,11 +513,11 @@ export const tr: Dict = {
     commands: "Komutlar",
     categories: { navigation: "gezinme", repositories: "depolar", action: "eylem" },
     items: {
-      research: { title: "Araştırma", desc: "RELIC, trainscope, kayıt aracı ve düzenlenebilir depo" },
+      research: { title: "Araştırma", desc: "RELIC, Weightsmith, kayıt aracı ve düzenlenebilir depo" },
       projects: { title: "İşler", desc: "Çukurlar: bütün projeler" },
       contact: { title: "İletişim", desc: "E-posta ve bağlantılar" },
       relic: { title: "relic deposu", desc: "github.com/kaelvalen/relic adresini yeni sekmede aç" },
-      trainscope: { title: "PyPI'da trainscope", desc: "pypi.org/project/trainscope adresini yeni sekmede aç" },
+      weightsmith: { title: "weightsmith deposu", desc: "github.com/kaelvalen/weightsmith adresini yeni sekmede aç" },
       noesis: { title: "noesis FINDINGS.md", desc: "Olumsuz sonucu GitHub'da aç" },
       email: { title: "E-posta adresini panoya kopyala", desc: "mehmetardahakbilen2005@gmail.com" },
       themeLight: { title: "Gündüz gökyüzüne geç", desc: "Açık bir harita kâğıdı" },
@@ -522,7 +529,7 @@ export const tr: Dict = {
   diagram: {
     title: "Sistem mimarisi ve kayıt aracı",
     tablist: "Proje diyagramları",
-    tabTrainscope: "trainscope kayıt aracı",
+    tabRecorder: "Weightsmith kayıt aracı",
     tabRelic: "RELIC",
     relic: {
       intro: "Temel model dondurulmuş halde kalıyor. Her olgu bir kayıt olarak tutuluyor ve depo üzerinde üç işlem tanımlı.",
@@ -550,7 +557,7 @@ export const tr: Dict = {
         ],
       },
     },
-    trainscope: {
+    recorder: {
       lr: "Öğrenme oranı çarpanı",
       play: "Çalıştır",
       pause: "Duraklat",

@@ -19,7 +19,7 @@ const fmt = (n: number, d = 2) => n.toFixed(d);
 
 export default function FlightRecorder() {
   const { t, locale } = useI18n();
-  const s = t.diagram.trainscope;
+  const s = t.diagram.recorder;
   const svgRef = useRef<SVGSVGElement>(null);
   const plotBox = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(640);

@@ -10,7 +10,7 @@ type Project = { name: string; stack: string; status: Status; href: string; sinc
 // The projects that are basins on the map, live things first.
 const onMap: (Project & { id: BasinId })[] = [
   { id: "relic", name: "relic", since: "2026-10", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic" },
-  { id: "trainscope", name: "trainscope", since: "2026-05", stack: "FastAPI, React", status: "PyPI", href: "https://pypi.org/project/trainscope/" },
+  { id: "weightsmith", name: "weightsmith", since: "2026-10", stack: "PyTorch, FastAPI, React", status: "active", href: "https://github.com/kaelvalen/weightsmith" },
   { id: "latch-lang", name: "latch-lang", since: "2026-02", stack: "Rust", status: "crates.io", href: "https://github.com/kaelvalen/latch-lang" },
   { id: "measure", name: "measure", since: "2026-10", stack: "Python, Claude Code", status: "public", href: "https://github.com/kaelvalen/measure" },
   { id: "connor", name: "connor", since: "2026-04", stack: "Rust", status: "public", href: "https://github.com/kaelvalen/connor" },
@@ -18,6 +18,7 @@ const onMap: (Project & { id: BasinId })[] = [
 ];
 
 const also: Project[] = [
+  { name: "trainscope", since: "2026-05", stack: "Python", status: "PyPI", href: "https://pypi.org/project/trainscope/" },
   { name: "engram", stack: "PyTorch", status: "public", href: "https://github.com/kaelvalen/engram" },
   { name: "weave", stack: "Tauri, React, Rust", status: "active", href: "https://github.com/kaelvalen/weave" },
   { name: "beyond_transformer", stack: "PyTorch", status: "superseded", href: "https://github.com/kaelvalen/beyond_transformer" },

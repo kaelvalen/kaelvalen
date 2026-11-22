@@ -24,9 +24,11 @@ Pre-registered study, Qwen2.5-1.5B-Instruct, 1000 facts per dataset (reported st
 
 Under the same chat template, GRACE answers 2.0% of CounterFact paraphrases and WISE 10.5% (EasyEdit, 200 sequential edits), and neither can remove a single edit. The open problem is leakage into neighboring relations: 11.7% of natural questions about them receive a wrong stored answer. The paper and every pre-registration record are in the repo.
 
-### [trainscope](https://pypi.org/project/trainscope/): a flight recorder for LLM training loss spikes
+### [Weightsmith](https://github.com/kaelvalen/weightsmith): build, train and diagnose models from a graph
 
-A CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ held-out noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a spike hits, the UI reconstructs the failure cascade: which layer moved first, whether it was activation kurtosis (distributional shift) or a gradient explosion, and how many steps of warning there were. It started as a tool I needed during ENGRAM runs.
+The source of truth is a typed graph, not code: shapes are checked as you draw, the graph compiles to plain PyTorch you can read and export, and it trains on a local GPU with every run identified by the hashes of its graph, config, data and seed. Variants diff against each other, LoRA and adapters are modifiers on a node, and Llama, Mistral, Qwen2, Mixtral, GPT-2, BERT, MPNet and Mamba checkpoints open as editable graphs.
+
+Every run is recorded by [trainscope](https://pypi.org/project/trainscope/), its flight recorder for loss spikes (still on PyPI on its own). A CUSUM change-point detector catches gradual loss drift 5 to 20 steps before it turns into a full spike, with 0.0% false positives across 280+ held-out noise scenarios and 100% detection for drift from 0.10σ to 0.50σ. When a run fails, Weightsmith shows which layer moved first, whether it was activation kurtosis or a gradient explosion, marks the node that holds it on the canvas, and across runs answers which setting the failed ones share. trainscope started as a tool I needed during ENGRAM runs.
 
 ### Closed: [NOESIS](https://github.com/kaelvalen/noesis)
 
@@ -38,7 +40,8 @@ NOESIS tried to inject retrieved memory (a Titans-style associative matrix with 
 
 ### Machine learning and research
 - [relic](https://github.com/kaelvalen/relic): transactional knowledge updates for frozen LMs. Notes and KL-gated LoRA adapters, parameter-free routing, exact removal and attribution. PyTorch, PEFT.
-- [trainscope](https://pypi.org/project/trainscope/): post-mortem flight recorder for LLM training loss spikes. FastAPI and React, CUSUM change-point detection, WandB auto-attach, on PyPI.
+- [weightsmith](https://github.com/kaelvalen/weightsmith): visual ML workbench. Typed graph IR → readable PyTorch → local GPU training → loss-spike diagnosis that points at the node. PyTorch, FastAPI, React.
+- [trainscope](https://pypi.org/project/trainscope/): the post-mortem flight recorder for LLM training loss spikes inside weightsmith, still installable on its own. CUSUM change-point detection, HF and Lightning callbacks, on PyPI.
 - [noesis](https://github.com/kaelvalen/noesis): continual learning with a frozen backbone and vector memory injection. Closed with a documented negative result.
 - [engram](https://github.com/kaelvalen/engram): hybrid linear-recurrent backbone, Mamba-2 SSD blocks interleaved 3:1 with Gated Delta Rule blocks, applied to PTB-XL, Speech Commands and sCIFAR-10 (312 tests).
 - [beyond_transformer](https://github.com/kaelvalen/beyond_transformer): PULSE, the predecessor to ENGRAM. Kept public as a design record.

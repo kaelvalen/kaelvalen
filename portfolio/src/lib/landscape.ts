@@ -4,7 +4,7 @@
  * on it, and the sky over Ankara (is the sun up, how much of the moon is lit).
  */
 
-export type BasinId = "relic" | "trainscope" | "latch-lang" | "measure" | "connor" | "noesis";
+export type BasinId = "relic" | "weightsmith" | "latch-lang" | "measure" | "connor" | "noesis";
 
 /** A Gaussian dent in the surface. A ridge has negative depth: a bump with no minimum under it. */
 export type Basin = { id: BasinId; x: number; y: number; depth: number; width: number; ridge?: boolean };
@@ -12,7 +12,7 @@ export type Basin = { id: BasinId; x: number; y: number; depth: number; width: n
 // Positions are fractions of the map; depths and widths are a composition, not a measurement.
 const WIDE: Basin[] = [
   { id: "relic", x: 0.62, y: 0.36, depth: 1.1, width: 0.01 },
-  { id: "trainscope", x: 0.89, y: 0.42, depth: 0.8, width: 0.008 },
+  { id: "weightsmith", x: 0.89, y: 0.42, depth: 0.8, width: 0.008 },
   { id: "latch-lang", x: 0.44, y: 0.2, depth: 0.55, width: 0.005 },
   { id: "measure", x: 0.86, y: 0.23, depth: 0.45, width: 0.004 },
   { id: "connor", x: 0.57, y: 0.74, depth: 0.4, width: 0.004 },
@@ -23,7 +23,7 @@ const WIDE: Basin[] = [
 // The text takes the lower half there, so every basin and its label stays above y = 0.42.
 const TALL: Record<BasinId, [number, number]> = {
   relic: [0.42, 0.2],
-  trainscope: [0.88, 0.23],
+  weightsmith: [0.88, 0.23],
   "latch-lang": [0.12, 0.12],
   measure: [0.82, 0.1],
   connor: [0.13, 0.28],
