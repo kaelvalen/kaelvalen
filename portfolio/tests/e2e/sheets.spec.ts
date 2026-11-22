@@ -88,8 +88,12 @@ test("a ball dropped on the map settles in a basin", async ({ page, isMobile }) 
 test("command palette search folds Turkish İ and Latin I", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("locale", "tr"));
   await page.goto("/");
-  await page.keyboard.press("/");
   const input = page.getByRole("combobox");
+  // The "/" listener attaches on hydration; on a slow runner the first press can land before it.
+  await expect(async () => {
+    await page.keyboard.press("/");
+    await expect(input).toBeVisible({ timeout: 1000 });
+  }).toPass();
   for (const [q, expected] of [
     ["işler", /İşler/],
     ["iletişim", /İletişim/],
