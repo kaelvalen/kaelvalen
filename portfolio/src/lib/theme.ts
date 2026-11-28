@@ -44,7 +44,12 @@ function apply(next: Theme) {
  * Switches the sky. The page's colours glide to the new sky (registered tokens in globals.css), and
  * the hero runs its own change of scene; both skip motion when the reader asks for less of it.
  */
+let glide: ReturnType<typeof setTimeout> | undefined;
 export function setTheme(next: Theme) {
+  const root = document.documentElement;
+  root.dataset.gliding = "";
+  clearTimeout(glide);
+  glide = setTimeout(() => delete root.dataset.gliding, 950);
   apply(next);
 }
 

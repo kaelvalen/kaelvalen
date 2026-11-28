@@ -646,7 +646,7 @@ export default function Hero() {
         ref={box}
         id="top"
         data-sheet-id="top"
-        className="sticky top-14 h-[calc(100dvh-3.5rem)] max-h-[1100px] min-h-[720px] cursor-crosshair touch-pan-y overflow-hidden bg-paper select-none sm:min-h-[600px]"
+        className="sticky top-0 h-[100dvh] max-h-[1100px] min-h-[720px] cursor-crosshair touch-pan-y overflow-hidden bg-paper select-none sm:min-h-[600px]"
       >
         <canvas ref={glCanvas} role="img" aria-label={theme === "light" ? h.sceneLabelDay : h.sceneLabel} className="absolute inset-0 h-full w-full" data-no-print />
         <canvas

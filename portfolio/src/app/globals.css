@@ -45,7 +45,12 @@
   --ok: #9fdcbb;
 }
 
-/* The tokens are registered colours, so a change of sky glides instead of snapping. */
+/* The tokens are registered colours, so a change of sky glides instead of snapping. While it glides
+   (lib/theme.ts sets data-gliding), elements drop their own colour transitions: stacked on the
+   glide, each would trail behind it instead of moving with the page. */
+html[data-gliding] body * {
+  transition: none !important;
+}
 @property --paper { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
 @property --paper-dim { syntax: "<color>"; inherits: true; initial-value: #f2f2f0; }
 @property --surface { syntax: "<color>"; inherits: true; initial-value: #f8f8f7; }
@@ -59,8 +64,7 @@
 @property --on-accent { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
 @property --ok { syntax: "<color>"; inherits: true; initial-value: #166b3e; }
 @media (prefers-reduced-motion: no-preference) {
-  html,
-  #top {
+  html {
     transition:
     --paper 900ms var(--ease-sweep),
     --paper-dim 900ms var(--ease-sweep),
