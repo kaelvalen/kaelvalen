@@ -248,6 +248,10 @@ html[data-vt="sheet"]::view-transition-new(root) {
    as the page decelerates from the warp. Scroll-driven, so it follows the reader's own speed. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    /* The title starts scaled up; clip it so it never widens the page (phones would zoom out). */
+    #projects {
+      overflow-x: clip;
+    }
     #projects h2,
     #projects li,
     #projects h3 {
