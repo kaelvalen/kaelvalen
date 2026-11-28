@@ -40,18 +40,12 @@ function apply(next: Theme) {
   window.dispatchEvent(new Event(THEME_CHANGE));
 }
 
-/** Switches the sky. With view transitions the new one sweeps in from the left; otherwise it swaps. */
+/**
+ * Switches the sky. The page's colours glide to the new sky (registered tokens in globals.css), and
+ * the hero runs its own change of scene; both skip motion when the reader asks for less of it.
+ */
 export function setTheme(next: Theme) {
-  const root = document.documentElement;
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!document.startViewTransition || still || root.dataset.vt) {
-    apply(next);
-    return;
-  }
-  root.dataset.vt = "sky";
-  document.startViewTransition(() => apply(next)).finished.finally(() => {
-    delete root.dataset.vt;
-  });
+  apply(next);
 }
 
 export function useTheme() {

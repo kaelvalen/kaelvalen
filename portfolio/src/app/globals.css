@@ -1,53 +1,80 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* Design tokens. Two skies over one map: night is violet with a pink */
-/* accent, day is a pale survey sheet with a deep rose accent. Left   */
-/* alone, the page shows the sky Ankara has right now (layout.tsx).    */
-/* Every text colour meets WCAG AA on --paper and --paper-dim.        */
+/* Design tokens. The page is monochrome: the only colour on it is    */
+/* light from the black hole. Night is true black, the colour of the  */
+/* shadow, so the hero's dive ends on the page itself. Day is the same */
+/* scene printed as a photographic plate: white, with black ink. The   */
+/* one accent is the disk's blueshift, the light of its near side,     */
+/* kept for marks in figures and for states, not for decoration.       */
+/* Every text colour meets WCAG AA on --paper and --paper-dim.         */
 /* ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
-  --paper: #eef1ee;
-  --paper-dim: #e2e8e5;
-  --surface: #f7f9f7;
-  --ink: #13302f;
-  --ink-soft: #2c4a48;
-  --muted: #4f6b68;
-  --line: #cfd8d4;
-  --line-strong: #9fb3ae;
-  --accent: #b8215a;
-  --accent-deep: #9c1a4b;
+  --paper: #ffffff;
+  --paper-dim: #f2f2f0;
+  --surface: #f8f8f7;
+  --ink: #0f0f0e;
+  --ink-soft: #383733;
+  --muted: #65635d;
+  --line: #dddcd8;
+  --line-strong: #a2a09a;
+  --accent: #2b3fae;
+  --accent-deep: #22338f;
   --on-accent: #ffffff;
   --ok: #166b3e;
-  /* the map: contour colour, and the colour the deepest contours lean toward (r g b) */
-  --map-line: 60 95 99;
-  --map-deep: 19 48 47;
-  --sky-glow: #eef1ee;
 
   --ease-settle: cubic-bezier(0.2, 0, 0, 1);
   --ease-sweep: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-sheet: 520ms;
-  --dur-sky: 900ms;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --paper: #18152b;
-  --paper-dim: #201c37;
-  --surface: #1d1932;
-  --ink: #ece8f6;
-  --ink-soft: #cfc9e2;
-  --muted: #a39cbf;
-  --line: #322d4d;
-  --line-strong: #4f4873;
-  --accent: #f29ac4;
-  --accent-deep: #f29ac4;
-  --on-accent: #18152b;
+  --paper: #000000;
+  --paper-dim: #0c0c0b;
+  --surface: #0a0a09;
+  --ink: #ebe7df;
+  --ink-soft: #c1bcb2;
+  --muted: #8d887e;
+  --line: #262420;
+  --line-strong: #46433d;
+  --accent: #a9baff;
+  --accent-deep: #a9baff;
+  --on-accent: #000000;
   --ok: #9fdcbb;
-  --map-line: 150 143 186;
-  --map-deep: 236 232 246;
-  --sky-glow: #211c3b;
+}
+
+/* The tokens are registered colours, so a change of sky glides instead of snapping. */
+@property --paper { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --paper-dim { syntax: "<color>"; inherits: true; initial-value: #f2f2f0; }
+@property --surface { syntax: "<color>"; inherits: true; initial-value: #f8f8f7; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #0f0f0e; }
+@property --ink-soft { syntax: "<color>"; inherits: true; initial-value: #383733; }
+@property --muted { syntax: "<color>"; inherits: true; initial-value: #65635d; }
+@property --line { syntax: "<color>"; inherits: true; initial-value: #dddcd8; }
+@property --line-strong { syntax: "<color>"; inherits: true; initial-value: #a2a09a; }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #2b3fae; }
+@property --accent-deep { syntax: "<color>"; inherits: true; initial-value: #22338f; }
+@property --on-accent { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
+@property --ok { syntax: "<color>"; inherits: true; initial-value: #166b3e; }
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  #top {
+    transition:
+    --paper 900ms var(--ease-sweep),
+    --paper-dim 900ms var(--ease-sweep),
+    --surface 900ms var(--ease-sweep),
+    --ink 900ms var(--ease-sweep),
+    --ink-soft 900ms var(--ease-sweep),
+    --muted 900ms var(--ease-sweep),
+    --line 900ms var(--ease-sweep),
+    --line-strong 900ms var(--ease-sweep),
+    --accent 900ms var(--ease-sweep),
+    --accent-deep 900ms var(--ease-sweep),
+    --on-accent 900ms var(--ease-sweep),
+    --ok 900ms var(--ease-sweep);
+  }
 }
 
 @theme inline {
@@ -182,21 +209,9 @@ a.press:active {
 }
 
 /* ------------------------------------------------------------------ */
-/* View transitions.                                                   */
-/* Sky: the new sky sweeps in from the left, like the terminator line. */
-/* Sections: the old one lifts away, the new one settles.             */
+/* View transitions between sections: the old one lifts away, the new */
+/* one settles. (The sky changes in the hero itself.)                  */
 /* ------------------------------------------------------------------ */
-html[data-vt="sky"]::view-transition-old(root) {
-  animation: none;
-}
-html[data-vt="sky"]::view-transition-new(root) {
-  animation: sky-sweep var(--dur-sky) var(--ease-sweep) both;
-}
-@keyframes sky-sweep {
-  from { clip-path: inset(0 100% 0 0); }
-  to { clip-path: inset(0 0 0 0); }
-}
-
 html[data-vt="sheet"]::view-transition-old(root) {
   animation: sheet-lift var(--dur-sheet) var(--ease-sweep) both;
 }
@@ -229,25 +244,45 @@ html[data-vt="sheet"]::view-transition-new(root) {
   scrollbar-color: var(--line-strong) transparent;
 }
 
+/* Arriving at Work out of the dive: the heading and each project come in out of depth and blur,
+   as the page decelerates from the warp. Scroll-driven, so it follows the reader's own speed. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    #projects h2,
+    #projects li,
+    #projects h3 {
+      animation: arrive linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 90%;
+    }
+    #projects h2 {
+      animation-name: arrive-title;
+    }
+  }
+}
+@keyframes arrive {
+  from { opacity: 0; transform: perspective(900px) translateZ(-260px) translateY(30px); filter: blur(8px); }
+}
+@keyframes arrive-title {
+  from { opacity: 0; transform: scale(1.5); filter: blur(14px); letter-spacing: 0.2em; }
+}
+
 /* Print always takes the day sky, without the interactive parts. */
 @media print {
   [data-theme="dark"] {
     color-scheme: light;
     --paper: #ffffff;
-    --paper-dim: #f1f4f2;
-    --surface: #ffffff;
-    --ink: #13302f;
-    --ink-soft: #2c4a48;
-    --muted: #4f6b68;
-    --line: #cfd8d4;
-    --line-strong: #9fb3ae;
-    --accent: #b8215a;
-    --accent-deep: #9c1a4b;
+    --paper-dim: #f2f2f0;
+    --surface: #f8f8f7;
+    --ink: #0f0f0e;
+    --ink-soft: #383733;
+    --muted: #65635d;
+    --line: #dddcd8;
+    --line-strong: #a2a09a;
+    --accent: #2b3fae;
+    --accent-deep: #22338f;
     --on-accent: #ffffff;
     --ok: #166b3e;
-    --map-line: 60 95 99;
-    --map-deep: 19 48 47;
-    --sky-glow: #ffffff;
   }
   [data-no-print] {
     display: none !important;
