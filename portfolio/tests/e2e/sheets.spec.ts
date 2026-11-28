@@ -62,27 +62,26 @@ test("at night in Ankara the page opens dark", async ({ page }) => {
   await expect(page.getByRole("button", { name: /night in Ankara/ })).toBeVisible();
 });
 
-test("a ball dropped on the map settles in a basin", async ({ page, isMobile }) => {
-  test.skip(isMobile, "the drop button lives beside the map on wide screens");
+test("a particle dropped beside the black hole falls in", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the hole sits above the copy on narrow screens; one layout is enough here");
+  // The black hole is the night scene; by day the hero is the 1919 eclipse.
+  await page.addInitScript(() => localStorage.setItem("theme", "dark"));
   await page.goto("/");
   const hero = page.locator("#top");
   const live = hero.locator("p[aria-live=polite]");
-  // Clicking the legend or the copy over the map should not drop a ball.
-  await hero.locator("aside p").first().click();
+  // Clicking the copy or the note over the scene should not drop a particle.
+  await hero.locator("[data-hero-note]").click();
   await hero.locator("[data-hero-copy] h1").click();
   await expect(live).toHaveText("");
 
+  // Released from rest a few r_s from the hole (components/Hero.tsx frame: 0.66 w, 0.4 h), it plunges.
   const box = (await hero.boundingBox())!;
-  // Just off RELIC's minimum on the wide map (lib/landscape.ts places it at 0.62, 0.36).
-  await page.mouse.click(box.x + box.width * 0.64, box.y + box.height * 0.34);
-  await expect(live).toHaveText(/settled in RELIC, \d+ steps/, { timeout: 8000 });
-  const settled = (await live.textContent())!;
+  await page.mouse.click(box.x + box.width * 0.66 + 140, box.y + box.height * 0.4);
+  await expect(live).toHaveText("The particle fell straight in.", { timeout: 8000 });
 
-  // Changing the sky keeps the settled result; changing language translates it.
-  await page.getByRole("button", { name: /Switch to the (day|night) sky/ }).click();
-  await expect(live).toHaveText(settled);
+  // Changing language translates the result.
   await page.getByRole("button", { name: /Türkçe'ye geç/ }).click();
-  await expect(live).toHaveText(/RELIC çukuruna yerleşti, \d+ adım/);
+  await expect(live).toHaveText("Parçacık doğrudan içeri düştü.");
 });
 
 test("command palette search folds Turkish İ and Latin I", async ({ page }) => {

@@ -1,19 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <style>
-    .bg { fill: #eef1ee; }
-    .ring { fill: none; stroke: #3c5f63; }
-    .ring-deep { fill: none; stroke: #13302f; }
-    .dot { fill: #b8215a; }
+    .bg { fill: #ffffff; }
+    .hole { fill: #0f0f0e; }
+    .disk { fill: none; stroke: #2b3fae; }
     @media (prefers-color-scheme: dark) {
-      .bg { fill: #18152b; }
-      .ring { stroke: #968fba; }
-      .ring-deep { stroke: #ece8f6; }
-      .dot { fill: #f29ac4; }
+      .bg { fill: #000000; }
+      .hole { fill: #000000; }
+      .disk { stroke: #ebe7df; }
     }
   </style>
   <rect width="64" height="64" rx="14" class="bg" />
-  <ellipse cx="32" cy="32" rx="25" ry="20" transform="rotate(-14 32 32)" class="ring" stroke-width="1.6" opacity="0.55" />
-  <ellipse cx="32" cy="32" rx="18" ry="14" transform="rotate(-14 32 32)" class="ring" stroke-width="2" opacity="0.8" />
-  <ellipse cx="32" cy="32" rx="11" ry="8.5" transform="rotate(-14 32 32)" class="ring-deep" stroke-width="2.2" />
-  <circle cx="32" cy="32" r="4" class="dot" />
+  <ellipse cx="32" cy="34" rx="25" ry="6.5" class="disk" stroke-width="3" />
+  <circle cx="32" cy="32" r="13" class="disk" stroke-width="2.2" />
+  <circle cx="32" cy="32" r="10.5" class="hole" />
+  <path d="M7 34a25 6.5 0 0 0 50 0" class="disk" stroke-width="3" />
 </svg>

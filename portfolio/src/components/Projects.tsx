@@ -1,13 +1,13 @@
 "use client";
 
 import { useI18n } from "@/lib/i18n";
-import { basinsFor, slice, surface, type BasinId } from "@/lib/landscape";
+import type { BasinId } from "@/lib/landscape";
 import { BASIN_NAMES } from "./Hero";
 
 type Status = "active" | "PyPI" | "crates.io" | "public" | "closed" | "superseded" | "archived";
 type Project = { name: string; stack: string; status: Status; href: string; since?: string };
 
-// The projects that are basins on the map, live things first.
+// The main projects, live things first.
 const onMap: (Project & { id: BasinId })[] = [
   { id: "relic", name: "relic", since: "2026-10", stack: "PyTorch, PEFT", status: "active", href: "https://github.com/kaelvalen/relic" },
   { id: "weightsmith", name: "weightsmith", since: "2026-10", stack: "PyTorch, FastAPI, React", status: "active", href: "https://github.com/kaelvalen/weightsmith" },
@@ -25,18 +25,6 @@ const also: Project[] = [
   { name: "nanonet", stack: "Go, Rust, TypeScript", status: "archived", href: "https://github.com/kaelvalen/nanonet" },
 ];
 
-// A slice through each basin of the wide map, as an SVG path in a 220 × 44 box: low loss is low.
-const basins = basinsFor(false);
-const f = surface(basins);
-const slices = Object.fromEntries(
-  basins.map((b) => {
-    const s = slice(f, b);
-    const lo = Math.min(...s), span = Math.max(...s) - lo || 1;
-    const y = (v: number) => (40 - ((v - lo) / span) * 36).toFixed(1);
-    return [b.id, { d: s.map((v, i) => `${i ? "L" : "M"}${((i / (s.length - 1)) * 220).toFixed(1)} ${y(v)}`).join(""), mid: y(s[s.length >> 1]) }];
-  })
-) as Record<BasinId, { d: string; mid: string }>;
-
 export default function Projects() {
   const { t, locale } = useI18n();
   const p = t.projects;
@@ -52,27 +40,28 @@ export default function Projects() {
       <div>
         <ul>
           {onMap.map((proj) => {
-            const ridge = proj.id === "noesis";
             return (
               <li key={proj.id} className="border-t border-line last:border-b">
-                <a href={proj.href} target="_blank" rel="noopener noreferrer" className="group grid grid-cols-[minmax(0,1fr)_96px] gap-x-6 py-5 sm:grid-cols-[minmax(0,1fr)_150px]">
+                <a
+                  href={proj.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group grid gap-x-10 gap-y-1 py-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,15rem)] sm:items-baseline"
+                >
                   <span>
-                    <span className="flex flex-wrap items-baseline gap-x-3">
-                      <span className={`font-display text-[24px] leading-tight italic transition-colors ${ridge ? "text-accent" : "text-ink group-hover:text-accent"}`}>
-                        {BASIN_NAMES[proj.id]}
-                        <span className="sr-only"> ({p.open})</span>
-                      </span>
-                      <span className="font-mono text-[12px] text-muted">{month(proj.since!)}</span>
+                    <span className="font-display text-[24px] leading-tight italic text-ink transition-colors group-hover:text-accent">
+                      {BASIN_NAMES[proj.id]}
+                      <span className="sr-only"> ({p.open})</span>
                     </span>
                     <span className="mt-1 block max-w-[62ch] text-ink-soft text-pretty">{p.blurbs[proj.name]}</span>
-                    <span className="mt-1 block text-[13px] text-muted">
+                  </span>
+                  <span className="text-[13px] text-muted sm:text-right">
+                    <span className="font-mono text-[12px]">{month(proj.since!)}</span>
+                    <span className="sm:block">
+                      <span className="sm:hidden">, </span>
                       {p.status[proj.status]}, {proj.stack}
                     </span>
                   </span>
-                  <svg viewBox="0 0 220 44" preserveAspectRatio="none" aria-hidden className="mt-2 h-8 w-full overflow-visible">
-                    <path d={slices[proj.id].d} fill="none" stroke="var(--line-strong)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
-                    <circle cx="110" cy={slices[proj.id].mid} r="3" fill={ridge ? "var(--accent)" : "var(--ink)"} />
-                  </svg>
                 </a>
               </li>
             );

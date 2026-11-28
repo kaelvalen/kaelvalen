@@ -39,6 +39,37 @@ function jump(id: SheetId) {
   else document.getElementById(id)?.scrollIntoView({ block: "start", behavior: "instant" });
 }
 
+/**
+ * From the hero, a sheet link first dives: the hero is pinned in a taller track (components/Hero.tsx)
+ * and scrolling through that track is the dive. To Work it is one unbroken move, dive and arrival;
+ * to a sheet further down it dives, then lands there. Returns false when there is nothing to dive
+ * through (already past it), so the caller turns the sheet as usual.
+ */
+function dive(id: SheetId, land: () => void) {
+  const track = document.getElementById("top-track");
+  const hero = document.getElementById("top");
+  const target = document.getElementById(id);
+  if (!track || !hero || !target) return false;
+  const room = track.offsetHeight - hero.offsetHeight;
+  const diveEnd = track.getBoundingClientRect().top + scrollY + room - parseFloat(getComputedStyle(hero).top || "0");
+  const from = scrollY;
+  if (room <= 0 || from >= diveEnd - 1) return false;
+  const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const through = id === "projects";
+  const end = through ? target.getBoundingClientRect().top + scrollY - pad : diveEnd;
+  const ms = through ? 2400 : 1600;
+  const t0 = performance.now();
+  const tick = (now: number) => {
+    const t = Math.min(1, (now - t0) / ms);
+    const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(2 - 2 * t, 3) / 2;
+    window.scrollTo({ top: from + (end - from) * e, behavior: "instant" });
+    if (t < 1) requestAnimationFrame(tick);
+    else land();
+  };
+  requestAnimationFrame(tick);
+  return true;
+}
+
 /** Turns to a sheet: updates the address, then shows the sheet with a sheet-turn transition. */
 export function goToSheet(id: SheetId, { push = true }: { push?: boolean } = {}) {
   const root = document.documentElement;
@@ -55,6 +86,7 @@ export function goToSheet(id: SheetId, { push = true }: { push?: boolean } = {})
     delete root.dataset.vt;
     reread?.();
   };
+  if (id !== "top" && !still && dive(id, () => (apply(), requestAnimationFrame(done)))) return;
   if (!document.startViewTransition || still || root.dataset.vt) {
     apply();
     requestAnimationFrame(done);
